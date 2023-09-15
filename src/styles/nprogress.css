@@ -1,0 +1,14 @@
+/* https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.3rem;
+  /* @apply bg-primary; */
+}
