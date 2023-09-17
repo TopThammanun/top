@@ -17,13 +17,7 @@
     margin: 0;
     padding: 0;
   }
-
-  /*
   * {
-    @apply !border-border;
+    @apply border-divider;
   }
-
-  body {
-    @apply bg-background text-foreground;
-  } */
 }
