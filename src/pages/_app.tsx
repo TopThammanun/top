@@ -10,7 +10,7 @@ import NprogressProvider from '@/providers/nprogress'
 import AuthProvider from '@/providers/auth';
 import ReactQueryProvider from '@/providers/react-query';
 import DateProvider from '@/providers/date';
-import { ThemeProvider } from '@/providers/theme';
+import { ThemeProvider } from '@/theme/index';
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page: ReactElement) => page);
