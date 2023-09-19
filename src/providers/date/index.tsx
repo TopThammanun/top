@@ -1,6 +1,6 @@
 "use client"
 import { Fragment } from 'react';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 import buddhistEra from 'dayjs/plugin/buddhistEra'
 

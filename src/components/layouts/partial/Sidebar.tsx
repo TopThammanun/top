@@ -89,7 +89,7 @@ export const MenuSidebar = () => {
 const Sidebar = () => {
     return (
         <div className='max-md:hidden'>
-            <Card className="h-[100dvh] w-[16rem] bg-background transition-all sticky top-0 z-20 rounded-none" >
+            <Card className="h-[100dvh] w-[16rem] bg-background transition-all sticky top-0 z-20 rounded-none dark:border-r" >
                 <PerfectScrollbar className='px-5'>
                     <MenuSidebar />
                 </PerfectScrollbar>

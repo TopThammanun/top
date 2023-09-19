@@ -20,7 +20,7 @@ module.exports = {
       800: "#27272a",
       900: "#18181b",
       foreground: "#11181C",
-      DEFAULT: "#d4d4d8",
+      DEFAULT: "#E0E0E3",
     },
     primary: {
       50: "#F2E8FC",
