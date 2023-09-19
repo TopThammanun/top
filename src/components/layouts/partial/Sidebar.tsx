@@ -1,6 +1,6 @@
 "use client"
 
-import Link from 'next/link';
+import NextLink from 'next/link';
 import router from 'next/router';
 import Image from 'next/image';
 import React, { Fragment, ReactElement, ReactNode, useState } from 'react'
@@ -18,16 +18,16 @@ type MenuItemProps = {
 const MenuItem = (menuItemProps: MenuItemProps) => {
     const active = router.pathname === menuItemProps.path
     return (
-        <Link
+        <NextLink
             href={menuItemProps.path}
-            className={`flex items-center gap-3 text-base py-2 pl-4 my-2 rounded-xl hover:pl-6 transition-all
+            className={`flex items-center gap-3 text-base py-2 pl-4 rounded-xl hover:pl-6 transition-all
                 ${active ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-default-100 hover:text-default-foreground'}`}
         >
             <div className='flex items-center w-fit h-full'>
                 <Icon icon={menuItemProps.icon} className='w-6 h-6' />
             </div>
             <div>{menuItemProps.label}</div>
-        </Link>
+        </NextLink>
     );
 };
 
@@ -45,30 +45,32 @@ export const MenuSidebar = () => {
                     R&N
                 </div>
             </div>
-            <div className='flex flex-col'>
-                <div className='text-foreground font-semibold px-4 mb-2'>MENU</div>
+            <div className='flex flex-col gap-2'>
+                <div className='text-foreground font-semibold px-4'>MENU</div>
                 <MenuItem path='/' label='Home' icon='heroicons:home' />
                 <MenuItem path='/dashboard' label='Dashboard' icon='lucide:layout-dashboard' />
-                <Accordion selectionMode="multiple" showDivider={false}>
+                <Accordion selectionMode="multiple" isCompact showDivider={false}>
                     <AccordionItem
                         key="1"
                         aria-label="components"
                         startContent={
                             <Icon icon="heroicons:swatch" className='w-6 h-6' />
                         }
-                        title="components"
+                        title="Components"
                         className='pl-2'
                     >
                         <MenuItem path='/a' label='Dashboard' icon='lucide:dot' />
                         <MenuItem path='/a' label='Dashboard' icon='lucide:dot' />
                     </AccordionItem>
+                </Accordion>
+                <Accordion selectionMode="multiple" isCompact showDivider={false}>
                     <AccordionItem
-                        key="2"
+                        key="1"
                         aria-label="components"
                         startContent={
                             <Icon icon="heroicons:swatch" className='w-6 h-6' />
                         }
-                        title="components"
+                        title="Components"
                         className='pl-2'
                     >
                         <MenuItem path='/a' label='Dashboard' icon='lucide:dot' />

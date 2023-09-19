@@ -1,8 +1,8 @@
 module.exports = {
   colors: {
-    background: "#FFFFFF",
+    background: "#F9FAFE",
     foreground: "#11181C",
-    content1: "#FFFFFF",
+    content1: "#F9FAFE",
     content2: "#f4f4f5",
     content3: "#e4e4e7",
     content4: "#d4d4d8",
