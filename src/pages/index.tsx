@@ -1,11 +1,10 @@
 // import MainLayout from '@/components/layouts/MainLayout'
 // import RootLayout from '@/components/layouts/RootLayout'
 import { Fragment, ReactElement } from 'react'
-import { Button } from "@nextui-org/react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 import RootLayout from '@/components/layouts/RootLayout';
 import MainLayout from '@/components/layouts/MainLayout';
+import { Button } from '@/components/ui';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -23,47 +22,6 @@ const Home = (props: Props) => {
         <Button onClick={() => setTheme('light')}>Light Mode</Button>
         <Button onClick={() => setTheme('dark')}>Dark Mode</Button>
       </div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
-      <div>1</div>
     </Fragment >
   )
 }

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { Fragment } from 'react'
 import { useTheme } from 'next-themes'
 import { Icon } from '@iconify/react';
