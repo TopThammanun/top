@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MenuSidebar } from './Sidebar'
 import router from 'next/router'
 import { Icon } from '@iconify/react';
@@ -12,6 +12,18 @@ type Props = {}
 
 const Navbar = (props: Props) => {
     const [isOpenToggle, setIsOpenToggle] = useState(false)
+    useEffect(() => {
+        const updatePageScroll = () => {
+            if (isOpenToggle) {
+                document.body.classList.remove('overflow-y-scroll');
+                document.body.classList.add('overflow-y-hidden');
+            } else {
+                document.body.classList.remove('overflow-y-hidden');
+                document.body.classList.add('overflow-y-scroll');
+            }
+        };
+        updatePageScroll();
+    }, [isOpenToggle]);
     return (
         <nav className='sticky top-0 z-10'>
             <div className='bg-background py-5 px-8'>
