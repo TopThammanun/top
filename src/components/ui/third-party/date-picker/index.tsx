@@ -23,7 +23,7 @@ const DatePicker = ({ placeholder, classNameInput, ...props }: CalendarProps & P
         <Popover placement="top">
             <PopoverTrigger>
                 <div>
-                    <div
+                    {/* <div
                         className={cn(
                             "flex flex-wrap gap-2 justify-start items-center text-sm text-left font-normal border-2 border-default-200 pl-3 cursor-pointer",
                             "hover:border-default-400 h-unit-10 min-h-unit-10 rounded-medium",
@@ -34,13 +34,13 @@ const DatePicker = ({ placeholder, classNameInput, ...props }: CalendarProps & P
                         {props.selected && isDate(props.selected) ?
                             DateFormat(dayjs(props.selected), "DD/MM/YYYY") :
                             <span>{placeholder}</span>}
-                    </div>
+                    </div> */}
                     <Input
                         type="text"
                         label="DatePicker"
                         placeholder={placeholder}
                         labelPlacement="outside"
-                        value={DateFormat(dayjs(props.selected), "DD/MM/YYYY")}
+                        value={props.selected ? DateFormat(dayjs(props.selected), "DD/MM/YYYY") : ""}
                         variant="bordered"
                         startContent={
                             <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
