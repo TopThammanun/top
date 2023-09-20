@@ -32,15 +32,19 @@ const Home = (props: Props) => {
           mode="single"
           label="DatePicker"
           placeholder='Picker Date'
-          labelPlacement="outside-left"
-          variant="bordered"
+          labelPlacement="inside"
+          variant="faded"
+          isReadOnly={true}
           selected={date}
           onSelect={setDate}
           defaultMonth={date}
         />
         <DateMultiplePicker
           mode="multiple"
-          placeholder='Picker Date'
+          label="DateMultiplePicker"
+          placeholder='DateMultiplePicker'
+          labelPlacement="outside"
+          variant="bordered"
           captionLayout='dropdown-buttons'
           selected={arrDate}
           onSelect={setArrDate}
@@ -48,7 +52,10 @@ const Home = (props: Props) => {
         />
         <DateRangePicker
           mode="range"
-          placeholder='Picker Date'
+          label="DateRangePicker"
+          placeholder='DateMultiplePicker'
+          labelPlacement="inside"
+          variant="bordered"
           captionLayout='dropdown-buttons'
           selected={rangeDate}
           onSelect={setRangeDate}
@@ -59,7 +66,7 @@ const Home = (props: Props) => {
           type="email"
           label="Email"
           placeholder="you@example.com"
-          labelPlacement="outside"
+          labelPlacement="inside"
           variant='bordered'
         />
         <Input

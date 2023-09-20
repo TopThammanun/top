@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import { Fragment, useEffect, useState } from "react"
 import { Icon } from "@iconify/react"
 import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
@@ -45,39 +44,81 @@ const DatePicker = ({
     classNameInput,
     ...props
 }: CalendarProps & Props) => {
+    const [textValue, setTextValue] = useState("")
+    const isDate = (selected: Date | undefined): selected is Date => selected instanceof Date;
+    useEffect(() => {
+        if (props.selected && isDate(props.selected)) {
+            const formattedDates = DateFormat(dayjs(props.selected), "DD/MM/YYYY")
+            setTextValue(formattedDates)
+        } else {
+            setTextValue("")
+        }
+    }, [props.selected])
+
     return (
-        <Popover placement="top">
-            <PopoverTrigger>
-                <div>
-                    <Input
-                        type="text"
-                        label={label}
-                        placeholder={placeholder}
-                        labelPlacement={labelPlacement}
-                        variant={variant}
-                        radius={radius}
-                        color={color}
-                        size={size}
-                        isDisabled={isDisabled}
-                        isReadOnly={isReadOnly}
-                        isRequired={isRequired}
-                        isInvalid={isInvalid}
-                        description={description}
-                        errorMessage={errorMessage}
-                        value={props.selected ? DateFormat(dayjs(props.selected), "DD/MM/YYYY") : ""}
-                        startContent={
-                            <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                        }
-                        className={classNameInput}
-                    />
-                </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-                <Calendar
-                    {...props}
+        <Fragment>
+            {!isDisabled && !isReadOnly
+                ? <Popover placement="top">
+                    <PopoverTrigger>
+                        <div>
+                            <Input
+                                type="text"
+                                label={label}
+                                placeholder={placeholder}
+                                labelPlacement={labelPlacement}
+                                variant={variant}
+                                radius={radius}
+                                color={color}
+                                size={size}
+                                isDisabled={isDisabled}
+                                isReadOnly={isReadOnly}
+                                isRequired={isRequired}
+                                isInvalid={isInvalid}
+                                description={description}
+                                errorMessage={errorMessage}
+                                value={textValue}
+                                startContent={
+                                    <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                }
+                                classNames={{
+                                    mainWrapper: "w-full"
+                                }}
+                                className={classNameInput}
+                            />
+                        </div>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                        <Calendar
+                            {...props}
+                        />
+                    </PopoverContent>
+                </Popover>
+                : <Input
+                    type="text"
+                    label={label}
+                    placeholder={placeholder}
+                    labelPlacement={labelPlacement}
+                    variant={variant}
+                    radius={radius}
+                    color={color}
+                    size={size}
+                    isDisabled={isDisabled}
+                    isReadOnly={isReadOnly}
+                    isRequired={isRequired}
+                    isInvalid={isInvalid}
+                    description={description}
+                    errorMessage={errorMessage}
+                    value={textValue}
+                    startContent={
+                        <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    }
+                    classNames={{
+                        mainWrapper: "w-full"
+                    }}
+                    className={classNameInput}
                 />
-            </PopoverContent>
-        </Popover>
+            }
+        </Fragment>
     )
 }
 export default DatePicker

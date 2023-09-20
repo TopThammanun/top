@@ -1,8 +1,6 @@
 "use client"
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-
+import { Fragment } from "react"
 import { Icon } from "@iconify/react"
 import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
@@ -11,13 +9,41 @@ import { Calendar, Input, Popover, PopoverContent, PopoverTrigger } from "@/comp
 import { useEffect, useState } from "react"
 
 type Props = {
-    placeholder?: string
     mode: "range"
+    label?: string
+    placeholder?: string
+    labelPlacement?: "inside" | "outside" | "outside-left"
+    variant?: "bordered" | "faded" | "flat" | "underlined"
+    radius?: "full" | "lg" | "md" | "sm" | "none"
+    color?: "default" | "primary" | "secondary" | "success" | "warning" | "danger"
+    size?: "sm" | "md" | "lg"
+    isDisabled?: boolean
+    isReadOnly?: boolean
+    isRequired?: boolean
+    isInvalid?: boolean
+    description?: React.ReactNode
+    errorMessage?: React.ReactNode
     classNameInput?: string
 }
 type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const DateRangePicker = ({ placeholder, classNameInput, ...props }: CalendarProps & Props) => {
+const DateRangePicker = ({
+    label,
+    placeholder,
+    labelPlacement,
+    variant,
+    radius,
+    color,
+    size,
+    isDisabled,
+    isReadOnly,
+    isRequired,
+    isInvalid,
+    description,
+    errorMessage,
+    classNameInput,
+    ...props
+}: CalendarProps & Props) => {
     const isDateRange = (selected: DateRange | undefined) => (
         selected && !(selected instanceof Date) && !Array.isArray(selected) && selected.from && selected.to
     )
@@ -25,40 +51,77 @@ const DateRangePicker = ({ placeholder, classNameInput, ...props }: CalendarProp
 
     useEffect(() => {
         if (props.selected && isDateRange(props.selected)) {
-            const x = `${DateFormat(dayjs(props.selected?.from), "DD/MM/YYYY")} - ${DateFormat(dayjs(props.selected?.to), "DD/MM/YYYY")}`
-            setTextValue(x)
+            const formattedDates = `${DateFormat(dayjs(props.selected?.from), "DD/MM/YYYY")} - ${DateFormat(dayjs(props.selected?.to), "DD/MM/YYYY")}`
+            setTextValue(formattedDates)
         } else {
             setTextValue("")
         }
     }, [props.selected])
 
-
     return (
-        <Popover placement="top">
-            <PopoverTrigger>
-                <div>
-                    <Input
-                        variant="bordered"
-                        labelPlacement="outside"
-                        label="RangeDatePicker"
-                        value={textValue}
-                        placeholder={placeholder}
-                        className="overflow-x-hidden"
-                        startContent={
-                            <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                        }
-                        classNames={{
-                            input: "flex",
-                        }}
-                    />
-                </div>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-                <Calendar
-                    {...props}
+        <Fragment>
+            {!isDisabled && !isReadOnly
+                ? <Popover placement="top">
+                    <PopoverTrigger>
+                        <div>
+                            <Input
+                                type="text"
+                                label={label}
+                                placeholder={placeholder}
+                                labelPlacement={labelPlacement}
+                                variant={variant}
+                                radius={radius}
+                                color={color}
+                                size={size}
+                                isDisabled={isDisabled}
+                                isReadOnly={isReadOnly}
+                                isRequired={isRequired}
+                                isInvalid={isInvalid}
+                                description={description}
+                                errorMessage={errorMessage}
+                                value={textValue}
+                                startContent={
+                                    <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                }
+                                classNames={{
+                                    mainWrapper: "w-full"
+                                }}
+                                className={classNameInput}
+                            />
+                        </div>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                        <Calendar
+                            {...props}
+                        />
+                    </PopoverContent>
+                </Popover>
+                : <Input
+                    type="text"
+                    label={label}
+                    placeholder={placeholder}
+                    labelPlacement={labelPlacement}
+                    variant={variant}
+                    radius={radius}
+                    color={color}
+                    size={size}
+                    isDisabled={isDisabled}
+                    isReadOnly={isReadOnly}
+                    isRequired={isRequired}
+                    isInvalid={isInvalid}
+                    description={description}
+                    errorMessage={errorMessage}
+                    value={textValue}
+                    startContent={
+                        <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    }
+                    classNames={{
+                        mainWrapper: "w-full"
+                    }}
+                    className={classNameInput}
                 />
-            </PopoverContent>
-        </Popover>
+            }
+        </Fragment>
     )
 }
 export default DateRangePicker

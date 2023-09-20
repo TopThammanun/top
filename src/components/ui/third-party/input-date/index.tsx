@@ -1,6 +1,7 @@
 "use client"
 
-import { Fragment, useEffect, useState } from "react"
+import * as React from "react"
+import { cn } from "@/lib/utils"
 import { Icon } from "@iconify/react"
 import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
@@ -9,7 +10,7 @@ import Calendar from "../calendar"
 import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
 
 type Props = {
-    mode: "multiple"
+    mode: "single" | "multiple" | "range"
     label?: string
     placeholder?: string
     labelPlacement?: "inside" | "outside" | "outside-left"
@@ -24,10 +25,11 @@ type Props = {
     description?: React.ReactNode
     errorMessage?: React.ReactNode
     classNameInput?: string
+    value: string
 }
 type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const DateMultiplePicker = ({
+const InputDate = ({
     label,
     placeholder,
     labelPlacement,
@@ -42,26 +44,13 @@ const DateMultiplePicker = ({
     description,
     errorMessage,
     classNameInput,
+    value,
     ...props
 }: CalendarProps & Props) => {
-    const isMultipleDate = (selected: Date[] | undefined): selected is Date[] => Array.isArray(selected);
-    const [textValue, setTextValue] = useState("")
-
-    useEffect(() => {
-        if (props.selected && isMultipleDate(props.selected)) {
-            const formattedDates = props.selected.map((item) => {
-                return DateFormat(dayjs(item), "DD/MM/YYYY");
-            });
-            setTextValue(formattedDates.join(', '))
-        } else {
-            setTextValue("")
-        }
-    }, [props.selected])
-
     return (
-        <Fragment>
-            {!isDisabled && !isReadOnly
-                ? <Popover placement="top">
+        <React.Fragment>
+            {!isDisabled && !isReadOnly ?
+                <Popover placement="top">
                     <PopoverTrigger>
                         <div>
                             <Input
@@ -79,7 +68,7 @@ const DateMultiplePicker = ({
                                 isInvalid={isInvalid}
                                 description={description}
                                 errorMessage={errorMessage}
-                                value={textValue}
+                                value={value}
                                 startContent={
                                     <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                                 }
@@ -95,8 +84,8 @@ const DateMultiplePicker = ({
                             {...props}
                         />
                     </PopoverContent>
-                </Popover>
-                : <Input
+                </Popover> :
+                <Input
                     type="text"
                     label={label}
                     placeholder={placeholder}
@@ -111,7 +100,7 @@ const DateMultiplePicker = ({
                     isInvalid={isInvalid}
                     description={description}
                     errorMessage={errorMessage}
-                    value={textValue}
+                    value={value}
                     startContent={
                         <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                     }
@@ -121,7 +110,7 @@ const DateMultiplePicker = ({
                     className={classNameInput}
                 />
             }
-        </Fragment>
+        </React.Fragment>
     )
 }
-export default DateMultiplePicker
+export default InputDate
