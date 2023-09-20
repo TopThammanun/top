@@ -38,15 +38,15 @@ const MenuItem = (menuItemProps: MenuItemProps) => {
 export const MenuSidebar = () => {
     return (
         <Fragment>
-            <div className='flex items-center gap-3 py-10 pl-5'>
+            <div className='flex items-center gap-3 py-10'>
                 <Image
                     src="/favicon.ico"
                     width={40}
                     height={40}
                     alt="logo"
                 />
-                <div className="text-4xl font-semibold">
-                    R&N
+                <div className="text-3xl font-semibold">
+                    DOUBLE-N
                 </div>
             </div>
             <div className='flex flex-col gap-2'>
