@@ -47,9 +47,6 @@ const DateMultiplePicker = ({ placeholder, classNameInput, ...props }: CalendarP
                         startContent={
                             <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
-                        classNames={{
-                            input: "flex",
-                        }}
                     />
                 </div>
             </PopoverTrigger>

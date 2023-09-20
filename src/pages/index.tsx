@@ -28,7 +28,6 @@ const Home = (props: Props) => {
           <Button onClick={() => setTheme('light')}>Light Mode</Button>
           <Button onClick={() => setTheme('dark')}>Dark Mode</Button>
         </div>
-        <Calendar captionLayout='buttons' className='bg-card border rounded-xl ' />
         <DatePicker
           mode="single"
           placeholder='Picker Date'
@@ -40,23 +39,8 @@ const Home = (props: Props) => {
           mode="multiple"
           placeholder='Picker Date'
           captionLayout='dropdown-buttons'
-          min={1}
           selected={arrDate}
           onSelect={setArrDate}
-        />
-        <Input
-          type="email"
-          label="Email"
-          placeholder="you@example.com"
-          labelPlacement="outside"
-          variant='bordered'
-        />
-        <Input
-          type="email"
-          label="Email"
-          placeholder="you@example.com"
-          labelPlacement="outside"
-          variant='bordered'
         />
         <DateRangePicker
           mode="range"
@@ -66,6 +50,20 @@ const Home = (props: Props) => {
           selected={rangeDate}
           onSelect={setRangeDate}
           numberOfMonths={2}
+        />
+        <Input
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          labelPlacement="outside"
+          variant='bordered'
+        />
+        <Input
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          labelPlacement="outside"
+          variant='bordered'
         />
       </div>
     </Fragment >
