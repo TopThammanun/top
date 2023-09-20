@@ -7,7 +7,7 @@ import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
-import { Input, Popover, PopoverContent, PopoverTrigger, Textarea } from "@/components/ui"
+import { Chip, Input, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
 
 type Props = {
     placeholder?: string
@@ -35,13 +35,21 @@ const DateMultiplePicker = ({ placeholder, classNameInput, ...props }: CalendarP
         <Popover placement="top">
             <PopoverTrigger>
                 <div>
-                    <Textarea
+                    <Input
                         variant="bordered"
                         labelPlacement="outside"
-                        minRows={1}
                         label="MultipleDatePicker"
                         value={textValue}
                         placeholder={placeholder}
+                        multiple={true}
+                        aria-multiline={"true"}
+                        className="overflow-x-hidden"
+                        startContent={
+                            <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                        }
+                        classNames={{
+                            input: "flex",
+                        }}
                     />
                 </div>
             </PopoverTrigger>

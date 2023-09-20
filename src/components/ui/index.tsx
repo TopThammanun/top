@@ -79,6 +79,7 @@ import Drawer from './third-party/drawer';
 import Calendar from "./third-party/calendar";
 import DatePicker from "./third-party/date-picker";
 import DateMultiplePicker from "./third-party/date-multiple-picker";
+import DateRangePicker from "./third-party/date-range-picker";
 
 // My Component
 import SwicthThemes from './swicth-themes';
@@ -165,5 +166,6 @@ export {
     SwicthThemes,
     Calendar,
     DatePicker,
-    DateMultiplePicker
+    DateMultiplePicker,
+    DateRangePicker
 }

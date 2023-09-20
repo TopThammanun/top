@@ -4,7 +4,7 @@ import { Fragment, ReactElement, useState } from 'react'
 import { useTheme } from "next-themes";
 import RootLayout from '@/components/layouts/RootLayout';
 import MainLayout from '@/components/layouts/MainLayout';
-import { Button, Calendar, DateMultiplePicker, DatePicker, Input } from '@/components/ui';
+import { Button, Calendar, DateMultiplePicker, DatePicker, DateRangePicker, Input } from '@/components/ui';
 import { DateRange } from 'react-day-picker';
 import { Icon } from '@iconify/react';
 type Props = {}
@@ -58,7 +58,7 @@ const Home = (props: Props) => {
           labelPlacement="outside"
           variant='bordered'
         />
-        {/* <DateRangePicker
+        <DateRangePicker
           mode="range"
           placeholder='Picker Date'
           defaultMonth={rangeDate?.from}
@@ -66,7 +66,7 @@ const Home = (props: Props) => {
           selected={rangeDate}
           onSelect={setRangeDate}
           numberOfMonths={2}
-        /> */}
+        />
       </div>
     </Fragment >
   )
