@@ -62,7 +62,7 @@ const DateMultiplePicker = ({
         <Fragment>
             {!isDisabled && !isReadOnly
                 ? <Popover placement="top">
-                    <PopoverTrigger>
+                    <PopoverTrigger className="z-0">
                         <div>
                             <Input
                                 type="text"

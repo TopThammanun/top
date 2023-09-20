@@ -34,7 +34,6 @@ const Home = (props: Props) => {
           placeholder='Picker Date'
           labelPlacement="inside"
           variant="faded"
-          isReadOnly={true}
           selected={date}
           onSelect={setDate}
           defaultMonth={date}
