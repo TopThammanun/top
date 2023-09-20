@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import dayjs from "dayjs";
 import { DateFormat } from "@/utils/date-format";
+import { Chip, Input, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
 
 const formatCaption = (date: Date) => {
     const y = DateFormat(dayjs(date), "YYYY");
@@ -92,27 +93,20 @@ const Calendar = ({
                     return (
                         <></>
                         // <Select
-                        //     value={value?.toString()}
-                        //     onValueChange={(value) => {
-                        //         handleChange(value);
-                        //     }}
+                        //     label="Favorite Animal"
+                        //     placeholder="Select an animal"
+                        //     labelPlacement="outside"
+                        //     disableSelectorIconRotation
+                        // // value={value?.toString()}
                         // >
-                        //     <SelectTrigger className="mx-1 px-2 focus:ring-0 text-base font-semibold">
-                        //         <SelectValue>{selected?.props?.children}</SelectValue>
-                        //     </SelectTrigger>
-                        //     <SelectContent position="popper">
-                        //         <ScrollArea className="h-80">
-                        //             {options.map((option, id: number) => (
-                        //                 <SelectItem
-                        //                     key={`${option.props.value}-${id}`}
-                        //                     value={option.props.value?.toString() ?? ""}
-                        //                     className="cursor-pointer"
-                        //                 >
-                        //                     {option.props.children}
-                        //                 </SelectItem>
-                        //             ))}
-                        //         </ScrollArea>
-                        //     </SelectContent>
+                        //     {options.map((option, id: number) => (
+                        //         <SelectItem
+                        //             key={`${option.props.value}-${id}`}
+                        //             value={option.props.value?.toString() ?? ""}
+                        //         >
+                        //             {option.props.children}
+                        //         </SelectItem>
+                        //     ))}
                         // </Select>
                     );
                 },
