@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import dayjs from "dayjs";
 import { DateFormat } from "@/utils/date-format";
-import { Chip, Input, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
+import { Button, Chip, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
 
 const formatCaption = (date: Date) => {
     const y = DateFormat(dayjs(date), "YYYY");
@@ -90,24 +90,30 @@ const Calendar = ({
                         } as React.ChangeEvent<HTMLSelectElement>;
                         onChange?.(changeEvent);
                     };
+                    console.log("value", value);
+
                     return (
-                        <></>
-                        // <Select
-                        //     label="Favorite Animal"
-                        //     placeholder="Select an animal"
-                        //     labelPlacement="outside"
-                        //     disableSelectorIconRotation
-                        // // value={value?.toString()}
-                        // >
-                        //     {options.map((option, id: number) => (
-                        //         <SelectItem
-                        //             key={`${option.props.value}-${id}`}
-                        //             value={option.props.value?.toString() ?? ""}
-                        //         >
-                        //             {option.props.children}
-                        //         </SelectItem>
-                        //     ))}
-                        // </Select>
+                        <Select
+                            selectedKeys={[`${value}`]}
+                            disabledKeys={[`${value}`]}
+                            aria-label="options"
+                            labelPlacement="outside"
+                            disableSelectorIconRotation
+                            variant="bordered"
+                            onChange={(event) => {
+                                handleChange(event.target.value)
+                            }}
+                            className="w-28 mx-1"
+                        >
+                            {options.map((option) => (
+                                <SelectItem
+                                    key={`${option.props.value}`}
+                                    value={option.props.value}
+                                >
+                                    {option.props.children}
+                                </SelectItem>
+                            ))}
+                        </Select >
                     );
                 },
                 IconLeft: ({ ...props }) => (

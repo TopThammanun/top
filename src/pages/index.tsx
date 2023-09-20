@@ -30,10 +30,13 @@ const Home = (props: Props) => {
         </div>
         <DatePicker
           mode="single"
+          label="DatePicker"
           placeholder='Picker Date'
+          labelPlacement="outside-left"
+          variant="bordered"
           selected={date}
           onSelect={setDate}
-          initialFocus
+          defaultMonth={date}
         />
         <DateMultiplePicker
           mode="multiple"
@@ -41,15 +44,16 @@ const Home = (props: Props) => {
           captionLayout='dropdown-buttons'
           selected={arrDate}
           onSelect={setArrDate}
+          defaultMonth={arrDate ? arrDate[0] : new Date()}
         />
         <DateRangePicker
           mode="range"
           placeholder='Picker Date'
-          defaultMonth={rangeDate?.from}
           captionLayout='dropdown-buttons'
           selected={rangeDate}
           onSelect={setRangeDate}
           numberOfMonths={2}
+          defaultMonth={rangeDate?.from}
         />
         <Input
           type="email"

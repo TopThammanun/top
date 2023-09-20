@@ -81,7 +81,6 @@ export const MenuSidebar = () => {
                         <MenuItem path='/a' label='Dashboard' icon='lucide:dot' isPaddingLeft={false} />
                     </AccordionItem>
                 </Accordion>
-                <MenuItem path='/dashboard' label='Dashboard' icon='lucide:layout-dashboard' isPaddingLeft={true} />
             </div>
         </Fragment >)
 }

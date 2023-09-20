@@ -10,41 +10,65 @@ import Calendar from "../calendar"
 import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
 
 type Props = {
-    placeholder?: string
     mode: "single"
+    label?: string
+    placeholder?: string
+    labelPlacement?: "inside" | "outside" | "outside-left"
+    variant?: "bordered" | "faded" | "flat" | "underlined"
+    radius?: "full" | "lg" | "md" | "sm" | "none"
+    color?: "default" | "primary" | "secondary" | "success" | "warning" | "danger"
+    size?: "sm" | "md" | "lg"
+    isDisabled?: boolean
+    isReadOnly?: boolean
+    isRequired?: boolean
+    isInvalid?: boolean
+    description?: React.ReactNode
+    errorMessage?: React.ReactNode
     classNameInput?: string
 }
 type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const DatePicker = ({ placeholder, classNameInput, ...props }: CalendarProps & Props) => {
-    const isDate = (selected: Date | undefined): selected is Date => selected instanceof Date;
-
+const DatePicker = ({
+    label,
+    placeholder,
+    labelPlacement,
+    variant,
+    radius,
+    color,
+    size,
+    isDisabled,
+    isReadOnly,
+    isRequired,
+    isInvalid,
+    description,
+    errorMessage,
+    classNameInput,
+    ...props
+}: CalendarProps & Props) => {
     return (
         <Popover placement="top">
             <PopoverTrigger>
                 <div>
-                    {/* <div
-                        className={cn(
-                            "flex flex-wrap gap-2 justify-start items-center text-sm text-left font-normal border-2 border-default-200 pl-3 cursor-pointer",
-                            "hover:border-default-400 h-unit-10 min-h-unit-10 rounded-medium",
-                            !props.selected && "text-default-400", classNameInput
-                        )}
-                    >
-                        <Icon icon="solar:calendar-outline" className="text-2xl text-default-400" />
-                        {props.selected && isDate(props.selected) ?
-                            DateFormat(dayjs(props.selected), "DD/MM/YYYY") :
-                            <span>{placeholder}</span>}
-                    </div> */}
                     <Input
                         type="text"
-                        label="DatePicker"
+                        label={label}
                         placeholder={placeholder}
-                        labelPlacement="outside"
+                        labelPlacement={labelPlacement}
+                        variant={variant}
+                        radius={radius}
+                        color={color}
+                        size={size}
+                        isDisabled={isDisabled}
+                        isReadOnly={isReadOnly}
+                        isRequired={isRequired}
+                        isInvalid={isInvalid}
+                        description={description}
+                        errorMessage={errorMessage}
                         value={props.selected ? DateFormat(dayjs(props.selected), "DD/MM/YYYY") : ""}
-                        variant="bordered"
                         startContent={
                             <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                         }
+                        className={classNameInput}
                     />
                 </div>
             </PopoverTrigger>
