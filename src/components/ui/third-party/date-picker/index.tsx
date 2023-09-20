@@ -7,7 +7,7 @@ import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
+import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
 
 type Props = {
     placeholder?: string
@@ -22,16 +22,30 @@ const DatePicker = ({ placeholder, classNameInput, ...props }: CalendarProps & P
     return (
         <Popover placement="top">
             <PopoverTrigger>
-                <div
-                    className={cn(
-                        "flex flex-wrap gap-y-2 justify-start text-sm text-left font-normal border p-2 rounded-xl cursor-pointer",
-                        !props.selected && "text-muted-foreground", classNameInput
-                    )}
-                >
-                    <Icon icon="solar:calendar-outline" className="mr-2 h-5 w-5" />
-                    {props.selected && isDate(props.selected) ?
-                        DateFormat(dayjs(props.selected), "DD/MM/YYYY") :
-                        <span>{placeholder}</span>}
+                <div>
+                    <div
+                        className={cn(
+                            "flex flex-wrap gap-2 justify-start items-center text-sm text-left font-normal border-2 border-default-200 pl-3 cursor-pointer",
+                            "hover:border-default-400 h-unit-10 min-h-unit-10 rounded-medium",
+                            !props.selected && "text-default-400", classNameInput
+                        )}
+                    >
+                        <Icon icon="solar:calendar-outline" className="text-2xl text-default-400" />
+                        {props.selected && isDate(props.selected) ?
+                            DateFormat(dayjs(props.selected), "DD/MM/YYYY") :
+                            <span>{placeholder}</span>}
+                    </div>
+                    <Input
+                        type="text"
+                        label="DatePicker"
+                        placeholder={placeholder}
+                        labelPlacement="outside"
+                        value={DateFormat(dayjs(props.selected), "DD/MM/YYYY")}
+                        variant="bordered"
+                        startContent={
+                            <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                        }
+                    />
                 </div>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">

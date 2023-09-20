@@ -66,7 +66,7 @@ const Calendar = ({
                     "text-muted-foreground rounded-md w-10 font-normal text-[0.8rem]",
                 row: "flex justify-center w-full mt-2",
                 cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-default first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                day: "flex justify-center items-center h-10 w-10 rounded-xl border-primary text-foreground hover:text-primary-foreground hover:bg-primary aria-selected:opacity-100 cursor-pointer",
+                day: "flex justify-center items-center h-10 w-10 rounded-xl text-foreground hover:text-primary-foreground hover:bg-primary aria-selected:opacity-100 cursor-pointer",
                 day_selected:
                     "[&:not([disabled])]:bg-primary [&:not([disabled])]:text-primary-foreground [&:not([disabled])]:hover:bg-primary [&:not([disabled])]:hover:text-primary-foreground",
                 day_today: "bg-default text-default-foreground",

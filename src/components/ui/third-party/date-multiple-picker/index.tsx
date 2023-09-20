@@ -25,7 +25,8 @@ const DateMultiplePicker = ({ placeholder, classNameInput, ...props }: CalendarP
             <PopoverTrigger>
                 <div
                     className={cn(
-                        "flex flex-wrap gap-y-2 justify-start text-sm text-left font-normal border p-2 rounded-xl cursor-pointer",
+                        "flex flex-wrap gap-y-2 justify-start text-sm text-left font-normal border-2 border-default-200 p-2 cursor-pointer",
+                        "hover:border-default-400 h-unit-10 min-h-unit-10 rounded-medium",
                         !props.selected && "text-muted-foreground", classNameInput
                     )}
                 >

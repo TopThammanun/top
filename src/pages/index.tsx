@@ -4,8 +4,9 @@ import { Fragment, ReactElement, useState } from 'react'
 import { useTheme } from "next-themes";
 import RootLayout from '@/components/layouts/RootLayout';
 import MainLayout from '@/components/layouts/MainLayout';
-import { Button, Calendar, DateMultiplePicker, DatePicker } from '@/components/ui';
+import { Button, Calendar, DateMultiplePicker, DatePicker, Input } from '@/components/ui';
 import { DateRange } from 'react-day-picker';
+import { Icon } from '@iconify/react';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -42,6 +43,20 @@ const Home = (props: Props) => {
           min={1}
           selected={arrDate}
           onSelect={setArrDate}
+        />
+        <Input
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          labelPlacement="outside"
+          variant='bordered'
+        />
+        <Input
+          type="email"
+          label="Email"
+          placeholder="you@example.com"
+          labelPlacement="outside"
+          variant='bordered'
         />
         {/* <DateRangePicker
           mode="range"
