@@ -5,27 +5,27 @@ import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import dayjs from "dayjs";
-import { DateFormat } from "@/utils/date-format";
 import { Button, Chip, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
+import { useDateFormat } from "@/hooks/use-date-format";
 
 const formatCaption = (date: Date) => {
-    const y = DateFormat(dayjs(date), "YYYY");
+    const y = useDateFormat(dayjs(date), "YYYY");
     const m = dayjs(date).format("MMMM");
     return `${m} ${y}`;
 };
 
 const formatYearCaption = (date: Date) => {
-    const y = DateFormat(dayjs(date), "YYYY");
+    const y = useDateFormat(dayjs(date), "YYYY");
     return `${y}`;
 };
 
 const formatMonthCaption = (date: Date) => {
-    const m = DateFormat(dayjs(date), "MMMM");
+    const m = useDateFormat(dayjs(date), "MMMM");
     return `${m}`;
 };
 
 const formatWeekdayName = (date: Date) => {
-    const d = DateFormat(dayjs(date), "dd");
+    const d = useDateFormat(dayjs(date), "dd");
     return `${d}`;
 };
 

@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 
-export const useDataFormat = (date: Dayjs, format: string) => {
+export const useDateFormat = (date: Dayjs, format: string) => {
   const isBuddhistEra = true;
 
   if (isBuddhistEra) {

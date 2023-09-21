@@ -2,11 +2,11 @@
 
 import { Fragment, useEffect, useState } from "react"
 import { Icon } from "@iconify/react"
-import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
 import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
+import { useDateFormat } from "@/hooks/use-date-format"
 
 type Props = {
     mode: "multiple"
@@ -50,7 +50,7 @@ const DateMultiplePicker = ({
     useEffect(() => {
         if (props.selected && isMultipleDate(props.selected)) {
             const formattedDates = props.selected.map((item) => {
-                return DateFormat(dayjs(item), "DD/MM/YYYY");
+                return useDateFormat(dayjs(item), "DD/MM/YYYY");
             });
             setTextValue(formattedDates.join(', '))
         } else {

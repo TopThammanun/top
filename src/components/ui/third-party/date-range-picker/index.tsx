@@ -2,11 +2,11 @@
 
 import { Fragment } from "react"
 import { Icon } from "@iconify/react"
-import { DateFormat } from "@/utils/date-format"
 import dayjs from "dayjs"
 import { DateRange, DayPicker } from "react-day-picker"
 import { Calendar, Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
 import { useEffect, useState } from "react"
+import { useDateFormat } from "@/hooks/use-date-format"
 
 type Props = {
     mode: "range"
@@ -51,7 +51,7 @@ const DateRangePicker = ({
 
     useEffect(() => {
         if (props.selected && isDateRange(props.selected)) {
-            const formattedDates = `${DateFormat(dayjs(props.selected?.from), "DD/MM/YYYY")} - ${DateFormat(dayjs(props.selected?.to), "DD/MM/YYYY")}`
+            const formattedDates = `${useDateFormat(dayjs(props.selected?.from), "DD/MM/YYYY")} - ${useDateFormat(dayjs(props.selected?.to), "DD/MM/YYYY")}`
             setTextValue(formattedDates)
         } else {
             setTextValue("")
