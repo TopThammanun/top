@@ -14,7 +14,7 @@ const RootLayout = (props: Props) => {
     return (
         <Fragment>
             <Head>
-                <title>{props.title || "Template R&N"}</title>
+                <title>{props.title || "DOUBLE-N"}</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="description" content={props.desc} />
                 <meta name="keyword" content={props.keyword} />
