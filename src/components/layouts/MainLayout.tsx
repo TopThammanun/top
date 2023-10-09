@@ -13,7 +13,7 @@ const MainLayout = (props: Props) => {
     return (
         <div className="flex flex-row min-h-[100dvh] max-w-screen">
             <Sidebar />
-            <div className="flex-grow">
+            <div className="w-full">
                 <div className='flex flex-col min-h-[100dvh] '>
                     <Navbar />
                     <div className="flex-grow">
