@@ -55,8 +55,8 @@ export const MenuSidebar = () => {
                         className='rounded-none'
                     />
                     <div className='flex flex-col text-primary text-2xl font-bold'>
-                        <div> HEALTH </div>
-                        <div className="-mt-1"> SERVICE </div>
+                        <div> DOUBLE </div>
+                        <div className="-mt-1">N & N </div>
                     </div>
                 </div>
             </div>
