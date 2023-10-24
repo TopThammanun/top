@@ -7,6 +7,7 @@ import MainLayout from '@/components/layouts/main-layout';
 import { Button, Calendar, DateMultiplePicker, DatePicker, DateRangePicker, Input, Popover, PopoverContent, PopoverTrigger } from '@/components/ui';
 import { DateRange } from 'react-day-picker';
 import { Icon } from '@iconify/react';
+import Alert from '@/components/ui/alert';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -18,10 +19,50 @@ const Home = (props: Props) => {
   return (
     <Fragment>
       <div className='flex flex-col gap-5'>
-        <div className='flex justify-center items-center gap-5'>Tempalte NextJs and NextUI
-          <Button color="primary">
-            Button
+        <div className='flex flex-wrap justify-center items-center gap-5'>
+          Tempalte NextJs and NextUI
+        </div>
+        <div className='flex flex-wrap justify-center items-center gap-5'>
+          <Button color="primary" onClick={() => (
+            Alert.message({
+              content: "Open Alert",
+            })
+          )}>
+            Open Alert
           </Button>
+
+          <Button color="primary" onClick={() => (
+            Alert.error({
+              content: "Open Error",
+            })
+          )}>
+            Open Error
+          </Button>
+
+          <Button color="primary" onClick={() => (
+            Alert.warning({
+              content: "Open warning",
+            })
+          )}>
+            Open warning
+          </Button>
+
+          <Button color="primary" onClick={() => (
+            Alert.success({
+              content: "Open success",
+            })
+          )}>
+            Open success
+          </Button>
+
+          <Button color="primary" onClick={() => (
+            Alert.question({
+              content: "Open Question",
+            })
+          )}>
+            Open Question
+          </Button>
+
         </div>
         <div className='flex items-center gap-2 p-5 rounded-lg border-1'>
           The current theme is: {theme}

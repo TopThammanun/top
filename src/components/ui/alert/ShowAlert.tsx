@@ -4,29 +4,50 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { createRoot } from 'react-dom/client';
 import { cn } from '@/lib/utils';
 
-export type AlertUIProps = {
-    icon?: "primary" | "default" | "secondary" | "success" | "warning" | "danger" | React.ReactNode;
+export type ShowAlertProps = {
+    icon?: "info" | "error" | "warning" | "success" | React.ReactNode;
     noIcon?: boolean;
     color?: "primary" | "default" | "secondary" | "success" | "warning" | "danger";
     content: string | React.ReactNode;
-    footerContent?: string | React.ReactNode
     size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
 };
+export type ButtonCancle = {
+    onCancle?: () => void;
+    labelCancle?: string
+};
+export type ButtonSubmit = {
+    onSubmit?: () => void;
+    labelSubmit?: string
+};
 
-const CreateAlert = (props: AlertUIProps) => {
+const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
     const {
         icon,
         noIcon = false,
         color = "default",
         content,
-        footerContent,
-        size
+        size,
+        onCancle,
+        labelCancle,
+        onSubmit,
+        labelSubmit
     } = props
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+
     useEffect(() => {
         onOpen()
     }, []);
+
+    const handleCancle = () => {
+        onCancle && onCancle()
+        onClose()
+    }
+
+    const handleSubmit = () => {
+        onSubmit && onSubmit()
+        onClose()
+    }
 
     return (
         <Modal
@@ -39,19 +60,23 @@ const CreateAlert = (props: AlertUIProps) => {
                     <ModalBody>
                         <div className='flex flex-col gap-3 m-5 items-center'>
                             {!noIcon &&
-                                <div className={cn(`text-6xl text-${color || "primary"}`)}>
-                                    {icon}
+                                <div className={cn(`text-6xl text-${color}`)}>
+                                    {icon || <Icon icon="icon-park-twotone:info" />}
                                 </div>
                             }
                             {content}
-                            {footerContent}
-                            <Button
-                                color={color}
-                                className='px-20'
-                                onPress={onClose}
-                            >
-                                ปิด
-                            </Button>
+                            <div className='flex gap-2'>
+                                {labelCancle &&
+                                    <Button color={color} variant='bordered' onClick={handleCancle}>
+                                        {labelCancle}
+                                    </Button>
+                                }
+                                {labelSubmit &&
+                                    <Button color={color} onClick={handleSubmit}>
+                                        {labelSubmit}
+                                    </Button>
+                                }
+                            </div>
                         </div>
                     </ModalBody>
                 )}
@@ -67,18 +92,27 @@ const ShowAlert = ({
     color,
     content,
     size,
-}: AlertUIProps) => {
+    onCancle,
+    labelCancle,
+    onSubmit,
+    labelSubmit
+}: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
     const div = document.createElement('div');
     document.body.append(document.createElement('div'));
     const root = createRoot(div);
     root.render(
-        <CreateAlert
+        <Alert
             icon={icon}
             noIcon={noIcon}
             color={color}
             content={content}
             size={size}
-        />);
+            onCancle={onCancle}
+            labelCancle={labelCancle}
+            onSubmit={onSubmit}
+            labelSubmit={labelSubmit}
+        />
+    );
 };
 
 export default ShowAlert

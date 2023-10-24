@@ -1,66 +1,65 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { Button, Modal, ModalBody, ModalContent, useDisclosure } from '..';
+import React from 'react';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { createRoot } from 'react-dom/client';
-import ShowAlert, { AlertUIProps } from './AlertUI';
+import ShowAlert, { ButtonCancle, ButtonSubmit, ShowAlertProps } from './ShowAlert';
 
 const Alert = {
-    icons: {
-        info: <Icon icon="icon-park-twotone:info" className='text-primary' />,
-        danger: <Icon icon="ph:x-circle-duotone" className='text-danger' />,
-        warning: <Icon icon="ph:warning-duotone" className='text-warning' />,
-        success: <Icon icon="icon-park-twotone:check-one" className='text-success' />,
-    },
-
-    info({ icon, noIcon, color, content, size }: AlertUIProps) {
+    message({ icon, noIcon, color, content, size, onSubmit, labelSubmit }: ShowAlertProps & ButtonSubmit) {
         ShowAlert({
-            icon: icon || this.icons.info,
-            noIcon,
+            icon: icon || <Icon icon="line-md:alert-circle-twotone" />,
+            noIcon: noIcon,
             color: color || 'primary',
-            content,
-            size
+            content: content,
+            size: size,
+            onSubmit: onSubmit,
+            labelSubmit: labelSubmit || 'ปิด'
         })
     },
-    warning({ icon, noIcon, color, content, size }: AlertUIProps) {
+    error({ icon, noIcon, color, content, size, onSubmit, labelSubmit }: ShowAlertProps & ButtonSubmit) {
         ShowAlert({
-            icon: icon || this.icons.warning,
-            noIcon,
-            color: color || 'warning',
-            content,
-            size
+            icon: icon || <Icon icon="line-md:close-circle-twotone" />,
+            noIcon: noIcon,
+            color: color || 'primary',
+            content: content,
+            size: size,
+            onSubmit: onSubmit,
+            labelSubmit: labelSubmit || 'ปิด'
         })
     },
-
-    danger({ icon, noIcon, color, content, size }: AlertUIProps) {
+    warning({ icon, noIcon, color, content, size, onSubmit, labelSubmit }: ShowAlertProps & ButtonSubmit) {
         ShowAlert({
-            icon: icon || this.icons.danger,
-            noIcon,
-            color: color || 'danger',
-            content,
-            size
+            icon: icon || <Icon icon="line-md:alert-twotone" />,
+            noIcon: noIcon,
+            color: color || 'primary',
+            content: content,
+            size: size,
+            onSubmit: onSubmit,
+            labelSubmit: labelSubmit || 'ปิด'
         })
     },
-    success({ icon, noIcon, color, content, size }: AlertUIProps) {
+    success({ icon, noIcon, color, content, size, onSubmit, labelSubmit }: ShowAlertProps & ButtonSubmit) {
         ShowAlert({
-            icon: icon || this.icons.success,
-            noIcon,
-            color: color || 'success',
-            content,
-            size
+            icon: icon || <Icon icon="line-md:confirm-circle-twotone" />,
+            noIcon: noIcon,
+            color: color || 'primary',
+            content: content,
+            size: size,
+            onSubmit: onSubmit,
+            labelSubmit: labelSubmit || 'ปิด'
         })
     },
-
-    question({ icon, noIcon, color, content, size }: AlertUIProps) {
+    question({ icon, noIcon, color, content, size, onCancle, labelCancle, onSubmit, labelSubmit }: ShowAlertProps & ButtonCancle & ButtonSubmit) {
         ShowAlert({
-            icon: icon || this.icons.success,
-            noIcon,
-            color: color || 'success',
-            content,
-            size,
-            footerContent: <div>asd</div>
+            icon: icon || <Icon icon="line-md:question-circle-twotone" />,
+            noIcon: noIcon,
+            color: color || 'primary',
+            content: content,
+            size: size,
+            onCancle: onCancle,
+            labelCancle: labelCancle || 'ยกเลิก',
+            onSubmit: onSubmit,
+            labelSubmit: labelSubmit || 'ยืนยัน'
         })
     },
-
 }
 
 export default Alert;
