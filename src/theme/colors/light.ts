@@ -34,7 +34,7 @@ module.exports = {
       800: "#141414",
       900: "#0A0A0A",
       foreground: "#EBEBEB",
-      DEFAULT: "#333333",
+      DEFAULT: "#292929",
     },
     secondary: {
       50: "#f2eafa",
