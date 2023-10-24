@@ -5,8 +5,7 @@ import { cn } from "@/lib/utils"
 import { Icon } from "@iconify/react"
 import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
-import Calendar from "../calendar"
-import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
+import { Calendar, Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
 
 type Props = {
     mode: "single" | "multiple" | "range"

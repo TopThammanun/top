@@ -1,31 +1,30 @@
 "use client";
 
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn, dateFormat } from "@/lib/utils";
 import { Icon } from "@iconify/react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import dayjs from "dayjs";
 import { Button, Chip, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
-import { useDateFormat } from "@/hooks/use-date-format";
 
 const formatCaption = (date: Date) => {
-    const y = useDateFormat(dayjs(date), "YYYY");
+    const y = dateFormat(dayjs(date), "YYYY");
     const m = dayjs(date).format("MMMM");
     return `${m} ${y}`;
 };
 
 const formatYearCaption = (date: Date) => {
-    const y = useDateFormat(dayjs(date), "YYYY");
+    const y = dateFormat(dayjs(date), "YYYY");
     return `${y}`;
 };
 
 const formatMonthCaption = (date: Date) => {
-    const m = useDateFormat(dayjs(date), "MMMM");
+    const m = dateFormat(dayjs(date), "MMMM");
     return `${m}`;
 };
 
 const formatWeekdayName = (date: Date) => {
-    const d = useDateFormat(dayjs(date), "dd");
+    const d = dateFormat(dayjs(date), "dd");
     return `${d}`;
 };
 

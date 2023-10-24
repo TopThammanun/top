@@ -6,10 +6,10 @@ import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
 import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
-import { useDateFormat } from "@/hooks/use-date-format"
+import { dateFormat } from "@/lib/utils"
 
 type Props = {
-    mode: "multiple"
+    mode: "single"
     label?: string
     placeholder?: string
     labelPlacement?: "inside" | "outside" | "outside-left"
@@ -17,8 +17,8 @@ type Props = {
     radius?: "full" | "lg" | "md" | "sm" | "none"
     color?: "default" | "primary" | "secondary" | "success" | "warning" | "danger"
     size?: "sm" | "md" | "lg"
-    isDisabled?: boolean
     isReadOnly?: boolean
+    isDisabled?: boolean
     isRequired?: boolean
     isInvalid?: boolean
     description?: React.ReactNode
@@ -27,7 +27,7 @@ type Props = {
 }
 type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const DateMultiplePicker = ({
+const DatePicker = ({
     label,
     placeholder,
     labelPlacement,
@@ -44,24 +44,23 @@ const DateMultiplePicker = ({
     classNameInput,
     ...props
 }: CalendarProps & Props) => {
-    const isMultipleDate = (selected: Date[] | undefined): selected is Date[] => Array.isArray(selected);
+    const [isOpen, setIsOpen] = useState(false)
     const [textValue, setTextValue] = useState("")
-
+    const isDate = (selected: Date | undefined): selected is Date => selected instanceof Date;
     useEffect(() => {
-        if (props.selected && isMultipleDate(props.selected)) {
-            const formattedDates = props.selected.map((item) => {
-                return useDateFormat(dayjs(item), "DD/MM/YYYY");
-            });
-            setTextValue(formattedDates.join(', '))
+        if (props.selected && isDate(props.selected)) {
+            const formattedDates = dateFormat(dayjs(props.selected), "DD/MM/YYYY")
+            setTextValue(formattedDates)
         } else {
             setTextValue("")
         }
+        setIsOpen(false)
     }, [props.selected])
 
     return (
         <Fragment>
             {!isDisabled && !isReadOnly
-                ? <Popover placement="top">
+                ? <Popover placement="top" isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)}>
                     <PopoverTrigger className="z-0">
                         <div>
                             <Input
@@ -124,4 +123,4 @@ const DateMultiplePicker = ({
         </Fragment>
     )
 }
-export default DateMultiplePicker
+export default DatePicker

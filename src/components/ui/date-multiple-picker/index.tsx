@@ -6,10 +6,10 @@ import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
 import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
-import { useDateFormat } from "@/hooks/use-date-format"
+import { dateFormat } from "@/lib/utils"
 
 type Props = {
-    mode: "single"
+    mode: "multiple"
     label?: string
     placeholder?: string
     labelPlacement?: "inside" | "outside" | "outside-left"
@@ -27,7 +27,7 @@ type Props = {
 }
 type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const DatePicker = ({
+const DateMultiplePicker = ({
     label,
     placeholder,
     labelPlacement,
@@ -44,12 +44,15 @@ const DatePicker = ({
     classNameInput,
     ...props
 }: CalendarProps & Props) => {
+    const isMultipleDate = (selected: Date[] | undefined): selected is Date[] => Array.isArray(selected);
     const [textValue, setTextValue] = useState("")
-    const isDate = (selected: Date | undefined): selected is Date => selected instanceof Date;
+
     useEffect(() => {
-        if (props.selected && isDate(props.selected)) {
-            const formattedDates = useDateFormat(dayjs(props.selected), "DD/MM/YYYY")
-            setTextValue(formattedDates)
+        if (props.selected && isMultipleDate(props.selected)) {
+            const formattedDates = props.selected.map((item) => {
+                return dateFormat(dayjs(item), "DD/MM/YYYY");
+            });
+            setTextValue(formattedDates.join(', '))
         } else {
             setTextValue("")
         }
@@ -121,4 +124,4 @@ const DatePicker = ({
         </Fragment>
     )
 }
-export default DatePicker
+export default DateMultiplePicker

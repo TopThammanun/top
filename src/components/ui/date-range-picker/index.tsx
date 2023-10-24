@@ -6,7 +6,7 @@ import dayjs from "dayjs"
 import { DateRange, DayPicker } from "react-day-picker"
 import { Calendar, Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
 import { useEffect, useState } from "react"
-import { useDateFormat } from "@/hooks/use-date-format"
+import { dateFormat } from "@/lib/utils"
 
 type Props = {
     mode: "range"
@@ -44,6 +44,8 @@ const DateRangePicker = ({
     classNameInput,
     ...props
 }: CalendarProps & Props) => {
+    const [isOpen, setIsOpen] = useState(false)
+    const [countSelected, setCountSelected] = useState(0)
     const isDateRange = (selected: DateRange | undefined) => (
         selected && !(selected instanceof Date) && !Array.isArray(selected) && selected.from && selected.to
     )
@@ -51,8 +53,14 @@ const DateRangePicker = ({
 
     useEffect(() => {
         if (props.selected && isDateRange(props.selected)) {
-            const formattedDates = `${useDateFormat(dayjs(props.selected?.from), "DD/MM/YYYY")} - ${useDateFormat(dayjs(props.selected?.to), "DD/MM/YYYY")}`
+            const formattedDates = `${dateFormat(dayjs(props.selected?.from), "DD/MM/YYYY")} - ${dateFormat(dayjs(props.selected?.to), "DD/MM/YYYY")}`
             setTextValue(formattedDates)
+            const updateConut = countSelected + 1
+            setCountSelected(updateConut)
+            if (countSelected > 0) {
+                setIsOpen(false)
+                setCountSelected(0)
+            }
         } else {
             setTextValue("")
         }
@@ -61,7 +69,7 @@ const DateRangePicker = ({
     return (
         <Fragment>
             {!isDisabled && !isReadOnly
-                ? <Popover placement="top">
+                ? <Popover placement="top" isOpen={isOpen} onOpenChange={(open) => setIsOpen(open)}>
                     <PopoverTrigger className="z-0">
                         <div>
                             <Input
