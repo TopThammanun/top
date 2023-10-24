@@ -25,10 +25,11 @@ const Home = (props: Props) => {
         <div className='flex flex-wrap justify-center items-center gap-5'>
           <Button color="primary" onClick={() => (
             Alert.message({
-              content: "Open Alert",
+              content: "Open Message",
+              noButton: true,
             })
           )}>
-            Open Alert
+            Open Message
           </Button>
 
           <Button color="primary" onClick={() => (

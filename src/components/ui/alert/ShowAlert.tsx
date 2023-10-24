@@ -10,6 +10,7 @@ export type ShowAlertProps = {
     color?: "primary" | "default" | "secondary" | "success" | "warning" | "danger";
     content: string | React.ReactNode;
     size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full";
+    noButton?: boolean
 };
 export type ButtonCancle = {
     onCancle?: () => void;
@@ -27,6 +28,7 @@ const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
         color = "default",
         content,
         size,
+        noButton,
         onCancle,
         labelCancle,
         onSubmit,
@@ -39,13 +41,13 @@ const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
         onOpen()
     }, []);
 
-    const handleCancle = () => {
-        onCancle && onCancle()
+    const handleCancle = async () => {
+        onCancle && await onCancle()
         onClose()
     }
 
-    const handleSubmit = () => {
-        onSubmit && onSubmit()
+    const handleSubmit = async () => {
+        onSubmit && await onSubmit()
         onClose()
     }
 
@@ -65,18 +67,20 @@ const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
                                 </div>
                             }
                             {content}
-                            <div className='flex gap-2'>
-                                {labelCancle &&
-                                    <Button color={color} variant='bordered' onClick={handleCancle}>
-                                        {labelCancle}
-                                    </Button>
-                                }
-                                {labelSubmit &&
-                                    <Button color={color} onClick={handleSubmit}>
-                                        {labelSubmit}
-                                    </Button>
-                                }
-                            </div>
+                            {!noButton &&
+                                <div className='flex gap-2'>
+                                    {labelCancle &&
+                                        <Button color={color} variant='bordered' onClick={handleCancle}>
+                                            {labelCancle}
+                                        </Button>
+                                    }
+                                    {labelSubmit &&
+                                        <Button color={color} onClick={handleSubmit}>
+                                            {labelSubmit}
+                                        </Button>
+                                    }
+                                </div>
+                            }
                         </div>
                     </ModalBody>
                 )}
@@ -92,6 +96,7 @@ const ShowAlert = ({
     color,
     content,
     size,
+    noButton,
     onCancle,
     labelCancle,
     onSubmit,
@@ -107,6 +112,7 @@ const ShowAlert = ({
             color={color}
             content={content}
             size={size}
+            noButton={noButton}
             onCancle={onCancle}
             labelCancle={labelCancle}
             onSubmit={onSubmit}
