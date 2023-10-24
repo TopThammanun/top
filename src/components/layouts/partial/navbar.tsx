@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import { MenuSidebar } from './Sidebars'
+import { MenuSidebar } from './sidebar'
 import router from 'next/router'
 import { Icon } from '@iconify/react';
 import { Button, Card, Tooltip } from '@nextui-org/react';

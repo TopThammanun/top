@@ -1,9 +1,9 @@
 "use client"
 
 import React, { ReactNode } from 'react'
-import Navbar from './partial/Navbars'
-import Footer from './partial/Footers'
-import Sidebar from './partial/Sidebars'
+import Navbar from './partial/navbar'
+import Footer from './partial/footer'
+import Sidebar from './partial/sidebar'
 
 type Props = {
     children: ReactNode
