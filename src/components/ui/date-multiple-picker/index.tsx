@@ -10,7 +10,7 @@ import { dateFormat } from "@/lib/utils"
 
 type Props = {
     mode: "multiple"
-    label?: string
+    label?: string | React.ReactNode
     placeholder?: string
     labelPlacement?: "inside" | "outside" | "outside-left"
     variant?: "bordered" | "faded" | "flat" | "underlined"
