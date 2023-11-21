@@ -8,7 +8,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import { Icon } from '@iconify/react';
 import { Accordion, AccordionItem, Card } from "@nextui-org/react";
 import { cn } from '@/lib/utils';
-import { Image } from '@/components/ui';
+import { Image } from '@nextui-org/react';
 
 type MenuItemProps = {
     path: string
