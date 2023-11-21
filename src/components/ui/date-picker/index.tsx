@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react"
 import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
-import { Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
+import { Input, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react"
 import { dateFormat } from "@/lib/utils"
 
 type Props = {

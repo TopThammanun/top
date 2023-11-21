@@ -1,13 +1,11 @@
-// import MainLayout from '@/components/layouts/MainLayout'
-// import RootLayout from '@/components/layouts/RootLayout'
 import { Fragment, ReactElement, useState } from 'react'
 import { useTheme } from "next-themes";
 import RootLayout from '@/components/layouts/root-layout';
 import MainLayout from '@/components/layouts/main-layout';
-import { Button, Calendar, DateMultiplePicker, DatePicker, DateRangePicker, Input, Popover, PopoverContent, PopoverTrigger } from '@/components/ui';
+import { DateMultiplePicker, DatePicker, DateRangePicker } from '@/components/ui';
 import { DateRange } from 'react-day-picker';
-import { Icon } from '@iconify/react';
 import Alert from '@/components/ui/alert';
+import { Button, Input } from '@nextui-org/react';
 type Props = {}
 
 const Home = (props: Props) => {

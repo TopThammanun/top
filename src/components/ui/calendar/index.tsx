@@ -5,7 +5,7 @@ import { cn, dateFormat } from "@/lib/utils";
 import { Icon } from "@iconify/react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import dayjs from "dayjs";
-import { Button, Chip, Input, Listbox, ListboxItem, Popover, PopoverContent, PopoverTrigger, Select, SelectItem, Textarea } from "@/components/ui"
+import { Select, SelectItem} from '@nextui-org/react';
 
 const formatCaption = (date: Date) => {
     const y = dateFormat(dayjs(date), "YYYY");

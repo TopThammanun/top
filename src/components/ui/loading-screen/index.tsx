@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Image } from '@/components/ui';
+import { Image } from '@nextui-org/react';
 
 type Props = {
     label?: string

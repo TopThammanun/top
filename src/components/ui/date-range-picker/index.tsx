@@ -4,9 +4,10 @@ import { Fragment } from "react"
 import { Icon } from "@iconify/react"
 import dayjs from "dayjs"
 import { DateRange, DayPicker } from "react-day-picker"
-import { Calendar, Input, Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
+import { Input, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react"
 import { useEffect, useState } from "react"
 import { dateFormat } from "@/lib/utils"
+import Calendar from "../calendar"
 
 type Props = {
     mode: "range"
