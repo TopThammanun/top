@@ -27,6 +27,13 @@ const apiBase = axios.create({
 });
 
 apiBase.interceptors.request.use((config) => {
+  if (config.headers.isDisableLoading) {
+    console.log("no loading")
+    delete config.headers.isDisableLoading
+  } else {
+    console.log("start loading")
+  }
+
   return config;
 });
 
@@ -44,28 +51,43 @@ apiBase.interceptors.response.use(
   }
 );
 
-const encodeURI = (url: string) =>
-  encodeURIComponent(url).replace(/%2F/gi, "/");
+const encodeURI = (url: string) => {
+
+  return encodeURIComponent(url).replace(/%2F/gi, "/");
+}
+
+const handleIsDisableLoading = (config: AxiosRequestConfig | undefined, isDisableLoading: boolean | undefined) => {
+  config = {
+    ...config,
+    headers: { ...config?.headers, 'isDisableLoading': isDisableLoading }
+  };
+  return config
+}
 
 const api = {
-  async get(url: string, config?: AxiosRequestConfig | undefined) {
-    const res = await apiBase.get(encodeURI(url), config);
+  async get(req: { url: string, config?: AxiosRequestConfig | undefined, isDisableLoading?: boolean }) {
+    handleIsDisableLoading(req?.config, req?.isDisableLoading)
+    const res = await apiBase.get(encodeURI(req.url), req?.config);
     return res?.data;
   },
-  async post(url: string, data: any, config?: AxiosRequestConfig | undefined) {
-    const res = await apiBase.post(encodeURI(url), data, config);
+  async post(req: { url: string, data: any, config?: AxiosRequestConfig | undefined, isDisableLoading?: boolean }) {
+    handleIsDisableLoading(req?.config, req?.isDisableLoading)
+    const res = await apiBase.post(encodeURI(req.url), req.data, req?.config);
     return res?.data;
   },
-  async put(url: string, data: any, config?: AxiosRequestConfig | undefined) {
-    const res = await apiBase.put(encodeURI(url), data, config);
+  async put(req: { url: string, data: any, config?: AxiosRequestConfig | undefined, isDisableLoading?: boolean }) {
+    handleIsDisableLoading(req?.config, req?.isDisableLoading)
+    const res = await apiBase.put(encodeURI(req.url), req.data, req?.config);
     return res?.data;
   },
-  async patch(url: string, data: any, config?: AxiosRequestConfig | undefined) {
-    const res = await apiBase.patch(encodeURI(url), data, config);
+  async patch(req: { url: string, data: any, config?: AxiosRequestConfig | undefined, isDisableLoading?: boolean }) {
+    handleIsDisableLoading(req?.config, req?.isDisableLoading)
+    const res = await apiBase.patch(encodeURI(req.url), req.data, req?.config);
     return res?.data;
   },
-  async delete(url: string, config?: AxiosRequestConfig | undefined) {
-    const res = await apiBase.delete(encodeURI(url), config);
+  async delete(req: { url: string, config?: AxiosRequestConfig | undefined, isDisableLoading?: boolean }) {
+    handleIsDisableLoading(req?.config, req?.isDisableLoading)
+    const res = await apiBase.delete(encodeURI(req.url), req?.config);
     return res?.data;
   },
 };
