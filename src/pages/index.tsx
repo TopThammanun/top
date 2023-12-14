@@ -6,7 +6,7 @@ import { DateMultiplePicker, DatePicker, DateRangePicker } from '@/components/ui
 import { DateRange } from 'react-day-picker';
 import Alert from '@/components/ui/alert';
 import { Button, Input } from '@nextui-org/react';
-import api from '@/api';
+import apiBase from '@/api/base-api';
 type Props = {}
 
 const Home = (props: Props) => {
@@ -21,7 +21,7 @@ const Home = (props: Props) => {
         <div className='flex flex-wrap justify-center items-center gap-5'>
           Tempalte NextJs and NextUI
         </div>
-        <Button onClick={() => { api.get({ url: "" }) }}>Call API</Button>
+        <Button onClick={() => { apiBase.get({ url: "" }) }}>Call API</Button>
         <div className='flex flex-wrap justify-center items-center gap-5'>
           <Button color="primary" onClick={() => (
             Alert.message({

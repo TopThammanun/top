@@ -18,7 +18,7 @@ export class ServerError extends Error {
   }
 }
 
-const apiBase = axios.create({
+const axiosBase = axios.create({
   baseURL,
   withCredentials: true,
   headers: {
@@ -28,7 +28,7 @@ const apiBase = axios.create({
   },
 });
 
-apiBase.interceptors.request.use((config) => {
+axiosBase.interceptors.request.use((config) => {
   // const dispatch = useDispatch();
   // const sttingReducer = useSelector((state: ReducerType ) => state.sttingReducer);
 
@@ -51,7 +51,7 @@ apiBase.interceptors.request.use((config) => {
   return config;
 });
 
-apiBase.interceptors.response.use(
+axiosBase.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -83,14 +83,14 @@ const handleIsDisableLoading = (
   return config;
 };
 
-const api = {
+const apiBase = {
   async get(req: {
     url: string;
     config?: AxiosRequestConfig | undefined;
     isDisableLoading?: boolean;
   }) {
     handleIsDisableLoading(req?.config, req?.isDisableLoading);
-    const res = await apiBase.get(encodeURI(req.url), req?.config);
+    const res = await axiosBase.get(encodeURI(req.url), req?.config);
     return res?.data;
   },
 
@@ -101,7 +101,7 @@ const api = {
     isDisableLoading?: boolean;
   }) {
     handleIsDisableLoading(req?.config, req?.isDisableLoading);
-    const res = await apiBase.post(encodeURI(req.url), req.data, req?.config);
+    const res = await axiosBase.post(encodeURI(req.url), req.data, req?.config);
     return res?.data;
   },
 
@@ -112,7 +112,7 @@ const api = {
     isDisableLoading?: boolean;
   }) {
     handleIsDisableLoading(req?.config, req?.isDisableLoading);
-    const res = await apiBase.put(encodeURI(req.url), req.data, req?.config);
+    const res = await axiosBase.put(encodeURI(req.url), req.data, req?.config);
     return res?.data;
   },
 
@@ -123,7 +123,11 @@ const api = {
     isDisableLoading?: boolean;
   }) {
     handleIsDisableLoading(req?.config, req?.isDisableLoading);
-    const res = await apiBase.patch(encodeURI(req.url), req.data, req?.config);
+    const res = await axiosBase.patch(
+      encodeURI(req.url),
+      req.data,
+      req?.config
+    );
     return res?.data;
   },
 
@@ -133,10 +137,10 @@ const api = {
     isDisableLoading?: boolean;
   }) {
     handleIsDisableLoading(req?.config, req?.isDisableLoading);
-    const res = await apiBase.delete(encodeURI(req.url), req?.config);
+    const res = await axiosBase.delete(encodeURI(req.url), req?.config);
     return res?.data;
   },
 };
 
-export default api;
+export default apiBase;
 export { axios, param, baseURL };
