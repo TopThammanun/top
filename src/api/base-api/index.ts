@@ -1,4 +1,4 @@
-import Alert from "@/components/ui/alert";
+import Alert from "@/components/shared/alert";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import $ from "jquery";
 import { useDispatch, useSelector } from "react-redux";

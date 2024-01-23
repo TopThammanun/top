@@ -1,10 +1,10 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { useTheme } from "next-themes";
-import RootLayout from '@/components/layouts/root-layout';
-import MainLayout from '@/components/layouts/main-layout';
-import { DateMultiplePicker, DatePicker, DateRangePicker } from '@/components/ui';
+import RootLayout from '@/layouts/root-layout';
+import MainLayout from '@/layouts/main-layout';
+import { DateMultiplePicker, DatePicker, DateRangePicker } from '@/components/shared';
 import { DateRange } from 'react-day-picker';
-import Alert from '@/components/ui/alert';
+import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base-api';
 type Props = {}

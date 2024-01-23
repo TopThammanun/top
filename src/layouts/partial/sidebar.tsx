@@ -6,8 +6,7 @@ import React, { Fragment, ReactElement, ReactNode, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import { Icon } from '@iconify/react';
-import { Accordion, AccordionItem, Card } from "@nextui-org/react";
-import { cn } from '@/lib/utils';
+import { Accordion, AccordionItem, Card, cn } from "@nextui-org/react";
 import { Image } from '@nextui-org/react';
 
 type MenuItemProps = {

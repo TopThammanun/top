@@ -5,7 +5,8 @@
 @tailwind utilities;
 
 @import url(nprogress.css);
-@import url(hidden-scrollbar.css);
+@import url(scrollbar.css);
+@import url(animation.css);
 
 @layer base {
   :root {
@@ -19,6 +20,6 @@
   }
 
   * {
-    @apply border-divider;
+    @apply border-divider min-w-0;
   }
 }

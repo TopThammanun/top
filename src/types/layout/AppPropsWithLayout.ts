@@ -1,6 +1,6 @@
 import { AppProps } from "next/app";
 import { NextPageWithLayout } from "./NextPageWithLayout";
 
-export type AppPropsWithLayout = AppProps & {
+export type AppPropsWithLayoutType = AppProps & {
   Component: NextPageWithLayout;
 };
