@@ -21,7 +21,7 @@ const Home = (props: Props) => {
   const [rangeDate, setRangeDate] = useState<DateRange | undefined>()
 
   const getApi = () => {
-    dispatch(globalReducer.startLoader())
+    // dispatch(globalReducer.startLoader())
     apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
     setTimeout(() => {
       apiBase.get({ url: "/api" })
