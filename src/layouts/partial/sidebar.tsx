@@ -1,6 +1,5 @@
 
 "use client"
-import NextLink from 'next/link';
 import router from 'next/router';
 import React, { Fragment, ReactElement, ReactNode, useState } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar';
