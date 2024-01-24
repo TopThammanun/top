@@ -1,6 +1,6 @@
 "use client"
 
-import GlobaAPILoader from '@/api/base/apiLoading'
+import { LoadingScreen } from '@/components/shared'
 import { ReducerType } from '@/redux/store'
 import Head from 'next/head'
 import React, { Fragment, ReactNode } from 'react'
@@ -14,8 +14,8 @@ type Props = {
 }
 
 const RootLayout = (props: Props) => {
-    const loadingScreenReducerData = useSelector((state: ReducerType) => state.loadingScreenReducer)
-    const isLoadingScreen = loadingScreenReducerData.countLoadingAPI && loadingScreenReducerData.countLoadingAPI > 0 || loadingScreenReducerData.isLoadingScreen
+    const globalReducer = useSelector((state: ReducerType) => state.globalReducer)
+
     return (
         <Fragment>
             <Head>
@@ -26,7 +26,7 @@ const RootLayout = (props: Props) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Head>
             <main>
-                <GlobaAPILoader/>
+                <LoadingScreen isLoading={globalReducer.countLoader > 0} />
                 {props.children}
             </main>
         </Fragment>

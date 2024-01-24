@@ -7,21 +7,25 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
-import { useAxiosLoader } from '@/api/base/apiLoading'
+import { ReducerType } from '@/redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import * as globalReducer from '@/redux/reducers/globalReducer';
+
 type Props = {}
 
 const Home = (props: Props) => {
+  const dispatch = useDispatch()
   const { theme, setTheme } = useTheme()
   const [date, setDate] = useState<Date | undefined>()
   const [arrDate, setArrDate] = useState<Date[] | undefined>()
   const [rangeDate, setRangeDate] = useState<DateRange | undefined>()
 
   const getApi = () => {
-    Promise.all([
-      apiBase.get({ urlBase: 'https://randomuser.me', url: "/api/", isLoadingScreen: true }),
-      apiBase.get({ urlBase: 'https://randomuser.me', url: "/api/", isLoadingScreen: true })]).then((values) => {
-        console.log(values);
-      })
+    dispatch(globalReducer.startLoader())
+    apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
+    setTimeout(() => {
+      apiBase.get({ url: "/api" })
+    }, 2000);
   }
 
   return (

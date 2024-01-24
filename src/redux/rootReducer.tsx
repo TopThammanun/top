@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import loadingScreenReducer from "./reducers/loadingScreenReducer"
+import globalReducer from "./reducers/globalReducer"
 
 const rootReducer = combineReducers({
-  loadingScreenReducer: loadingScreenReducer
+  globalReducer: globalReducer
 });
 export default rootReducer;
