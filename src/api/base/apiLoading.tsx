@@ -12,18 +12,34 @@ export const useAxiosLoader = () => {
     const loadingScreenReducerData = useSelector((state: ReducerType) => state.loadingScreenReducer)
 
     const [counter, setCounter] = useState(0);
-    const [apiLoading, setAPILoading] = useState({});
+    const [apiLoading, setAPILoading] = useState<string[]>([]);
 
     const inc = useCallback((url: string) => {
-        // const api = [...apiLoading, url]
-        const api = apiLoading
-        // setAPILoading(prev => ({...prev, {[url]:''}}))
-        setCounter(counter => counter + 1)
+        setCounter(counter + 1)
+        apiLoading.push(url)
     }, [setCounter]);
+
+    const inc2 = useCallback(() => setCounter(counter => (counter + 1)), [
+        setCounter
+    ]);
+
+    const inc3 = (url: string) => {
+        setCounter(counter + 1)
+        apiLoading.push(url)
+    }
 
     const dec = useCallback(() => setCounter(counter => (counter > 0 ? counter - 1 : counter)), [
         setCounter
     ]);
+
+    const dec2 = (url: string) => {
+        setCounter(counter => (counter > 0 ? counter - 1 : counter))
+        const indexToRemove = apiLoading.indexOf(url);
+
+        if (indexToRemove !== -1) {
+            apiLoading.splice(indexToRemove, 1);
+        }
+    }
 
     const handleRejection = (response: AxiosResponse<any, any>) => {
 
@@ -38,18 +54,23 @@ export const useAxiosLoader = () => {
             //     }
             //     delete config.headers.preventLoader;
             // }
-            console.log('config.headers.isLoadingScreen === true', config.headers.isLoadingScreen === "true")
+            console.log('config.headers.isLoadingScreen === true', config.headers.IsLoadingScreen === "true")
             if (config.url) {
-                if (config.headers.isLoadingScreen === "true") {
+                if (config.headers.IsLoadingScreen === "true") {
+                    console.log('YES')
+                    console.log('apiLoading', apiLoading)
                     inc(config.url);
-                    delete config.headers.isLoadingScreen;
+                    // delete config.headers.IsLoadingScreen;
                 }
             }
             return config;
         },
         response: (response: AxiosResponse<any, any>) => {
-            dec();
-
+            console.log('response', response)
+            if (response.config.url) {
+                dec2(response.config.url);
+            }
+            console.log('apiLoading', apiLoading)
             return response;
         },
         error: (error: any) => {

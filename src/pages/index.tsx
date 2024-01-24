@@ -7,7 +7,7 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
-import {useAxiosLoader} from '@/api/base/apiLoading'
+import { useAxiosLoader } from '@/api/base/apiLoading'
 type Props = {}
 
 const Home = (props: Props) => {
@@ -16,13 +16,21 @@ const Home = (props: Props) => {
   const [arrDate, setArrDate] = useState<Date[] | undefined>()
   const [rangeDate, setRangeDate] = useState<DateRange | undefined>()
 
+  const getApi = () => {
+    Promise.all([
+      apiBase.get({ urlBase: 'https://randomuser.me', url: "/api/", isLoadingScreen: true }),
+      apiBase.get({ urlBase: 'https://randomuser.me', url: "/api/", isLoadingScreen: true })]).then((values) => {
+        console.log(values);
+      })
+  }
+
   return (
     <Fragment>
       <div className='flex flex-col gap-5'>
         <div className='flex flex-wrap justify-center items-center gap-5'>
           Tempalte NextJs and NextUI
         </div>
-        <Button onClick={() => { apiBase.get({ url: "", urlBase:'https://randomuser.me/api/', isLoadingScreen:true }) }}>Call API</Button>
+        <Button onClick={getApi}>Call API</Button>
         <div className='flex flex-wrap justify-center items-center gap-5'>
           <Button color="primary" onClick={() => (
             Alert.message({

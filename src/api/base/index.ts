@@ -7,7 +7,7 @@ import * as loadingScreenReducer from "@/redux/reducers/loadingScreenReducer";
 import { ReducerType } from "@/redux/store";
 
 const param = $.param;
-const urlBaseDefault = process.env.NEXT_PUBLIC_API || '';
+const urlBaseDefault = "https://www.google.com/";
 
 export class ServerError extends Error {
   status: number;
@@ -66,88 +66,92 @@ axiosBase.interceptors.response.use(
   }
 );
 
-const encodeURI = (url: string, urlBase?: string) => {
-  const enCodeURI = encodeURIComponent(url).replace(/%2F/gi, "/")
-  return `${urlBase}${enCodeURI}`
+const encodeURI = (req: apiBaseType) => {
+  const enCodeURI = encodeURIComponent(req.url).replace(/%2F/gi, "/");
+  return `${req.urlBase}${enCodeURI}`;
 };
 
-const handleLoadingScreen = (isLoadingScreen: boolean | undefined, action: "add" | "delete") => {
-  const dispatch = useDispatch()
-  const loadingScreenReducerData = useSelector((state: ReducerType) => state.loadingScreenReducer)
+const handleLoadingScreen = (
+  isLoadingScreen: boolean | undefined,
+  action: "add" | "delete"
+) => {
+  const dispatch = useDispatch();
+  const loadingScreenReducerData = useSelector(
+    (state: ReducerType) => state.loadingScreenReducer
+  );
 
   if (isLoadingScreen) {
-    let countLoadingAPI = loadingScreenReducerData.countLoadingAPI
+    let countLoadingAPI = loadingScreenReducerData.countLoadingAPI;
 
-    if(countLoadingAPI){
-      if(countLoadingAPI < 0){
-        countLoadingAPI = 0
-      }else {
+    if (countLoadingAPI) {
+      if (countLoadingAPI < 0) {
+        countLoadingAPI = 0;
+      } else {
         switch (action) {
           case "add":
-            countLoadingAPI = + 1
+            countLoadingAPI = +1;
             break;
           case "delete":
-            countLoadingAPI = - 1
+            countLoadingAPI = -1;
             break;
         }
       }
     }
-    dispatch(loadingScreenReducer.updateState({
-      countLoadingAPI: countLoadingAPI
-    }))
+    dispatch(
+      loadingScreenReducer.updateState({
+        countLoadingAPI: countLoadingAPI,
+      })
+    );
   }
 };
 
-const handleIsLoadingScreen = ({ config, isLoadingScreen}: apiBaseType) => {
+const handleIsLoadingScreen = ({ config, isLoadingScreen }: apiBaseType) => {
   config = {
     ...config,
-    headers: { ...config?.headers, isLoadingScreen: isLoadingScreen },
+    headers: { ...config?.headers, IsLoadingScreen: isLoadingScreen },
   };
   return config;
 };
 
-
 const apiBase = {
-  async get(req : apiBaseType) {
-    // const { urlBase = urlBaseDefault, url, config } = req
-
-  req.config =  handleIsLoadingScreen(req)
-    // handleLoadingScreen(isLoadingScreen, 'add')
-    const res = await axiosBase.get(encodeURI(req.url, req.urlBase), req.config);
-    // handleLoadingScreen(isLoadingScreen, 'delete')
+  async get(req: apiBaseType) {
+    req.config = handleIsLoadingScreen(req);
+    const res = await axiosBase.get(encodeURI(req), req.config);
     return res?.data;
   },
 
-  async post(req: {
-    data: any;
-  } & apiBaseType) {
-    const { urlBase = urlBaseDefault, url, config, data } = req
-    const res = await axiosBase.post(encodeURI(url, urlBase), data, config);
+  async post(
+    req: {
+      data: any;
+    } & apiBaseType
+  ) {
+    const res = await axiosBase.post(encodeURI(req), req.data, req.config);
     return res?.data;
   },
 
-  async put(req: {
-    data: any;
-  } & apiBaseType) {
-    const { urlBase = urlBaseDefault, url, config, data } = req
-    const res = await axiosBase.put(encodeURI(url, urlBase), data, config);
+  async put(
+    req: {
+      data: any;
+    } & apiBaseType
+  ) {
+    const res = await axiosBase.put(encodeURI(req), req.data, req.config);
     return res?.data;
   },
 
-  async patch(req: {
-    data: any;
-  } & apiBaseType) {
-    const { urlBase = urlBaseDefault, url, config, data } = req
-    const res = await axiosBase.patch(encodeURI(url, urlBase), data, config);
+  async patch(
+    req: {
+      data: any;
+    } & apiBaseType
+  ) {
+    const res = await axiosBase.patch(encodeURI(req), req.data, req.config);
     return res?.data;
   },
 
-  async delete(req : apiBaseType) {
-    const { urlBase = urlBaseDefault, url, config } = req
-    const res = await axiosBase.delete(encodeURI(url, urlBase), config);
+  async delete(req: apiBaseType) {
+    const res = await axiosBase.delete(encodeURI(req), req.config);
     return res?.data;
   },
 };
 
 export default apiBase;
-export { axios, param, urlBaseDefault as baseURL, axiosBase }
+export { axios, param, urlBaseDefault as baseURL, axiosBase };
