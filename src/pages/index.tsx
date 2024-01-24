@@ -7,6 +7,7 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
+import {useAxiosLoader} from '@/api/base/apiLoading'
 type Props = {}
 
 const Home = (props: Props) => {

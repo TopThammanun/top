@@ -34,6 +34,21 @@ axiosBase.interceptors.request.use((config) => {
   return config;
 });
 
+// baseAxios.interceptors.request.use((config) => {
+//   const token = Cookies.get("token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   if (config.headers.isLoadingScreen) {
+//     console.log("no loading");
+//     delete config.headers.isLoadingScreen;
+//   } else {
+//     console.log("start loading");
+//   }
+
+//   return config;
+// });
+
 axiosBase.interceptors.response.use(
   (response) => {
     return response;
@@ -51,12 +66,12 @@ axiosBase.interceptors.response.use(
   }
 );
 
-const encodeURI = (url: string, urlBase: string) => {
+const encodeURI = (url: string, urlBase?: string) => {
   const enCodeURI = encodeURIComponent(url).replace(/%2F/gi, "/")
   return `${urlBase}${enCodeURI}`
 };
 
-const handleStartLoadingScreen = (isLoadingScreen: boolean | undefined, action: "add" | "delete") => {
+const handleLoadingScreen = (isLoadingScreen: boolean | undefined, action: "add" | "delete") => {
   const dispatch = useDispatch()
   const loadingScreenReducerData = useSelector((state: ReducerType) => state.loadingScreenReducer)
 
@@ -83,13 +98,23 @@ const handleStartLoadingScreen = (isLoadingScreen: boolean | undefined, action: 
   }
 };
 
+const handleIsLoadingScreen = ({ config, isLoadingScreen}: apiBaseType) => {
+  config = {
+    ...config,
+    headers: { ...config?.headers, isLoadingScreen: isLoadingScreen },
+  };
+  return config;
+};
+
+
 const apiBase = {
-  async get(req: {
-  } & apiBaseType) {
-    const { urlBase = urlBaseDefault, url, config, isLoadingScreen } = req
-    // handleStartLoadingScreen(isLoadingScreen, 'add')
-    const res = await axiosBase.get(encodeURI(url, urlBase), config);
-    // handleStartLoadingScreen(isLoadingScreen, 'delete')
+  async get(req : apiBaseType) {
+    // const { urlBase = urlBaseDefault, url, config } = req
+
+  req.config =  handleIsLoadingScreen(req)
+    // handleLoadingScreen(isLoadingScreen, 'add')
+    const res = await axiosBase.get(encodeURI(req.url, req.urlBase), req.config);
+    // handleLoadingScreen(isLoadingScreen, 'delete')
     return res?.data;
   },
 
@@ -117,8 +142,7 @@ const apiBase = {
     return res?.data;
   },
 
-  async delete(req: {
-  } & apiBaseType) {
+  async delete(req : apiBaseType) {
     const { urlBase = urlBaseDefault, url, config } = req
     const res = await axiosBase.delete(encodeURI(url, urlBase), config);
     return res?.data;
@@ -126,4 +150,4 @@ const apiBase = {
 };
 
 export default apiBase;
-export { axios, param, urlBaseDefault as baseURL }
+export { axios, param, urlBaseDefault as baseURL, axiosBase }

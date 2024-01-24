@@ -1,5 +1,6 @@
 "use client"
 
+import GlobaAPILoader from '@/api/base/apiLoading'
 import { ReducerType } from '@/redux/store'
 import Head from 'next/head'
 import React, { Fragment, ReactNode } from 'react'
@@ -25,7 +26,7 @@ const RootLayout = (props: Props) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Head>
             <main>
-                {isLoadingScreen && <div>zxc</div>}
+                <GlobaAPILoader/>
                 {props.children}
             </main>
         </Fragment>
