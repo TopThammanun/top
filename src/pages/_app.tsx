@@ -19,15 +19,15 @@ export default function App({ Component, pageProps }: AppPropsWithLayoutType) {
     <Fragment>
       <ReactQueryProvider>
         <ReduxProvider store={store}>
-          <NextUIProvider>
-            <DateJSProvider>
-              <NprogressProvider>
+          <NprogressProvider>
+            <NextUIProvider>
+              <DateJSProvider>
                 <AuthProvider>
                   {getLayout(<Component {...pageProps} />)}
                 </AuthProvider>
-              </NprogressProvider>
-            </DateJSProvider>
-          </NextUIProvider>
+              </DateJSProvider>
+            </NextUIProvider>
+          </NprogressProvider>
         </ReduxProvider>
       </ReactQueryProvider>
     </Fragment>

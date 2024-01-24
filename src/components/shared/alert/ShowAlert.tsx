@@ -58,7 +58,7 @@ const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
 
   useEffect(() => {
     onOpen();
-  }, []);
+  },[]);
 
   const handleCancle = async () => {
     onCancle && (await onCancle());
