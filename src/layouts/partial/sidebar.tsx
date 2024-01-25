@@ -54,16 +54,15 @@ export const MenuSidebar = () => {
                     />
                     <div className='flex flex-col text-primary text-2xl font-bold'>
                         <div> DOUBLE </div>
-                        <div className="-mt-1">N & N </div>
+                        <div className="-mt-1">NEXT </div>
                     </div>
                 </div>
             </div>
             <div className='flex flex-col gap-2'>
                 <div className='text-foreground font-semibold px-4'>MENU</div>
-                <MenuItem path='/admin/create-patient' label='เพิ่มข้อมูลผู้ป่วย' icon='tabler:users-plus' />
-                <MenuItem path='' label='Dashboard' icon='akar-icons:dashboard' disable />
-                <MenuItem path='/admin/information-patient' label='ข้อมูลผู้ป่วย' icon='solar:document-add-outline' />
-                <MenuItem path='' label='Complete' icon='icon-park-outline:folder-success' disable />
+                <MenuItem path='#' label='หน้าแรก' icon='lucide:home' />
+                <MenuItem path='#' label='หน้าสอง' icon='ep:monitor' disable />
+                <MenuItem path='#' label='หน้าสาม' icon='ep:monitor' />
                 {/* <Accordion selectionMode="multiple" isCompact showDivider={false}>
                     <AccordionItem
                         key="1"
