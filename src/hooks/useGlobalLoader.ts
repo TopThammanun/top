@@ -1,10 +1,8 @@
-import { StoreType } from '@/store';
-import { loaderAction } from '@/store/app/loader/loader';
-import { useDispatch, useSelector } from 'react-redux';
+import { loaderAction } from '@/store/app/loader';
+import { useDispatch } from 'react-redux';
 
 const useGlobalLoader = () => {
     const dispatch = useDispatch()
-    const globalState = useSelector((state: StoreType) => state.globalState)
 
     const start = () => {
         dispatch(loaderAction.startLoader());

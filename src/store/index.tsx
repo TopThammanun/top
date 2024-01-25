@@ -11,4 +11,4 @@ const store = configureStore({
 });
 
 export default store;
-export type StoreType = ReturnType<typeof store.getState>
+export type StateType = ReturnType<typeof store.getState>

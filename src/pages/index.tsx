@@ -7,11 +7,11 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
-import { StoreType } from '@/store';
+import { StateType } from '@/store';
 import { useDispatch, useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import useGlobalLoader from '@/hooks/useGlobalLoader';
-import { loaderAction } from '@/store/app/loader/loader';
+import { loaderAction } from '@/store/app/loader';
 
 type Props = {}
 
