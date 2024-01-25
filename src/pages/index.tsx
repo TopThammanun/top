@@ -10,6 +10,7 @@ import apiBase from '@/api/base';
 import { ReducerType } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import * as globalReducer from '@/redux/reducers/globalReducer';
+import dayjs from 'dayjs';
 
 type Props = {}
 
@@ -35,6 +36,7 @@ const Home = (props: Props) => {
           Tempalte NextJs and NextUI
         </div>
         <Button onClick={getApi}>Call API</Button>
+
         <div className='flex flex-wrap justify-center items-center gap-5'>
           <Button color="primary" onClick={() => (
             Alert.message({

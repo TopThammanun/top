@@ -1,30 +1,30 @@
 "use client";
 
 import * as React from "react";
-import { dateFormat } from "@/lib/utils";
+import { formatDate } from "@/utils/formatDate";
 import { Icon } from "@iconify/react";
 import { DayPicker, DropdownProps } from "react-day-picker";
 import dayjs from "dayjs";
 import { Select, SelectItem, cn } from '@nextui-org/react';
 
 const formatCaption = (date: Date) => {
-    const y = dateFormat(dayjs(date), "YYYY");
+    const y = formatDate(dayjs(date), "YYYY");
     const m = dayjs(date).format("MMMM");
     return `${m} ${y}`;
 };
 
 const formatYearCaption = (date: Date) => {
-    const y = dateFormat(dayjs(date), "YYYY");
+    const y = formatDate(dayjs(date), "YYYY");
     return `${y}`;
 };
 
 const formatMonthCaption = (date: Date) => {
-    const m = dateFormat(dayjs(date), "MMMM");
+    const m = formatDate(dayjs(date), "MMMM");
     return `${m}`;
 };
 
 const formatWeekdayName = (date: Date) => {
-    const d = dateFormat(dayjs(date), "dd");
+    const d = formatDate(dayjs(date), "dd");
     return `${d}`;
 };
 
