@@ -90,7 +90,7 @@ const DateRangePicker = ({
                                 errorMessage={errorMessage}
                                 value={textValue}
                                 startContent={
-                                    <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                    <Icon icon="solar:calendar-outline" className="text-xl text-default-400 pointer-events-none flex-shrink-0" />
                                 }
                                 classNames={{
                                     mainWrapper: "w-full"

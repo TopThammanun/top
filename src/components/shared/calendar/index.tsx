@@ -62,16 +62,14 @@ const Calendar = ({
                 nav_button_next: "absolute right-0",
                 table: "w-72 border-collapse space-y-1",
                 head_row: "flex justify-center",
-                head_cell:
-                    "text-muted-foreground rounded-md w-10 font-normal text-[0.8rem]",
+                head_cell: "rounded-md w-10 font-normal text-[0.8rem]",
                 row: "flex justify-center w-full mt-2",
                 cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-default focus-within:relative focus-within:z-20",
                 day: "flex justify-center items-center h-10 w-10 rounded-xl text-foreground hover:text-primary-foreground hover:bg-primary aria-selected:opacity-100 cursor-pointer",
-                day_selected:
-                    "[&:not([disabled])]:bg-primary [&:not([disabled])]:text-primary-foreground [&:not([disabled])]:hover:bg-primary [&:not([disabled])]:hover:text-primary-foreground",
-                day_today: "bg-default text-default-foreground",
-                day_outside: "text-muted-foreground opacity-50",
-                day_disabled: "text-muted-foreground opacity-50",
+                day_selected: "[&:not([disabled])]:bg-primary [&:not([disabled])]:text-primary-foreground [&:not([disabled])]:hover:bg-primary [&:not([disabled])]:hover:text-primary-foreground",
+                day_today: " text-default-foreground border border-primary",
+                day_outside: "opacity-50",
+                day_disabled: "opacity-50",
                 day_range_middle:
                     "[&:not([disabled])]:aria-selected:bg-default [&:not([disabled])]:aria-selected:text-default-foreground",
                 day_hidden: "invisible",

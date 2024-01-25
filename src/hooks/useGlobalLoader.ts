@@ -8,7 +8,7 @@ const useGlobalLoader = () => {
         dispatch(loaderAction.startLoader());
     };
     const stop = () => {
-        dispatch(loaderAction.startLoader());
+        dispatch(loaderAction.stopLoader());
     };
 
     return {
