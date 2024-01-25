@@ -102,7 +102,7 @@ const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
                   </Button>
                 )}
                 {labelSubmit && (
-                  <Button color={"default"} onClick={handleSubmit}>
+                  <Button color={color} onClick={handleSubmit}>
                     {labelSubmit}
                   </Button>
                 )}

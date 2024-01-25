@@ -38,6 +38,7 @@ const Home = (props: Props) => {
             Alert.message({
               content: "Open Message",
               noButton: true,
+              color:'primary'
             })
           )}>
             Open Message
@@ -46,6 +47,7 @@ const Home = (props: Props) => {
           <Button color="primary" onClick={() => (
             Alert.error({
               content: "Open Error",
+              color: 'primary'
             })
           )}>
             Open Error
