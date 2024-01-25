@@ -15,5 +15,5 @@ export {
     DateMultiplePicker,
     DateRangePicker,
     SwicthThemes,
-    LoadingScreen
+    LoadingScreen,
 }

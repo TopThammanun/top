@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import $ from "jquery";
 import { useDispatch, useSelector } from "react-redux";
 import { apiBaseType } from "./apiBaseType";
-import * as globalReducer from "@/redux/reducers/globalReducer";
+import * as globalReducer from "@/redux/reducers/global";
 import { ReducerType } from "@/redux/store";
 
 const param = $.param;

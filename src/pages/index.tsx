@@ -9,25 +9,31 @@ import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
 import { ReducerType } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
-import * as globalReducer from '@/redux/reducers/globalReducer';
+import * as globalReducer from '@/redux/reducers/global';
 import dayjs from 'dayjs';
+import Loader from '@/components/shared/loader';
 
 type Props = {}
 
 const Home = (props: Props) => {
   const dispatch = useDispatch()
+  const globalReducerData = useSelector((state: ReducerType) => state.globalReducer)
+
   const { theme, setTheme } = useTheme()
   const [date, setDate] = useState<Date | undefined>()
   const [arrDate, setArrDate] = useState<Date[] | undefined>()
   const [rangeDate, setRangeDate] = useState<DateRange | undefined>()
 
-  const getApi = () => {
-    // dispatch(globalReducer.startLoader())
-    apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
-    setTimeout(() => {
+  const getApi = async () => {
+    dispatch(globalReducer.startLoader())
+    await apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
+    await setTimeout(() => {
       apiBase.get({ url: "/api" })
     }, 2000);
+    dispatch(globalReducer.stopLoader())
   }
+
+  console.log('globalReducerData', globalReducerData);
 
   return (
     <Fragment>

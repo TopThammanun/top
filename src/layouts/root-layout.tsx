@@ -26,7 +26,7 @@ const RootLayout = (props: Props) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Head>
             <main>
-                <LoadingScreen isLoading={globalReducer.countLoader > 0} />
+                <LoadingScreen isLoading={globalReducer.loader > 0} />
                 {props.children}
             </main>
         </Fragment>
