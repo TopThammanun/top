@@ -20,6 +20,5 @@ const loaderSlice = createSlice({
 });
 
 export const loaderAction = loaderSlice.actions;
+export const loaderReducer = loaderSlice.reducer;
 
-const loaderState = loaderSlice.reducer;
-export default loaderState

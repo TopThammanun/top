@@ -1,5 +1,6 @@
 import { Fragment, ReactElement } from 'react';
 import '@/styles/globals.css'
+import dynamic from 'next/dynamic'
 
 //SetUp Store redux
 import { Provider as ReduxProvider } from "react-redux";

@@ -1,4 +1,4 @@
-import { loaderAction } from '@/store/app/loader';
+import { loaderAction } from '@/store/reducers/loader';
 import { useDispatch } from 'react-redux';
 
 const useGlobalLoader = () => {

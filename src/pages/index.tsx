@@ -7,11 +7,7 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
-import { StateType } from '@/store';
-import { useDispatch, useSelector } from 'react-redux';
-import dayjs from 'dayjs';
 import useGlobalLoader from '@/hooks/useGlobalLoader';
-import { loaderAction } from '@/store/app/loader';
 
 type Props = {}
 
@@ -26,9 +22,6 @@ const Home = (props: Props) => {
   const getApi = async () => {
     loaderGlobal.start()
     await apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
-    await setTimeout(() => {
-      apiBase.get({ url: "/api" })
-    }, 2000);
     loaderGlobal.stop()
   }
 
