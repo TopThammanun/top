@@ -1,7 +1,7 @@
 "use client"
 
 import { LoadingScreen } from '@/components/shared'
-import { ReducerType } from '@/redux/store'
+import { StoreType } from '@/store'
 import Head from 'next/head'
 import React, { Fragment, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
@@ -14,7 +14,7 @@ type Props = {
 }
 
 const RootLayout = (props: Props) => {
-    const globalReducer = useSelector((state: ReducerType) => state.globalReducer)
+    const globalReducer = useSelector((state: StoreType) => state.globalState)
 
     return (
         <Fragment>

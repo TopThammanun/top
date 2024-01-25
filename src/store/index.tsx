@@ -11,4 +11,4 @@ const store = configureStore({
 });
 
 export default store;
-export type ReducerType = ReturnType<typeof store.getState>
+export type StoreType = ReturnType<typeof store.getState>

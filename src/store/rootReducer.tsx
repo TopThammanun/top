@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import globalReducer from "./reducers/global"
+import loaderSlice from "@/store/app/loader/loader"
 
 const rootReducer = combineReducers({
-  globalReducer: globalReducer
+  globalState: loaderSlice
 });
 export default rootReducer;

@@ -3,8 +3,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import $ from "jquery";
 import { useDispatch, useSelector } from "react-redux";
 import { apiBaseType } from "./apiBaseType";
-import * as globalReducer from "@/redux/reducers/global";
-import { ReducerType } from "@/redux/store";
+import * as globalReducer from "@/store/app/loader/loader";
+import { StoreType } from "@/store";
 
 const param = $.param;
 const defaultURL = "https://randomuser.me";

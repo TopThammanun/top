@@ -3,7 +3,7 @@ import '@/styles/globals.css'
 
 //SetUp Store redux
 import { Provider as ReduxProvider } from "react-redux";
-import store from '@/redux/store';
+import store from '@/store';
 
 import { AppPropsWithLayoutType } from '@/types/layout/AppPropsWithLayout';
 import NprogressProvider from '@/providers/nprogress'
