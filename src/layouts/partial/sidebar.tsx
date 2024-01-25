@@ -63,7 +63,7 @@ export const MenuSidebar = () => {
                 <MenuItem path='#' label='หน้าแรก' icon='lucide:home' />
                 <MenuItem path='#' label='หน้าสอง' icon='ep:monitor' disable />
                 <MenuItem path='#' label='หน้าสาม' icon='ep:monitor' />
-                {/* <Accordion selectionMode="multiple" isCompact showDivider={false}>
+                <Accordion selectionMode="multiple" isCompact showDivider={false}>
                     <AccordionItem
                         key="1"
                         aria-label="components"
@@ -73,10 +73,10 @@ export const MenuSidebar = () => {
                         title="Components"
                         className='pl-2'
                     >
-                        <MenuItem path='' label='Dashboard' icon='lucide:dot' disablePadding={true} />
-                        <MenuItem path='' label='Dashboard' icon='lucide:dot' disablePadding={true} />
+                        <MenuItem path='' label='example' icon='lucide:dot' disablePadding={true} />
+                        <MenuItem path='' label='example' icon='lucide:dot' disablePadding={true} />
                     </AccordionItem>
-                </Accordion> */}
+                </Accordion>
             </div>
         </Fragment >)
 }
