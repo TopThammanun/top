@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import globalReducer from "./reducers/globalReducer"
+import { loaderReducer } from "./reducers/loader";
 
 const rootReducer = combineReducers({
-  globalReducer: globalReducer
+  loaderState: loaderReducer
 });
 export default rootReducer;

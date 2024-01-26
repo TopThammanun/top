@@ -6,7 +6,7 @@ import dayjs from "dayjs"
 import { DayPicker } from "react-day-picker"
 import Calendar from "../calendar"
 import { Input, Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react"
-import { dateFormat } from "@/lib/utils"
+import { formatDate } from "@/utils/formatDate"
 
 type Props = {
     mode: "single"
@@ -49,7 +49,7 @@ const DatePicker = ({
     const isDate = (selected: Date | undefined): selected is Date => selected instanceof Date;
     useEffect(() => {
         if (props.selected && isDate(props.selected)) {
-            const formattedDates = dateFormat(dayjs(props.selected), "DD/MM/YYYY")
+            const formattedDates = formatDate(dayjs(props.selected), "DD/MM/YYYY")
             setTextValue(formattedDates)
         } else {
             setTextValue("")
@@ -80,7 +80,7 @@ const DatePicker = ({
                                 errorMessage={errorMessage}
                                 value={textValue}
                                 startContent={
-                                    <Icon icon="solar:calendar-outline" className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                    <Icon icon="solar:calendar-outline" className="text-xl text-default-400 pointer-events-none flex-shrink-0" />
                                 }
                                 classNames={{
                                     mainWrapper: "w-full"

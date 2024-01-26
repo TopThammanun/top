@@ -1,10 +1,7 @@
 import Alert from "@/components/shared/alert";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import $ from "jquery";
-import { useDispatch, useSelector } from "react-redux";
 import { apiBaseType } from "./apiBaseType";
-import * as globalReducer from "@/redux/reducers/globalReducer";
-import { ReducerType } from "@/redux/store";
 
 const param = $.param;
 const defaultURL = "https://randomuser.me";

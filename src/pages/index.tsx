@@ -7,25 +7,22 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
-import { ReducerType } from '@/redux/store';
-import { useDispatch, useSelector } from 'react-redux';
-import * as globalReducer from '@/redux/reducers/globalReducer';
+import useGlobalLoader from '@/hooks/useGlobalLoader';
 
 type Props = {}
 
 const Home = (props: Props) => {
-  const dispatch = useDispatch()
+  const loaderGlobal = useGlobalLoader()
+
   const { theme, setTheme } = useTheme()
   const [date, setDate] = useState<Date | undefined>()
   const [arrDate, setArrDate] = useState<Date[] | undefined>()
   const [rangeDate, setRangeDate] = useState<DateRange | undefined>()
 
-  const getApi = () => {
-    // dispatch(globalReducer.startLoader())
-    apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
-    setTimeout(() => {
-      apiBase.get({ url: "/api" })
-    }, 2000);
+  const getApi = async () => {
+    loaderGlobal.start()
+    await apiBase.get({ urlBase: 'https://randomuser.me', url: "/api" })
+    loaderGlobal.stop()
   }
 
   return (
@@ -35,11 +32,13 @@ const Home = (props: Props) => {
           Tempalte NextJs and NextUI
         </div>
         <Button onClick={getApi}>Call API</Button>
+
         <div className='flex flex-wrap justify-center items-center gap-5'>
           <Button color="primary" onClick={() => (
             Alert.message({
               content: "Open Message",
               noButton: true,
+              color:'primary'
             })
           )}>
             Open Message
@@ -48,6 +47,7 @@ const Home = (props: Props) => {
           <Button color="primary" onClick={() => (
             Alert.error({
               content: "Open Error",
+              color: 'primary'
             })
           )}>
             Open Error

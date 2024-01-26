@@ -57,8 +57,11 @@ const Alert = (props: ShowAlertProps & ButtonCancle & ButtonSubmit) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    onOpen();
-  },[]);
+    function openModal() {
+      onOpen();
+    }
+    openModal()
+  }, [onOpen]);
 
   const handleCancle = async () => {
     onCancle && (await onCancle());

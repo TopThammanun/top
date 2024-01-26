@@ -1,7 +1,7 @@
 "use client"
 
 import { LoadingScreen } from '@/components/shared'
-import { ReducerType } from '@/redux/store'
+import { StateType } from '@/store'
 import Head from 'next/head'
 import React, { Fragment, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
@@ -14,7 +14,7 @@ type Props = {
 }
 
 const RootLayout = (props: Props) => {
-    const globalReducer = useSelector((state: ReducerType) => state.globalReducer)
+    const loaderState = useSelector((state: StateType) => state.loaderState)
 
     return (
         <Fragment>
@@ -26,7 +26,7 @@ const RootLayout = (props: Props) => {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Head>
             <main>
-                <LoadingScreen isLoading={globalReducer.countLoader > 0} />
+                <LoadingScreen isLoading={loaderState.loader > 0} />
                 {props.children}
             </main>
         </Fragment>

@@ -1,9 +1,10 @@
 import { Fragment, ReactElement } from 'react';
 import '@/styles/globals.css'
+import dynamic from 'next/dynamic'
 
 //SetUp Store redux
 import { Provider as ReduxProvider } from "react-redux";
-import store from '@/redux/store';
+import store from '@/store';
 
 import { AppPropsWithLayoutType } from '@/types/layout/AppPropsWithLayout';
 import NprogressProvider from '@/providers/nprogress'

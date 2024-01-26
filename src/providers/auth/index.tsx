@@ -13,6 +13,7 @@ const privateRoute: string[] = []
 const AuthProvider = (props: Props) => {
     const router = useRouter()
     const [isLoading, setLoading] = useState(true)
+
     useEffect(() => {
         const token = sessionStorage.getItem("token") // or Redux or Cookie or Other
         const isPrivateRoute = privateRoute.some((route) =>
