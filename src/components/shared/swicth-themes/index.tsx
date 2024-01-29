@@ -12,22 +12,26 @@ const SwicthThemes = (props: Props) => {
 
     return (
         <Fragment>
-            <Button
-                isIconOnly
-                variant='bordered'
-                className='flex scale-100 transition-all dark:scale-0 cursor-pointer'
-                onClick={() => setTheme("dark")}
-            >
-                <Icon icon="heroicons:sun" className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            </Button>
-            <Button
-                isIconOnly
-                variant='bordered'
-                onClick={() => setTheme("light")}
-                className='flex absolute scale-0 transition-all dark:scale-100 cursor-pointer'
-            >
-                <Icon icon="heroicons:moon" className="h-6 w-6 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            </Button>
+            <div className='flex relative'>
+                <Button
+                    isIconOnly
+                    variant='bordered'
+                    color='primary'
+                    className='absolute transition-all scale-100 dark:scale-0 opacity-100 dark:opacity-0'
+                    onClick={() => setTheme("dark")}
+                >
+                    <Icon icon="mingcute:sun-fill" className="h-6 w-6 rotate-0 transition-all dark:-rotate-90" />
+                </Button>
+                <Button
+                    isIconOnly
+                    color='primary'
+                    variant='bordered'
+                    onClick={() => setTheme("light")}
+                    className='transition-all scale-0 dark:scale-100 opacity-0 dark:opacity-100'
+                >
+                    <Icon icon="ph:moon-fill" className="h-6 w-6 rotate-90 transition-all dark:rotate-0" />
+                </Button>
+            </div>
         </Fragment>
     )
 }

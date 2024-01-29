@@ -7,12 +7,12 @@ import { DateRange } from 'react-day-picker';
 import Alert from '@/components/shared/alert';
 import { Button, Input } from '@nextui-org/react';
 import apiBase from '@/api/base';
-import useGlobalLoader from '@/hooks/useGlobalLoader';
+import useLoaderGlobal from '@/hooks/useLoaderGlobal';
 
 type Props = {}
 
 const Home = (props: Props) => {
-  const loaderGlobal = useGlobalLoader()
+  const loaderGlobal = useLoaderGlobal()
 
   const { theme, setTheme } = useTheme()
   const [date, setDate] = useState<Date | undefined>()

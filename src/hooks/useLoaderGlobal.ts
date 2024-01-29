@@ -1,7 +1,7 @@
 import { loaderAction } from '@/store/reducers/loader';
 import { useDispatch } from 'react-redux';
 
-const useGlobalLoader = () => {
+const useLoaderGlobal = () => {
     const dispatch = useDispatch()
 
     const start = () => {
@@ -17,4 +17,4 @@ const useGlobalLoader = () => {
     };
 };
 
-export default useGlobalLoader;
+export default useLoaderGlobal;
