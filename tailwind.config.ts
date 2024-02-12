@@ -13,6 +13,9 @@ module.exports = {
     extend: {},
   },
   darkMode: "class",
+  // corePlugins: {
+  //   preflight: false,
+  // },
   plugins: [
     nextui({
       addCommonColors: true,

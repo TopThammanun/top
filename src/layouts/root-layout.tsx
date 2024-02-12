@@ -20,19 +20,13 @@ const RootLayout = (props: Props) => {
     return (
         <Fragment>
             <Head>
-                <title>{props.title || "DOUBLE NEXT TEMP"}</title>
+                <title>{props.title || "TEST"}</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="description" content={props.desc} />
                 <meta name="keyword" content={props.keyword} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Head>
             <main>
-                <Image
-                    src='/images/background-full.svg'
-                    removeWrapper
-                    radius='none'
-                    className='w-screen h-screen object-cover fixed -z-10'
-                />
                 <LoadingScreen isLoading={loaderState.loader > 0} />
                 {props.children}
             </main>
