@@ -20,8 +20,8 @@ const RootLayout = (props: Props) => {
     return (
         <Fragment>
             <Head>
-                <title>{props.title || "TEST"}</title>
-                <link rel="icon" href="/favicon.ico" />
+                <title>{props.title || "Top Sandbox"}</title>
+                <link rel="icon" href="/logo.svg" />
                 <meta name="description" content={props.desc} />
                 <meta name="keyword" content={props.keyword} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

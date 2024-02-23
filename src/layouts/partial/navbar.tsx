@@ -24,7 +24,10 @@ const Navbar = (props: Props) => {
         <nav className='sticky top-0 z-[40]'>
             <div className='bg-gradient-to-b from-background from-60% to-background/0 p-6 pt-5 max-md:p-5  max-md:pt-3'>
                 <Card className='flex flex-row justify-between items-center py-2 px-5'>
-                    <Icon icon="tabler:sandbox" className="h-9 w-9" />
+                    <div className='flex justify-center items-center gap-2 cursor-pointer max-lg:hidden'>
+                        <Icon icon="tabler:sandbox" className="h-9 w-9" />
+                        <div className='font-bold'>TOP</div>
+                    </div>
                     <div className='flex items-center gap-5'>
                         <div className='lg:hidden'>
                             <div className='cursor-pointer' onClick={() => { setIsOpenToggle(!isOpenToggle) }}>
