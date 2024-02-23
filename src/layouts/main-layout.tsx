@@ -20,7 +20,7 @@ const MainLayout = (props: Props) => {
                     <div className='flex flex-col min-h-[100dvh]'>
                         <Navbar breadcrumb={breadcrumb} />
                         <div className="flex-grow">
-                            <div className="px-6 pb-6 max-md:px-5 max-md:pb-5">
+                            <div className="px-1 pb-6 md:px-3 max-md:pb-5">
                                 {props.children}
                             </div>
                         </div>

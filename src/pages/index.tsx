@@ -2,17 +2,41 @@ import { Fragment, ReactElement, useState } from 'react'
 import RootLayout from '@/layouts/root-layout';
 import MainLayout from '@/layouts/main-layout';
 import EditorBlock from '@/components/shared/EditorBlock'
+import { Card, CardBody } from "@nextui-org/react";
+import Link from "next/link";
+import { Divider } from "@nextui-org/react";
 
 type Props = {}
 
 const Home = (props: Props) => {
-  const [content, setContent] = useState({});
-
-  console.log("content", content);
+  const description = "Software engineering is a dynamic field that shapes the digital world we live in. In this article, we will explore the fascinating realm of software engineering, its significance, and its profound impact on our daily lives."
+  const limitedDescription =
+    description.length > 300 ? description.slice(0, 300) + "..." : description;
 
   return (
     <Fragment>
-      <EditorBlock content={content} setContent={setContent} />
+      <div className="flex flex-col flex-wrap items-center justify-center mt-10 space-y-4 w-full">
+        <section className="w-full lg:w-fit">
+          <h2 className='pl-4 mb-5'>List of articles</h2>
+          <section className="flex justify-center px-4 w-full min-h-screen">
+            <div className="grid grid-cols-1 h-full w-[61rem] cursor-pointer">
+              <div key={`1-post`}>
+                <div className="h-full">
+                  <Link href={"/posts/" + '1'} className="text-xl font-semibold">
+                    The World of Software Engineering: Crafting the Digital Landscape
+                  </Link>
+                  <br />
+                  <span className="font-thin">November 3, 2023</span>
+                  <br />
+                  {limitedDescription}
+                  <Link href={"/posts/" + '1'}> Read More...</Link>
+                </div>
+                <Divider className="my-4" key={`1-divider`} />
+              </div>
+            </div>
+          </section>
+        </section>
+      </div>
     </Fragment >
   )
 }

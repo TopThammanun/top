@@ -15,19 +15,17 @@ const SwicthThemes = (props: Props) => {
             <div className='flex relative'>
                 <Button
                     isIconOnly
-                    variant='bordered'
                     color='primary'
-                    className='absolute transition-all scale-100 dark:scale-0 opacity-100 dark:opacity-0'
+                    className='absolute transition-all scale-100 dark:scale-0 opacity-100 dark:opacity-0 text-white'
                     onClick={() => setTheme("dark")}
                 >
                     <Icon icon="mingcute:sun-fill" className="h-6 w-6 rotate-0 transition-all dark:-rotate-90" />
                 </Button>
                 <Button
                     isIconOnly
-                    color='primary'
                     variant='bordered'
                     onClick={() => setTheme("light")}
-                    className='transition-all scale-0 dark:scale-100 opacity-0 dark:opacity-100'
+                    className='transition-all scale-0 dark:scale-100 opacity-0 dark:opacity-100 text-white'
                 >
                     <Icon icon="ph:moon-fill" className="h-6 w-6 rotate-90 transition-all dark:rotate-0" />
                 </Button>
