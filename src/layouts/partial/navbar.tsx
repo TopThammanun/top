@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 import { Button, Card, Tooltip } from '@nextui-org/react';
 import { Drawer, SwicthThemes } from '@/components/shared';
 import { useDispatch, useSelector } from 'react-redux'
+import Link from "next/link";
 
 type Props = {
     breadcrumb?: ReactNode
@@ -46,6 +47,10 @@ const Navbar = (props: Props) => {
                         {breadcrumb && breadcrumb}
                     </div>
                     <div className='flex items-center gap-2'>
+                        <Link className='flex items-center gap-2 mr-4 justify-center cursor-pointer' href={"/create"}>
+                            <Icon icon="jam:write-f" className="h-7 w-7" />
+                            <div className='font-semibold'>Write</div>
+                        </Link>
                         <SwicthThemes />
                         <Tooltip showArrow={true} content="ออกจากระบบ" delay={0} closeDelay={200} >
                             <Button isIconOnly variant='light' onClick={logout}>

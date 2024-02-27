@@ -21,7 +21,8 @@ import {
     Code2,
     Text,
     Braces,
-    Quote
+    Quote,
+    ImageIcon
 } from "lucide-react";
 
 interface CommandItemProps {
@@ -33,6 +34,15 @@ interface CommandItemProps {
 interface Command {
     editor: Editor;
     range: Range;
+}
+
+type ImageAttributes = {
+    src: string
+    alt?: string
+    title?: string
+    width?: string | undefined
+    height?: string | undefined
+    style?: string
 }
 
 const Command = Extension.create({
@@ -64,6 +74,22 @@ const Command = Extension.create({
         ];
     },
 });
+
+const insertImage = ({ editor, range }: Command) => {
+    const imageUrl = prompt("Enter the URL of the image:");
+
+    if (imageUrl && editor) {
+        const imageAttributes: ImageAttributes = {
+            src: imageUrl,
+            alt: 'x',
+            title: 'x',
+            width: "2",
+            height: "2",
+            style: `w-2 h-2`,
+        }
+        editor.chain().focus().setImage(imageAttributes).run();
+    }
+};
 
 const getSuggestionItems = ({ query }: { query: string }) => {
     return [
@@ -174,6 +200,12 @@ const getSuggestionItems = ({ query }: { query: string }) => {
             command: ({ editor, range }: Command) => {
                 editor.chain().focus().deleteRange(range).toggleBlockquote().run();
             },
+        },
+        {
+            title: "Insert Image",
+            description: "Insert an image by providing the URL.",
+            icon: <ImageIcon size={18} />,
+            command: insertImage as any,
         },
     ].filter((item) => {
         if (typeof query === "string" && query.length > 0) {

@@ -4,12 +4,8 @@ import SlashCommand from "./slash-command";
 import RootBlock from "./root-block";
 import Keymap from "./keymap";
 import { Node } from "@tiptap/core";
-
-const Document = Node.create({
-  name: "doc",
-  topNode: true,
-  content: "rootblock+",
-});
+import Image from "@tiptap/extension-image";
+import Document from "@tiptap/extension-document";
 
 export const TipTapEditorExtensions = [
   StarterKit.configure({
@@ -56,7 +52,8 @@ export const TipTapEditorExtensions = [
     showOnlyWhenEditable: false,
   }),
   SlashCommand,
-  // Document,
+  Document,
   RootBlock,
   Keymap,
+  Image,
 ];
