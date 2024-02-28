@@ -9,20 +9,18 @@ const Post = (props: Props) => {
     return (
         <Fragment>
             <div className="flex justify-center px-2 mt-5 w-full min-h-screen">
-                <Card>
-                    <CardBody>
-                        <article className="max-w-[63rem]">
-                            <h1 className="text-3xl font-bold">Half-Life: A Game-Changer in the World of First-Person Shooters</h1>
-                            <p className="font-thin">
-                                November 4, 2023 / Author: admin
-                            </p>
-                            {/* <article
+                <div>
+                    <article className="max-w-[63rem]">
+                        <h1 className="text-3xl font-bold">Half-Life: A Game-Changer in the World of First-Person Shooters</h1>
+                        <p className="font-thin">
+                            November 4, 2023 / Author: admin
+                        </p>
+                        {/* <article
                 dangerouslySetInnerHTML={{ __html: contentHtml }}
                 className="article"
               /> */}
-                        </article>
-                    </CardBody>
-                </Card>
+                    </article>
+                </div>
             </div>
         </Fragment >
     )

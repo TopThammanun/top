@@ -2,7 +2,7 @@ import { Fragment, ReactElement, useState } from 'react'
 import RootLayout from '@/layouts/root-layout';
 import MainLayout from '@/layouts/main-layout';
 import EditorBlock from '@/components/shared/EditorBlock'
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { Divider } from "@nextui-org/react";
 
@@ -22,14 +22,41 @@ const Home = (props: Props) => {
             <div className="grid grid-cols-1 h-full w-[61rem] cursor-pointer">
               <div key={`1-post`}>
                 <div className="h-full">
-                  <Link href={"/posts/" + '1'} className="text-xl font-semibold">
-                    The World of Software Engineering: Crafting the Digital Landscape
-                  </Link>
-                  <br />
-                  <span className="font-thin">November 3, 2023</span>
-                  <br />
-                  {limitedDescription}
-                  <Link href={"/posts/" + '1'}> Read More...</Link>
+                  <div className='flex gap-10'>
+                    <div>
+                      <Link href={"/posts/" + '1'} className="text-xl font-semibold">
+                        The World of Software Engineering: Crafting the Digital Landscape
+                      </Link>
+                      <br />
+                      <span className="font-thin">November 3, 2023</span>
+                      <br />
+                      <div>
+                        <div className='max-lg:hidden'>
+                          <Link href={"/posts/" + '1'}>{limitedDescription}</Link>
+                          <Link href={"/posts/" + '1'}> Read More...</Link>
+                        </div>
+                        <div className='lg:hidden flex gap-10 justify-between'>
+                          <Link href={"/posts/" + '1'}> Read More...</Link>
+                          <Image
+                            removeWrapper
+                            radius="none"
+                            alt="Relaxing app background"
+                            className="w-24 h-24"
+                            src={"/images/@mock/200x200.jpg"}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className='max-lg:hidden'>
+                      <Image
+                        removeWrapper
+                        radius="none"
+                        alt="Relaxing app background"
+                        className="w-52 h-24"
+                        src={"/images/@mock/200x200.jpg"}
+                      />
+                    </div>
+                  </div>
                 </div>
                 <Divider className="my-4" key={`1-divider`} />
               </div>

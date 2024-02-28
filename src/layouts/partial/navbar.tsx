@@ -31,10 +31,10 @@ const Navbar = (props: Props) => {
         <nav className='sticky top-0 z-[40]'>
             <div className='bg-gradient-to-b from-background from-40% to-background/0 p-6 pt-5 max-md:p-5  max-md:pt-3'>
                 <Card className='flex flex-row justify-between items-center py-2 px-5'>
-                    <div className='flex justify-center items-center gap-2 cursor-pointer max-lg:hidden'>
+                    <Link className='flex justify-center items-center gap-2 cursor-pointer max-lg:hidden' href={"/"}>
                         <Icon icon="tabler:sandbox" className="h-9 w-9" />
                         <div className='font-bold'>TOP</div>
-                    </div>
+                    </Link>
                     <div className='flex items-center gap-5'>
                         <div className='lg:hidden'>
                             <div className='cursor-pointer' onClick={() => { setIsOpenToggle(!isOpenToggle) }}>
@@ -52,7 +52,7 @@ const Navbar = (props: Props) => {
                         </div>
                         {breadcrumb && breadcrumb}
                     </div>
-                    <div className='flex items-center gap-10'>
+                    <div className='flex items-center lg:gap-10 gap-2'>
                         <div className="flex-initial">
                             <div className="flex justify-end items-center relative">
                                 <SignedIn>

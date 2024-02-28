@@ -5,7 +5,7 @@ import RootLayout from '@/layouts/root-layout';
 
 export default function Index() {
     return (
-        <div>
+        <div className="flex justify-center mt-20">
             <SignUp />
         </div>
     );
