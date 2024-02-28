@@ -1,8 +1,9 @@
 import { Fragment, ReactElement, useState } from 'react'
 import RootLayout from '@/layouts/root-layout';
-import MainLayout from '@/layouts/main-layout';
-import { Card, CardBody } from "@nextui-org/react";
+import CreatePostLayout from '@/layouts/page/create-post-layout';
+import { Card, CardBody, Spacer } from "@nextui-org/react";
 import EditorBlock from '@/components/shared/EditorBlock';
+import Header from '@/components/pages/create/header';
 
 type Props = {}
 
@@ -11,6 +12,8 @@ const Create = (props: Props) => {
 
     return (
         <Fragment>
+            <Header />
+            <Spacer y={10} />
             <div className='custom-editor'>
                 <EditorBlock content={content} setContent={setContent} />
             </div>
@@ -23,9 +26,9 @@ Create.getLayout = (page: ReactElement) => {
     return (
         <Fragment>
             <RootLayout>
-                <MainLayout>
+                <CreatePostLayout>
                     {page}
-                </MainLayout>
+                </CreatePostLayout>
             </RootLayout>
         </Fragment>
     );
