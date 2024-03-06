@@ -5,7 +5,6 @@ import { StateType } from '@/store'
 import Head from 'next/head'
 import React, { Fragment, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
-import { Image } from '@nextui-org/react'
 
 type Props = {
     children: ReactNode
@@ -20,7 +19,7 @@ const RootLayout = (props: Props) => {
     return (
         <Fragment>
             <Head>
-                <title>TopThammanun</title>
+                <title>{props.title || "TopThammanun"}</title>
                 <link rel="icon" href="/logo.svg" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                 <meta name="description" content="Explore TopThammanun's web development portfolio showcasing skills and projects." />

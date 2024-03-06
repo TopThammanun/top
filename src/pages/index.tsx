@@ -1,10 +1,6 @@
 import { Fragment, ReactElement, useEffect, useState } from 'react'
 import RootLayout from '@/layouts/root-layout';
-import MainLayout from '@/layouts/main-layout';
-import EditorBlock from '@/components/shared/EditorBlock'
-import { Card, CardBody, Image } from "@nextui-org/react";
-import Link from "next/link";
-import { Divider } from "@nextui-org/react";
+import Head from 'next/head';
 
 let Snowfall: any;
 if (typeof window !== 'undefined') {
@@ -21,6 +17,17 @@ const Home = (props: Props) => {
   }, []);
   return (
     <Fragment>
+      <Head>
+        <title>TopThammanun - Home</title>
+        <meta
+          name="description"
+          content="Welcome to TopThammanun's personal website. Explore the world of Thammanun through various projects and content."
+        />
+        <meta
+          name="keywords"
+          content="TopThammanun, Thammanun, personal website, projects, React, Next.js"
+        />
+      </Head>
       <div className="flex flex-col flex-wrap items-center justify-center w-screen h-screen text-center">
         <div className='sm:flex items-center gap-3'>
           <h1 className='font-extrabold'>{`Hello I'm Thammanun`}</h1>
