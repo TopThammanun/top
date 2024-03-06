@@ -1,0 +1,27 @@
+{
+  "name": "TopThammanun",
+  "short_name": "TopThammanun",
+  "icons": [
+    {
+      "src": "/images/@mock/200x200.jpg",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/@mock/200x200.jpg",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/@mock/200x200.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#1a1a1a",
+  "background_color": "#1a1a1a",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}
