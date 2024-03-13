@@ -5,6 +5,7 @@ import { StateType } from '@/store'
 import Head from 'next/head'
 import React, { Fragment, ReactNode } from 'react'
 import { useSelector } from 'react-redux'
+import { Analytics } from "@vercel/analytics/react"
 
 type Props = {
     children: ReactNode
@@ -39,6 +40,7 @@ const RootLayout = (props: Props) => {
             <main>
                 <LoadingScreen isLoading={loaderState.loader > 0} />
                 {props.children}
+                <Analytics />
             </main>
         </Fragment>
     )
