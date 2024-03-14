@@ -35,6 +35,18 @@ const Home = (props: Props) => {
         </div>
         {isClient && <Snowfall />}
       </div>
+      <div className="ship">
+        <div className="wrapper">
+          <div className="body side left" />
+          <div className="body main">
+            <div className="wing left" />
+            <div className="wing right" />
+            <div className="booster" />
+            <div className="exhaust" />
+          </div>
+          <div className="body side right" />
+        </div>
+      </div>
     </Fragment >
   )
 }
