@@ -1,6 +1,12 @@
 import { Fragment, ReactElement, useEffect, useState } from 'react'
 import RootLayout from '@/layouts/root-layout';
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import Head from 'next/head';
+import type { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useTranslation, Trans } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { Button } from '@nextui-org/react';
 
 let Snowfall: any;
 if (typeof window !== 'undefined') {
@@ -9,12 +15,30 @@ if (typeof window !== 'undefined') {
 
 type Props = {}
 
-const Home = (props: Props) => {
+const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const router = useRouter()
+  const { t, i18n } = useTranslation('common')
   const [isClient, setIsClient] = useState(false);
+
+  const onToggleLanguageClick = (newLocale: string) => {
+    const { pathname, asPath, query } = router
+    router.push({ pathname, query }, asPath, { locale: newLocale })
+  }
+
+  const clientSideLanguageChange = (newLocale: string) => {
+    try {
+      i18n.changeLanguage(newLocale);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const changeTo = router.locale === 'en' ? 'th' : 'en'
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
   return (
     <Fragment>
       <Head>
@@ -30,8 +54,23 @@ const Home = (props: Props) => {
       </Head>
       <div className="flex flex-col flex-wrap items-center justify-center w-screen h-screen text-center">
         <div className='sm:flex items-center gap-3'>
-          <h1 className='font-extrabold'>{`Hello I'm Thammanun`}</h1>
+          <h1 className='font-extrabold'>{t('h1')}</h1>
           <span className="waving-hand text-4xl">👋</span>
+          <Button
+            color='default'
+            variant='bordered'
+            className='text-white'
+            onClick={() => onToggleLanguageClick("th")}
+          >
+            TH
+          </Button>
+          <Button
+            variant='bordered'
+            onClick={() => onToggleLanguageClick("en")}
+            className='text-white'
+          >
+            EN
+          </Button>
         </div>
         {isClient && <Snowfall />}
       </div>
@@ -50,6 +89,17 @@ const Home = (props: Props) => {
     </Fragment >
   )
 }
+
+export const getStaticProps: GetStaticProps<Props> = async ({
+  locale,
+}) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'common',
+    ])),
+  },
+})
+
 export default Home
 
 Home.getLayout = (page: ReactElement) => {

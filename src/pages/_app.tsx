@@ -11,8 +11,9 @@ import ReactQueryProvider from '@/providers/react-query';
 import DateJSProvider from '@/providers/datejs';
 import NextUIProvider from '@/providers/next-ui/index';
 import { ClerkProvider } from "@clerk/nextjs";
+import { appWithTranslation } from 'next-i18next'
 
-export default function App({ Component, pageProps }: AppPropsWithLayoutType) {
+const App = ({ Component, pageProps }: AppPropsWithLayoutType) => {
   const getLayout = Component.getLayout || ((page: ReactElement) => page);
 
   return (
@@ -35,3 +36,5 @@ export default function App({ Component, pageProps }: AppPropsWithLayoutType) {
     </Fragment>
   )
 }
+
+export default appWithTranslation(App)
