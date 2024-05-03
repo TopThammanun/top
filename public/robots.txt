@@ -4,3 +4,6 @@ Allow: /
 
 # Host
 Host: https://topthammanun.dev
+
+# Sitemaps
+Sitemap: https://topthammanun.dev/sitemap.xml
