@@ -10,7 +10,7 @@ import AuthProvider from '@/providers/auth';
 import ReactQueryProvider from '@/providers/react-query';
 import DateJSProvider from '@/providers/datejs';
 import NextUIProvider from '@/providers/next-ui/index';
-import { ClerkProvider } from "@clerk/nextjs";
+// import { ClerkProvider } from "@clerk/nextjs";
 import { appWithTranslation } from 'next-i18next'
 
 const App = ({ Component, pageProps }: AppPropsWithLayoutType) => {
@@ -23,11 +23,11 @@ const App = ({ Component, pageProps }: AppPropsWithLayoutType) => {
           <NprogressProvider>
             <NextUIProvider>
               <DateJSProvider>
-                <ClerkProvider {...pageProps}>
+                {/* <ClerkProvider {...pageProps}> */}
                   <AuthProvider>
                     {getLayout(<Component {...pageProps} />)}
                   </AuthProvider>
-                </ClerkProvider>
+                {/* </ClerkProvider> */}
               </DateJSProvider>
             </NextUIProvider>
           </NprogressProvider>
