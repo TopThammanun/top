@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useState , useRef} from 'react'
 import RootLayout from '@/layouts/root-layout';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -7,6 +7,10 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { useTranslation, Trans } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Button } from '@nextui-org/react';
+import { Canvas, useLoader, useFrame } from '@react-three/fiber'
+// import { OrbitControls, Box } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 let Snowfall: any;
 if (typeof window !== 'undefined') {
@@ -15,30 +19,25 @@ if (typeof window !== 'undefined') {
 
 type Props = {}
 
-const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const router = useRouter()
-  const { t, i18n } = useTranslation('common')
-  const [isClient, setIsClient] = useState(false);
+const Model = () => {
+  const gltf = useLoader(GLTFLoader, "./ModelChar.glb");
+  const myMesh = useRef<any>();
 
-  const onToggleLanguageClick = (newLocale: string) => {
-    const { pathname, asPath, query } = router
-    router.push({ pathname, query }, asPath, { locale: newLocale })
-  }
-
-  const clientSideLanguageChange = (newLocale: string) => {
-    try {
-      i18n.changeLanguage(newLocale);
-    } catch (err) {
-      console.log(err);
+  useFrame(({ clock }) => {
+    const a = clock.getElapsedTime();
+    if (myMesh.current) {
+      myMesh.current.rotation.y = a;
     }
-  }
+  });
 
-  const changeTo = router.locale === 'en' ? 'th' : 'en'
+  return (
+    <>
+      <primitive object={gltf.scene} scale={1} ref={myMesh}/>
+    </>
+  );
+};
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
+const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Fragment>
       <Head>
@@ -53,39 +52,15 @@ const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProp
         />
       </Head>
       <div className="flex flex-col flex-wrap items-center justify-center w-screen h-screen text-center">
-        <div className='sm:flex items-center gap-3'>
-          <h1 className='font-extrabold'>{t('h1')}</h1>
-          <span className="waving-hand text-4xl">👋</span>
-          <Button
-            color='default'
-            variant='bordered'
-            className='text-white'
-            onClick={() => onToggleLanguageClick("th")}
-          >
-            TH
-          </Button>
-          <Button
-            variant='bordered'
-            onClick={() => onToggleLanguageClick("en")}
-            className='text-white'
-          >
-            EN
-          </Button>
-        </div>
-        {isClient && <Snowfall />}
-      </div>
-      <div className="ship">
-        <div className="wrapper">
-          <div className="body side left" />
-          <div className="body main">
-            <div className="wing left" />
-            <div className="wing right" />
-            <div className="booster" />
-            <div className="exhaust" />
-          </div>
-          <div className="body side right" />
-        </div>
-      </div>
+      <Canvas camera={{ fov: 60 }}>
+        <ambientLight intensity={0.4} />
+        <pointLight position={[0, 0.5, -1]} distance={1} intensity={2} />
+        <directionalLight position={[-10, 10, 5]} intensity={2} lookAt={() => {[0,0,0]}} />
+        <directionalLight position={[-10, -10, 0]} intensity={1} lookAt={() => {[0,0,0]}} />
+        <Model/>
+        <OrbitControls />
+      </Canvas>
+    </div>
     </Fragment >
   )
 }
