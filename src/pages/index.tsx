@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect, useState , useRef} from 'react'
+import { Fragment, ReactElement, useEffect, useState, useRef } from 'react'
 import RootLayout from '@/layouts/root-layout';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
 type Props = {}
 
 const Model = () => {
-  const gltf = useLoader(GLTFLoader, "./Rocketship.glb");
+  const gltf = useLoader(GLTFLoader, "./pika_poly.glb");
   const myMesh = useRef<any>();
 
   useFrame(({ clock }) => {
@@ -59,20 +59,20 @@ const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProp
         />
       </Head>
       <div className='flex flex-col items-center justify-center w-screen h-screen'>
-      <h1 className='font-extrabold'>{"Hello I'm Thammanun"}</h1>
-      <div className='h-fit'>
-      {isClient && <Snowfall />}
-      <Canvas camera={{ fov: 30 }}>
-        <ambientLight intensity={0.4} />
-        <pointLight position={[0, 0.5, -1]} distance={1} intensity={2} />
-        <directionalLight position={[-10, 10, 5]} intensity={2} lookAt={() => {[0,0,0]}} />
-        <directionalLight position={[-10, -10, 0]} intensity={1} lookAt={() => {[0,0,0]}} />
-        <Model/>
-        <OrbitControls />
-      </Canvas>
-    </div>
+        <h1 className='font-extrabold'>{"Hello I'm Thammanun"}</h1>
+        <div className='h-screen w-screen'>
+          {isClient && <Snowfall />}
+          <Canvas camera={{ fov: 30 }}>
+            <ambientLight intensity={1} />
+            <pointLight position={[0, 0.5, -1]} distance={1} intensity={2} />
+            <directionalLight position={[-10, 10, 5]} intensity={2} lookAt={() => { [0, 0, 0] }} />
+            <directionalLight position={[-10, -10, 0]} intensity={1} lookAt={() => { [0, 0, 0] }} />
+            <Model />
+            <OrbitControls />
+          </Canvas>
+        </div>
       </div>
-    
+
     </Fragment >
   )
 }
