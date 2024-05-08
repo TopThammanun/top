@@ -1,4 +1,4 @@
-import { Fragment, ReactElement, useEffect, useState } from 'react'
+import { Fragment, ReactElement, useEffect, useState , useRef} from 'react'
 import RootLayout from '@/layouts/root-layout';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -7,6 +7,10 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { useTranslation, Trans } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Button } from '@nextui-org/react';
+import { Canvas, useLoader, useFrame } from '@react-three/fiber'
+// import { OrbitControls, Box } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 let Snowfall: any;
 if (typeof window !== 'undefined') {
@@ -15,25 +19,27 @@ if (typeof window !== 'undefined') {
 
 type Props = {}
 
+const Model = () => {
+  const gltf = useLoader(GLTFLoader, "./Rocketship.glb");
+  const myMesh = useRef<any>();
+
+  useFrame(({ clock }) => {
+    const a = clock.getElapsedTime();
+    const yPosition = Math.sin(a) * 0.2;
+
+    if (myMesh.current) {
+      myMesh.current.rotation.y = a;
+      myMesh.current.position.y = yPosition;
+    }
+  });
+
+  return (
+    <primitive object={gltf.scene} scale={2} ref={myMesh} />
+  );
+};
+
 const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  // const router = useRouter()
-  // const { t, i18n } = useTranslation('common')
   const [isClient, setIsClient] = useState(false);
-
-  // const onToggleLanguageClick = (newLocale: string) => {
-  //   const { pathname, asPath, query } = router
-  //   router.push({ pathname, query }, asPath, { locale: newLocale })
-  // }
-
-  // const clientSideLanguageChange = (newLocale: string) => {
-  //   try {
-  //     i18n.changeLanguage(newLocale);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
-  // const changeTo = router.locale === 'en' ? 'th' : 'en'
 
   useEffect(() => {
     setIsClient(true);
@@ -52,43 +58,21 @@ const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProp
           content="TopThammanun, Thammanun, personal website, projects, React, Next.js"
         />
       </Head>
-      <div className="flex flex-col flex-wrap items-center justify-center w-screen h-screen text-center">
-      <div className='sm:flex items-center gap-3'>
+      <div className='flex flex-col items-center justify-center w-screen h-screen'>
       <h1 className='font-extrabold'>{"Hello I'm Thammanun"}</h1>
+      <div className='h-fit'>
+      {isClient && <Snowfall />}
+      <Canvas camera={{ fov: 30 }}>
+        <ambientLight intensity={0.4} />
+        <pointLight position={[0, 0.5, -1]} distance={1} intensity={2} />
+        <directionalLight position={[-10, 10, 5]} intensity={2} lookAt={() => {[0,0,0]}} />
+        <directionalLight position={[-10, -10, 0]} intensity={1} lookAt={() => {[0,0,0]}} />
+        <Model/>
+        <OrbitControls />
+      </Canvas>
+    </div>
       </div>
-        {/* <div className='sm:flex items-center gap-3'>
-          <h1 className='font-extrabold'>{t('h1')}</h1>
-          <span className="waving-hand text-4xl">👋</span>
-          <Button
-            color='default'
-            variant='bordered'
-            className='text-white'
-            onClick={() => onToggleLanguageClick("th")}
-          >
-            TH
-          </Button>
-          <Button
-            variant='bordered'
-            onClick={() => onToggleLanguageClick("en")}
-            className='text-white'
-          >
-            EN
-          </Button>
-        </div> */}
-        {isClient && <Snowfall />}
-      </div>
-      {/* <div className="ship">
-        <div className="wrapper">
-          <div className="body side left" />
-          <div className="body main">
-            <div className="wing left" />
-            <div className="wing right" />
-            <div className="booster" />
-            <div className="exhaust" />
-          </div>
-          <div className="body side right" />
-        </div>
-      </div> */}
+    
     </Fragment >
   )
 }
