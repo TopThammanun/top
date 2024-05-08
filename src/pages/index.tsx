@@ -20,7 +20,7 @@ if (typeof window !== 'undefined') {
 type Props = {}
 
 const Model = () => {
-  const gltf = useLoader(GLTFLoader, "./pika_poly.glb");
+  const gltf = useLoader(GLTFLoader, "./cat.glb");
   const myMesh = useRef<any>();
 
   useFrame(({ clock }) => {
