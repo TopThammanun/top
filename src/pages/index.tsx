@@ -5,20 +5,9 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
 
-let Snowfall: any;
-if (typeof window !== 'undefined') {
-  Snowfall = require('react-snowfall').default;
-}
-
 type Props = {}
 
 const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   return (
     <Fragment>
       <Head>
@@ -29,9 +18,8 @@ const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProp
       </Head>
       <div className="flex flex-col items-center justify-center w-screen h-screen text-center">
         <div className='sm:flex items-center gap-3'>
-          <h1 className='font-extrabold'>{"Hello, I'm Thammanun"}</h1>
+          {/* <h1 className='font-extrabold'>{"Hello, I'm Thammanun"}</h1> */}
         </div>
-        {isClient && <Snowfall />}
       </div>
     </Fragment>
   )
