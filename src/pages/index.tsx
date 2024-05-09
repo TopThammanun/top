@@ -1,100 +1,73 @@
-import { Fragment, ReactElement, useEffect, useState, useRef } from 'react'
+import { Fragment, ReactElement, useEffect, useState, useRef } from 'react';
+import { Canvas, useLoader, useFrame } from '@react-three/fiber';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from "@react-three/drei";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import RootLayout from '@/layouts/root-layout';
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import Head from 'next/head';
-import type { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { useTranslation, Trans } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { Button } from '@nextui-org/react';
-import { Canvas, useLoader, useFrame } from '@react-three/fiber'
-// import { OrbitControls, Box } from "@react-three/drei";
-import { Environment, OrbitControls } from "@react-three/drei";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
-let Snowfall: any;
+let Snowfall:any;
 if (typeof window !== 'undefined') {
   Snowfall = require('react-snowfall').default;
 }
 
-type Props = {}
-
-const Model = () => {
-  const gltf = useLoader(GLTFLoader, "./cat.glb");
+const Model = ({ position, setPosition }:any) => {
+  const gltf = useLoader(GLTFLoader, "./pika_poly.glb");
   const myMesh = useRef<any>();
 
-  useFrame(({ clock }) => {
-    const a = clock.getElapsedTime();
-    const yPosition = Math.sin(a) * 0.2;
-
+  useFrame(() => {
     if (myMesh.current) {
-      myMesh.current.rotation.y = a;
-      myMesh.current.position.y = yPosition;
+      myMesh.current.position.x = position.x;
+      myMesh.current.position.y = position.y;
     }
   });
 
-  return (
-    <primitive object={gltf.scene} scale={2} ref={myMesh} />
-  );
+  return <primitive object={gltf.scene} scale={1} ref={myMesh} />;
 };
 
-const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const [isClient, setIsClient] = useState(false);
+const Home = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setIsClient(true);
+    const handleKeyDown = (event : any) => {
+      switch (event.key) {
+        case 'w': setPosition(pos => ({ ...pos, y: pos.y + 0.1 })); break;
+        case 's': setPosition(pos => ({ ...pos, y: pos.y - 0.1 })); break;
+        case 'a': setPosition(pos => ({ ...pos, x: pos.x - 0.1 })); break;
+        case 'd': setPosition(pos => ({ ...pos, x: pos.x + 0.1 })); break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   return (
     <Fragment>
-      <Head>
-        <title>TopThammanun - Home</title>
-        <meta
-          name="description"
-          content="Welcome to TopThammanun's personal website. Explore the world of Thammanun through various projects and content."
-        />
-        <meta
-          name="keywords"
-          content="TopThammanun, Thammanun, personal website, projects, React, Next.js"
-        />
-      </Head>
       <div className='flex flex-col items-center justify-center w-screen h-screen'>
         <h1 className='font-extrabold'>{"Hello I'm Thammanun"}</h1>
         <div className='h-screen w-screen'>
-          {isClient && <Snowfall />}
+          <Snowfall />
           <Canvas camera={{ fov: 30 }}>
             <ambientLight intensity={1} />
             <pointLight position={[0, 0.5, -1]} distance={1} intensity={2} />
-            <directionalLight position={[-10, 10, 5]} intensity={2} lookAt={() => { [0, 0, 0] }} />
-            <directionalLight position={[-10, -10, 0]} intensity={1} lookAt={() => { [0, 0, 0] }} />
-            <Model />
+            <directionalLight position={[-10, 10, 5]} intensity={2} />
+            <directionalLight position={[-10, -10, 0]} intensity={1} />
+            <Model position={position} setPosition={setPosition} />
             <OrbitControls />
           </Canvas>
         </div>
       </div>
-
-    </Fragment >
-  )
-}
-
-export const getStaticProps: GetStaticProps<Props> = async ({
-  locale,
-}) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'common',
-    ])),
-  },
-})
-
-export default Home
-
-Home.getLayout = (page: ReactElement) => {
-  return (
-    <Fragment>
-      <RootLayout>
-        {page}
-      </RootLayout>
     </Fragment>
   );
 };
+
+export default Home;
+
+Home.getLayout = (page: ReactElement) => (
+  <Fragment>
+    <RootLayout>{page}</RootLayout>
+  </Fragment>
+);
