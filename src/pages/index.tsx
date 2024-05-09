@@ -10,7 +10,6 @@ import Link from 'next/link';
 
 type Props = {}
 
-const Home = (props: Props, _props: InferGetStaticPropsType<typeof getStaticProps>) => {
 const Model = ({ position, setPosition }:any) => {
   const gltf = useLoader(GLTFLoader, "./pika_poly.glb");
   const myMesh = useRef<any>();
@@ -47,8 +46,14 @@ const Home = () => {
 
   return (
     <Fragment>
+       <Head>
+        <title>TopThammanun</title>
+        <meta name="description" content="Discover TopThammanun's personal website. Dive into Thammanun's projects, insights, and content uniquely crafted in Next.js." />
+        <meta name="keywords" content="TopThammanun, Thammanun, personal website, projects, React, Next.js, technology" />
+        <link rel="canonical" href="https://www.topthammanun.com" />
+      </Head>
       <div className='flex flex-col items-center justify-center w-screen h-screen'>
-        <h1 className='font-extrabold'>{"Hello I'm Thammanun"}</h1>
+        {/* <h1 className='font-extrabold'>{"Hello I'm Thammanun"}</h1> */}
         <div className='h-screen w-screen'>
           <Canvas camera={{ fov: 30 }}>
             <ambientLight intensity={1} />
@@ -58,16 +63,6 @@ const Home = () => {
             <Model position={position} setPosition={setPosition} />
             <OrbitControls />
           </Canvas>
-        </div>
-      <Head>
-        <title>TopThammanun</title>
-        <meta name="description" content="Discover TopThammanun's personal website. Dive into Thammanun's projects, insights, and content uniquely crafted in Next.js." />
-        <meta name="keywords" content="TopThammanun, Thammanun, personal website, projects, React, Next.js, technology" />
-        <link rel="canonical" href="https://www.topthammanun.com" />
-      </Head>
-      <div className="flex flex-col items-center justify-center w-screen h-screen text-center">
-        <div className='sm:flex items-center gap-3'>
-          {/* <h1 className='font-extrabold'>{"Hello, I'm Thammanun"}</h1> */}
         </div>
       </div>
     </Fragment>
@@ -82,12 +77,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({ locale }) => ({
 
 export default Home;
 
-Home.getLayout = (page: ReactElement) => {
-  return (
-    <Fragment>
-      <RootLayout>
-        {page}
-      </RootLayout>
-    </Fragment>
-  );
-};
+Home.getLayout = (page: ReactElement) => (
+  <Fragment>
+    <RootLayout>{page}</RootLayout>
+  </Fragment>
+);
