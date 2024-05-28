@@ -6,7 +6,7 @@
 
 @import url(nprogress.css);
 @import url(scrollbar.css);
-@import url(animation.css);
+/* @import url(animation.css); */
 
 @layer base {
   :root {

@@ -55,8 +55,8 @@ export const MenuSidebar = () => {
     <Fragment>
       <Spacer y={4} />
       <div className="flex flex-col gap-2">
-        <MenuItem path="#" label="Search" icon="ic:outline-search" />
-        <MenuItem path="#" label="Setting" icon="ic:baseline-settings" />
+        {/* <MenuItem path="#" label="Search" icon="ic:outline-search" /> */}
+        {/* <MenuItem path="#" label="Setting" icon="ic:baseline-settings" /> */}
         <MenuItem
           path="#"
           label="Page"
@@ -70,7 +70,7 @@ export const MenuSidebar = () => {
 
 const Sidebar = () => {
   return (
-    <Card className="max-lg:hidden h-[100dvh] w-[40rem] bg-background transition-all sticky top-0 z-[41] rounded-none dark:border-r">
+    <Card className="max-lg:hidden h-[100dvh] w-[20rem] bg-background transition-all sticky top-0 z-[41] rounded-none dark:border-r">
       <div className="flex gap-3 items-center"></div>
       <PerfectScrollbar className="px-5">
         <MenuSidebar />
