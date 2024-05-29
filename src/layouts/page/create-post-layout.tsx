@@ -15,7 +15,15 @@ const CreatePostLayout = (props: Props) => {
 
   return (
     <Fragment>
-      <div className="flex flex-row  max-w-screen">
+      <div className="max-w-screen min-h-dvh relative">
+        <div className="flex">
+          <div className="sticky top-0 h-dvh">
+            <Sidebar />
+          </div>
+          <div className="flex-1 pb-6 max-md:pb-5">{props.children}</div>
+        </div>
+      </div>
+      {/* <div className="flex flex-row max-w-screen bg-black min-h-dvh relative">
         <Sidebar />
         <div className="w-full lg:w-[calc(100vw-16rem)]">
           <div className="flex flex-col">
@@ -24,7 +32,7 @@ const CreatePostLayout = (props: Props) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </Fragment>
   );
 };

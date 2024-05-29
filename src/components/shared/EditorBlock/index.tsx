@@ -65,7 +65,7 @@ export default function Editor(props: Props) {
 
   return (
     <Fragment>
-      <div className="relative flex h-[80dvh] w-full cursor-text flex-col items-center p-5 pt-10">
+      <div className="relative flex min-h-[80dvh] w-full cursor-text flex-col items-center p-5 pt-10">
         <div className=" w-full max-w-screen-lg">
           <div className="flex">
             <div className="absolute top-0 rounded-lg bg-gray-100 px-2 py-1 text-sm text-gray-400">
@@ -75,20 +75,24 @@ export default function Editor(props: Props) {
               {"Press '/' for commands, or enter some text..."}
             </div>
           </div>
-          <div className="text-5xl font-semibold w-full">
-            <input
-              className="bg-transparent text-white outline-none py-5 appearance-none w-full"
-              type="text"
-              maxLength={35}
+          <div className="font-semibold w-full">
+            <textarea
+              className="bg-transparent text-white outline-none py-5 appearance-none w-full text-5xl placeholder:text-5xl"
               value={titleState.title}
               onChange={(e) => {
                 dispatch(titleAction.updateState({ title: e.target.value }));
               }}
               placeholder="Untitled Title"
+              rows={1}
+              style={{ resize: "none", overflow: "hidden" }}
+              onInput={(e: any) => {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
             />
           </div>
           <div
-            className="h-[70dvh]"
+            className="min-h-[70dvh]"
             onClick={() => {
               editor?.chain().focus().run();
             }}
