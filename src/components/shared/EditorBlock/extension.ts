@@ -47,9 +47,10 @@ export const TipTapEditorExtensions = [
     },
   }),
   Placeholder.configure({
-    placeholder: "Press '/' for commands, or enter some text...",
+    placeholder : "Press '/' for commands, or enter some text...",
     includeChildren: true,
-    showOnlyWhenEditable: false,
+    emptyEditorClass:
+    'cursor-text before:content-[attr(data-placeholder)] before:absolute before:top-1 before:left-0 before:text-mauve-11 before:opacity-50 before:pointer-events-none before:whitespace-pre-wrap',
   }),
   SlashCommand,
   Document,
