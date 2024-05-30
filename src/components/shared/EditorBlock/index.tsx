@@ -68,10 +68,10 @@ export default function Editor(props: Props) {
       <div className="relative flex min-h-[80dvh] w-full cursor-text flex-col items-center p-5 pt-10">
         <div className=" w-full max-w-screen-lg">
           <div className="flex">
-            <div className="absolute top-0 rounded-lg bg-gray-100 px-2 py-1 text-sm text-gray-400">
+            <div className="absolute top-0 rounded-lg bg-gray-100 px-2 py-1 sm:text-sm max-sm:text text-gray-400">
               {saveStatus}
             </div>
-            <div className="absolute top-0 ml-20 rounded-lg bg-gray-100 px-2 py-1 text-sm text-gray-400">
+            <div className="absolute top-0 ml-20 rounded-lg bg-gray-100 px-2 py-1 sm:text-sm max-sm:text text-gray-400">
               {"Press '/' for commands, or enter some text..."}
             </div>
           </div>
