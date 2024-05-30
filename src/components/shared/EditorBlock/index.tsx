@@ -9,6 +9,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { StateType } from "@/store";
 import { titleAction } from "@/store/reducers/title";
+import docAPI from "@/api/doc";
 
 type Props = {
   content: any;
@@ -22,15 +23,19 @@ export default function Editor(props: Props) {
   const { setContent, content } = props;
   const titleState = useSelector((state: StateType) => state.titleState);
   const dispatch = useDispatch();
-  async function patchRequest(publicId: string, title: string, document: any) {
-    // const response = await axios.put(
-    //   'https://nest-js-project.vercel.app/documents/update/1', { title, publicId, document, ownerId: "top" });
+  async function patchRequest(id: string, title: string, document: any) {
+    const res = await docAPI.update(id, {
+      data: {
+        title: title,
+        editorJson: document,
+      },
+    });
 
-    // if (response.status != 200) {
+    // if (res.status != 200) {
     //   setSaveStatus("Waiting to Save.");
     //   throw new Error("Failed to update document");
     // }
-    setSaveStatus("Saved");
+    // setSaveStatus("Saved");
     // startTransition(() => {
     //   router.refresh();
     // });
@@ -39,7 +44,7 @@ export default function Editor(props: Props) {
   const debouncedUpdates = useDebouncedCallback(async ({ editor }) => {
     const json = editor.getJSON();
     setContent(json);
-    await patchRequest("1", "Test", json);
+    await patchRequest("665838e832e12ec847b988b6", "Test", json);
     setTimeout(() => {
       setSaveStatus("Saved");
     }, 500);
