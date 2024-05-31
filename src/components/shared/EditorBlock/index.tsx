@@ -21,6 +21,7 @@ export default function Editor(props: Props) {
   const { setContent, content, id, editable } = props;
   const titleState = useSelector((state: StateType) => state.titleState);
   const dispatch = useDispatch();
+
   async function patchRequest(title: string, document: any) {
     const res = await docAPI.update(id, {
       data: {
@@ -28,15 +29,19 @@ export default function Editor(props: Props) {
         editorJson: document,
       },
     });
+    return res;
   }
 
-  const debouncedUpdates = useDebouncedCallback(async ({ editor }) => {
+  const debouncedEditorUpdate = useDebouncedCallback(async ({ editor }) => {
     const json = editor.getJSON();
     setContent(json);
     await patchRequest(titleState.title, json);
-    setTimeout(() => {
-      setSaveStatus("Saved");
-    }, 500);
+    setSaveStatus("Saved");
+  }, 1000);
+
+  const debouncedTitleUpdate = useDebouncedCallback(async (title: string) => {
+    await patchRequest(title, content);
+    setSaveStatus("Saved");
   }, 1000);
 
   const editor = useEditor({
@@ -44,7 +49,7 @@ export default function Editor(props: Props) {
     editorProps: TipTapEditorProps,
     onUpdate: (e) => {
       setSaveStatus("Saving...");
-      debouncedUpdates(e);
+      debouncedEditorUpdate(e);
     },
     editable: editable,
     content: content,
@@ -57,14 +62,6 @@ export default function Editor(props: Props) {
       });
     }
   }, [editor, content]);
-
-  const titleUpdate = async () => {
-    await patchRequest(titleState.title, content);
-  };
-
-  // useEffect(() => {
-  //   titleUpdate();
-  // }, [titleState.title]);
 
   return (
     <Fragment>
@@ -82,9 +79,10 @@ export default function Editor(props: Props) {
             <textarea
               className="bg-transparent text-white outline-none py-5 appearance-none w-full text-5xl placeholder:text-5xl"
               value={titleState.title}
-              onChange={async (e) => {
-                titleUpdate();
+              onChange={(e) => {
+                setSaveStatus("Saving...");
                 dispatch(titleAction.updateState({ title: e.target.value }));
+                debouncedTitleUpdate(e.target.value);
               }}
               placeholder="Untitled Title"
               rows={1}
