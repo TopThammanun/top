@@ -1,11 +1,9 @@
 "use client";
 import { useEditor, EditorContent } from "@tiptap/react";
-import { useState, useEffect, useTransition, Fragment } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Fragment } from "react";
 import { TipTapEditorExtensions } from "./extension";
 import { TipTapEditorProps } from "./props";
 import { useDebouncedCallback } from "use-debounce";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { StateType } from "@/store";
 import { titleAction } from "@/store/reducers/title";
@@ -14,37 +12,28 @@ import docAPI from "@/api/doc";
 type Props = {
   content: any;
   setContent: any;
+  id: string;
+  editable: boolean;
 };
 
 export default function Editor(props: Props) {
-  const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<string>("Saved");
-  const [title, setTitle] = useState<string>("Untitled");
-  const { setContent, content } = props;
+  const { setContent, content, id, editable } = props;
   const titleState = useSelector((state: StateType) => state.titleState);
   const dispatch = useDispatch();
-  async function patchRequest(id: string, title: string, document: any) {
+  async function patchRequest(title: string, document: any) {
     const res = await docAPI.update(id, {
       data: {
         title: title,
         editorJson: document,
       },
     });
-
-    // if (res.status != 200) {
-    //   setSaveStatus("Waiting to Save.");
-    //   throw new Error("Failed to update document");
-    // }
-    // setSaveStatus("Saved");
-    // startTransition(() => {
-    //   router.refresh();
-    // });
   }
 
   const debouncedUpdates = useDebouncedCallback(async ({ editor }) => {
     const json = editor.getJSON();
     setContent(json);
-    await patchRequest("665838e832e12ec847b988b6", "Test", json);
+    await patchRequest(titleState.title, json);
     setTimeout(() => {
       setSaveStatus("Saved");
     }, 500);
@@ -57,6 +46,7 @@ export default function Editor(props: Props) {
       setSaveStatus("Saving...");
       debouncedUpdates(e);
     },
+    editable: editable,
     content: content,
   });
 
@@ -67,6 +57,14 @@ export default function Editor(props: Props) {
       });
     }
   }, [editor, content]);
+
+  const titleUpdate = async () => {
+    await patchRequest(titleState.title, content);
+  };
+
+  // useEffect(() => {
+  //   titleUpdate();
+  // }, [titleState.title]);
 
   return (
     <Fragment>
@@ -84,7 +82,8 @@ export default function Editor(props: Props) {
             <textarea
               className="bg-transparent text-white outline-none py-5 appearance-none w-full text-5xl placeholder:text-5xl"
               value={titleState.title}
-              onChange={(e) => {
+              onChange={async (e) => {
+                titleUpdate();
                 dispatch(titleAction.updateState({ title: e.target.value }));
               }}
               placeholder="Untitled Title"

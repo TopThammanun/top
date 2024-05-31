@@ -6,6 +6,11 @@ const docAPI = {
       url: `/doc/all`,
     });
   },
+  getById(id: any) {
+    return apiBase.get({
+      url: `/doc/${id}`,
+    });
+  },
   create(req: { data: any }) {
     return apiBase.post({
       data: req.data,
