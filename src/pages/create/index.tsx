@@ -26,9 +26,11 @@ const Create = (props: Props) => {
     <Fragment>
       <Header />
       <Spacer y={10} />
-      <div className="custom-editor">
-        <EditorBlock content={content} setContent={setContent} />
-      </div>
+      {!getPostAll.isLoading && (
+        <div className="custom-editor">
+          <EditorBlock content={content} setContent={setContent} />
+        </div>
+      )}
     </Fragment>
   );
 };
