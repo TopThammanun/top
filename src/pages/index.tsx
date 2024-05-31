@@ -5,6 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import { Button } from "@nextui-org/react";
+import { useQuery } from "@tanstack/react-query";
+import docAPI from "@/api/doc";
 
 let Snowfall: any;
 if (typeof window !== "undefined") {
@@ -17,11 +19,22 @@ const Home = (
   props: Props,
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) => {
+  const getPostAll = useQuery({
+    queryKey: ["all"],
+    queryFn: (): Promise<any> => docAPI.getAll(),
+  });
   const [isClient, setIsClient] = useState(false);
+  const [firstId, setFirstId] = useState<string>("");
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (getPostAll.data) {
+      setFirstId(getPostAll.data[0].id);
+    }
+  }, [getPostAll.data]);
 
   return (
     <Fragment>
@@ -42,8 +55,9 @@ const Home = (
           <h1 className="font-extrabold">{"Hello, I'm Thammanun"}</h1>
         </div>
         <Button
+          isLoading={getPostAll.isLoading}
           color="secondary"
-          href="/create"
+          href={`/create/${firstId}`}
           as={Link}
           className="py-6 px-12 text-base text-white font-semibold"
         >
