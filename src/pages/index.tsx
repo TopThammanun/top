@@ -54,15 +54,27 @@ const Home = (
         <div className="sm:flex items-center gap-3">
           <h1 className="font-extrabold">{"Hello, I'm Thammanun"}</h1>
         </div>
-        <Button
-          isLoading={getPostAll.isLoading}
-          color="secondary"
-          href={`/create/${firstId}`}
-          as={Link}
-          className="py-6 px-12 text-base text-white font-semibold"
-        >
-          Play Tiptap Editor!!
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            isLoading={getPostAll.isLoading}
+            color="secondary"
+            href={`/create/${firstId}`}
+            as={Link}
+            className="py-6 px-12 text-base text-white font-semibold"
+          >
+            Play Tiptap Editor!!
+          </Button>
+          <Button
+            isLoading={getPostAll.isLoading}
+            color="primary"
+            href={`/docs`}
+            as={Link}
+            className="py-6 px-12 text-base text-white font-semibold"
+          >
+            View
+          </Button>
+        </div>
+
         {isClient && <Snowfall />}
       </div>
     </Fragment>
