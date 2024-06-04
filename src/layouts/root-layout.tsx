@@ -17,21 +17,30 @@ const RootLayout = ({
   children,
   title = "TopThammanun",
   desc = "Explore TopThammanun's web development portfolio showcasing skills and projects.",
-  keyword = "TopThammanun, web development, portfolio, projects, skills",
+  keyword = "TopThammanun, web development, portfolio, projects, skills, Thammanun, Thammanun Aikhamdaeng",
 }: Props) => {
   const loaderState = useSelector((state: StateType) => state.loaderState);
 
   return (
     <Fragment>
       <Head>
-        <title>{title}</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>TopThammanun</title>
+        <link rel="icon" href="/logo2.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content={desc} />
-        <meta name="keywords" content={keyword} />
+        <meta
+          name="descriptiondescription"
+          content="Explore TopThammanun's web development portfolio showcasing skills and projects."
+        />
+        <meta
+          name="keywords"
+          content="TopThammanun, web development, portfolio, projects, skills, Thammanun, Thammanun Aikhamdaeng"
+        />
         <meta name="author" content="TopThammanun" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={desc} />
+        <meta property="og:title" content="TopThammanun" />
+        <meta
+          property="og:description"
+          content="Explore TopThammanun's web development portfolio showcasing skills and projects."
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.topthammanun.dev/" />
         <meta
