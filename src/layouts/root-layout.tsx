@@ -33,7 +33,7 @@ const RootLayout = ({
         />
         <meta
           name="keywords"
-          content="TopThammanun, web development, portfolio, projects, skills, Thammanun, Thammanun Aikhamdaeng"
+          content="TopThammanun, web development, Thammanun, Thammanun Aikhamdaeng"
         />
         <meta name="author" content="TopThammanun" />
         <meta property="og:title" content="TopThammanun" />
