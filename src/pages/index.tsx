@@ -42,12 +42,13 @@ const Home = (
         <title>TopThammanun</title>
         <meta
           name="description"
-          content="Discover TopThammanun's personal website. Dive into Thammanun's projects, insights, and content uniquely crafted in Next.js."
+          content="Discover TopThammanun's personal website. Dive into Thammanun's projects, insights, and content uniquely crafted in Next.js.2"
         />
         <meta
           name="keywords"
           content="TopThammanun, Thammanun, personal website, projects, React, Next.js, technology"
         />
+        <link rel="icon" href="/favicon.ico" />
         <link rel="canonical" href="https://www.topthammanun.com" />
       </Head>
       <div className="flex flex-col items-center justify-center w-screen h-screen text-center">
