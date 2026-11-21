@@ -1,0 +1,107 @@
+export type YearMonth = `${number}-${number}`;
+
+export type ProjectKind = "client" | "tooling" | "side";
+export type Lane = "main" | "branch";
+export type LinkId = "github" | "website" | "email" | "linkedin";
+
+export interface ContactLink {
+  id: LinkId;
+  label: string;
+  value: string;
+  href: string;
+}
+
+export interface Profile {
+  handle: string;
+  name: string;
+  nickname: string;
+  displayName: string;
+  fullName: string | null;
+  title: string;
+  roles: string[];
+  tagline: string;
+  summary: string[];
+  now: string;
+  location: { label: string; timeZone: string; utcOffset: string };
+  links: ContactLink[];
+  email: string | null;
+  linkedin: string | null;
+  languages: { name: string; level: string }[];
+}
+
+export interface TechCategory {
+  id: string;
+  label: string;
+}
+
+export interface TechItem {
+  id: string;
+  name: string;
+  category: string;
+}
+
+export interface Period {
+  start: YearMonth;
+  end: YearMonth | null;
+}
+
+export interface Layer {
+  label: string;
+  items: string[];
+}
+
+export interface Stat {
+  label: string;
+  value: string;
+}
+
+export interface Project {
+  slug: string;
+  name: string;
+  kind: ProjectKind;
+  domain: string;
+  role: string;
+  period: Period;
+  summary: string;
+  highlights: string[];
+  layers: Layer[];
+  stats: Stat[];
+  stack: string[];
+}
+
+export interface TimelineEvent {
+  date: YearMonth;
+  lane: Lane;
+  project: string;
+  message: string;
+  head?: boolean;
+}
+
+export interface Practice {
+  title: string;
+  body: string;
+}
+
+export interface Education {
+  school: string;
+  degree: string;
+  period: Period;
+}
+
+export interface ResumeMeta {
+  version: string;
+  updated: string;
+  siteUrl: string;
+  statsAsOf: string;
+}
+
+export interface Resume {
+  meta: ResumeMeta;
+  profile: Profile;
+  categories: TechCategory[];
+  tech: TechItem[];
+  projects: Project[];
+  timeline: TimelineEvent[];
+  practices: Practice[];
+  education: Education[];
+}
