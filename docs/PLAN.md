@@ -332,7 +332,7 @@ Requested by the owner once the seven tasks were done. These replace the matchin
   feed a career path at the top of Timeline, the hero meta table (`at`, `path`, `edu`), `Professional
   Experience` in the PDF, `work`, `education` and `awards` in the JSON resume, the text outputs and the
   JSON-LD (`worksFor`, `alumniOf`). The title is now `Senior Full Stack Developer`. Company projects moved to
-  their own PDF section. Roles without known dates show none.
+  their own PDF section.
 - **Commit calendar.** `scripts/build-activity.ts` writes `src/content/activity.ts` from local clones, and the
   hero shows it under the mascot as a dot calendar coloured by company or personal work, with a readout for
   the day under the pointer (`hero/CommitCalendar.tsx`, `src/lib/commit-calendar.ts`).

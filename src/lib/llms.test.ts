@@ -28,8 +28,12 @@ describe("toLlmsTxt", () => {
     expect(text).toContain(
       "- Senior Full Stack Developer, Chanwanich Company Limited (Mar 2026 – Present): Promoted in March 2026",
     );
-    expect(text).toContain("- Junior Full Stack Developer, Chanwanich Company Limited: Worked on phase 1");
-    expect(text).toContain("- Intern Full Stack Developer, Chanwanich Company Limited (14 months): ");
+    expect(text).toContain(
+      "- Junior Full Stack Developer, Chanwanich Company Limited (Apr 2024 – Mar 2026): Worked on phase 1",
+    );
+    expect(text).toContain(
+      "- Intern Full Stack Developer, Chanwanich Company Limited (Dec 2022 – Mar 2024): ",
+    );
     expect(text).toContain("Technologies: React, .NET, Amazon Cognito, AWS services.");
   });
 

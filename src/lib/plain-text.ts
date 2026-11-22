@@ -1,6 +1,6 @@
 import type { Education, Project, Resume, Role, YearMonth } from "@/content/types";
-import { educationDegree, educationWhen, roleWhen } from "./career";
-import { formatPeriod, periodDuration } from "./format";
+import { educationDegree, educationWhen } from "./career";
+import { formatFormalPeriod, formatPeriod, periodDuration } from "./format";
 import { fullName } from "./identity";
 import { absoluteUrl, MACHINE_ROUTES } from "./routes";
 import { companyProjects, personalProjects, skillGroups, techName } from "./selectors";
@@ -52,10 +52,9 @@ function projectBlock(r: Resume, p: Project, now: YearMonth): string[] {
 }
 
 function roleBlock(role: Role): string[] {
-  const when = roleWhen(role);
   return [
     "",
-    ...(when ? spread(role.title, when) : [role.title]),
+    ...spread(role.title, formatFormalPeriod(role.period)),
     ...hanging(role.employer, INDENT, INDENT),
     ...hanging(role.summary, INDENT, INDENT),
     ...(role.stack.length > 0 ? hanging(`Stack: ${role.stack.join(", ")}`, INDENT, INDENT) : []),

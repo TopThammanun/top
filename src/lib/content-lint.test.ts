@@ -21,7 +21,7 @@ describe("lintResume", () => {
   it("passes the real resume and lists pending fields", () => {
     expect(lintResume(resume)).toEqual({
       errors: [],
-      pending: ["profile.email", "profile.linkedin", "career[1].period", "career[2].period"],
+      pending: ["profile.email", "profile.linkedin"],
     });
   });
 
@@ -60,18 +60,13 @@ describe("lintResume", () => {
       (r) => (r.career[0].period = { start: "2026-03", end: "2026-01" }),
       "career[0].period",
     ],
-    ["role shorter than a month", (r) => (r.career[2].months = 0), "career[2].months"],
     ["role without a summary", (r) => (r.career[1].summary = ""), "career[1].summary"],
     [
       "non-https role link",
       (r) => (r.career[2].links[0].href = "http://example.com"),
       "career[2].links[0].href",
     ],
-    [
-      "two current roles",
-      (r) => (r.career[1].period = { start: "2024-03", end: null }),
-      "career has 2 current roles",
-    ],
+    ["two current roles", (r) => (r.career[1].period.end = null), "career has 2 current roles"],
     [
       "bad graduation month",
       (r) => (r.education[0].graduated = "2024-3" as YearMonth),

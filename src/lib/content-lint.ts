@@ -81,12 +81,11 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
 
   r.career.forEach((role, i) => {
     const path = `career[${i}]`;
-    if (role.period) errors.push(...lintPeriod(role.period, `${path}.period`));
-    if (role.months !== null && role.months < 1) errors.push(`${path}.months must be at least 1`);
+    errors.push(...lintPeriod(role.period, `${path}.period`));
     if (!role.summary) errors.push(`${path}.summary is empty`);
     role.links.forEach((link, j) => errors.push(...lintHref(link.href, `${path}.links[${j}].href`)));
   });
-  const current = r.career.filter((role) => role.period?.end === null).length;
+  const current = r.career.filter((role) => role.period.end === null).length;
   if (current > 1) errors.push(`career has ${current} current roles, expected at most 1`);
 
   r.education.forEach((education, i) => {
@@ -103,7 +102,6 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
     r.profile.email === null && "profile.email",
     r.profile.linkedin === null && "profile.linkedin",
     r.education.length === 0 && "education",
-    ...r.career.map((role, i) => role.period === null && `career[${i}].period`),
   ].filter((field): field is string => typeof field === "string");
 
   return { errors, pending };

@@ -638,7 +638,6 @@ export const resume: Resume = {
       title: "Senior Full Stack Developer",
       employer: EMPLOYER,
       period: { start: "2026-03", end: null },
-      months: null,
       summary:
         "Promoted in March 2026 while on the Automated Border Control platform, now on the Industrial-estate e-Permit platform.",
       stack: [],
@@ -648,8 +647,7 @@ export const resume: Resume = {
       id: "junior",
       title: "Junior Full Stack Developer",
       employer: EMPLOYER,
-      period: null,
-      months: null,
+      period: { start: "2024-04", end: "2026-03" },
       summary: "Worked on phase 1 of the Automated Border Control platform.",
       stack: [],
       links: [],
@@ -658,10 +656,9 @@ export const resume: Resume = {
       id: "intern",
       title: "Intern Full Stack Developer",
       employer: EMPLOYER,
-      period: null,
-      months: 14,
+      period: { start: "2022-12", end: "2024-03" },
       summary:
-        "A 14-month internship on HealthTeams, a management platform for hospitals and sub-district health promoting hospitals.",
+        "An internship on HealthTeams, a management platform for hospitals and sub-district health promoting hospitals.",
       stack: ["React", ".NET", "Amazon Cognito", "AWS services"],
       links: [
         { label: "HealthTeams product page", href: "https://www.chanwanich.digital/healthteams/" },

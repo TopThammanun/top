@@ -7,7 +7,7 @@ export interface CareerStep {
   title: string;
   subtitle: string;
   distinction: string | null;
-  when: string | null;
+  when: string;
   current: boolean;
   summary: string | null;
   chips: { label: string; items: string[] };
@@ -16,7 +16,7 @@ export interface CareerStep {
 }
 
 export function currentRole(r: Resume): Role | null {
-  return r.career.find((role) => role.period?.end === null) ?? null;
+  return r.career.find((role) => role.period.end === null) ?? null;
 }
 
 function sharedEnding(titles: string[][]): string[] {
@@ -36,14 +36,8 @@ export function careerLadder(r: Resume): string | null {
   return [steps.join(" → "), ...ending].join(" ");
 }
 
-export function roleWhen(role: Role): string | null {
-  if (role.period) return formatFormalPeriod(role.period);
-  return role.months === null ? null : `${role.months} months`;
-}
-
 export function roleHeading(role: Role): string {
-  const when = roleWhen(role);
-  return `${role.title}, ${role.employer}${when ? ` (${when})` : ""}`;
+  return `${role.title}, ${role.employer} (${formatFormalPeriod(role.period)})`;
 }
 
 export function educationDegree(education: Education): string {
@@ -85,8 +79,8 @@ function roleStep(role: Role): CareerStep {
     title: role.title,
     subtitle: role.employer,
     distinction: null,
-    when: roleWhen(role),
-    current: role.period?.end === null,
+    when: formatFormalPeriod(role.period),
+    current: role.period.end === null,
     summary: role.summary,
     chips: { label: "Stack", items: role.stack },
     links: role.links,

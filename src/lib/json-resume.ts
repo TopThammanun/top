@@ -16,7 +16,7 @@ interface JsonResumeDates {
   endDate?: string;
 }
 
-interface JsonResumeWork extends Partial<JsonResumeDates> {
+interface JsonResumeWork extends JsonResumeDates {
   name: string;
   position: string;
   summary: string;
@@ -89,7 +89,7 @@ function toWork(role: Role): JsonResumeWork {
     name: role.employer,
     position: role.title,
     summary: role.summary,
-    ...(role.period ? dates(role.period) : {}),
+    ...dates(role.period),
   };
 }
 

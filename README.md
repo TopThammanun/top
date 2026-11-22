@@ -54,8 +54,6 @@ These fields are empty on purpose and render nothing until they are filled in `s
 
 - `profile.email`
 - `profile.linkedin`
-- `career[].period` for the junior and intern roles (their start and end months are not known yet, so no
-  dates are shown for them)
 
 Client names are intentionally left out; the employer is named. Commit counts are rounded figures from local
 clones on `meta.statsAsOf`, and the calendar shows the 53 weeks up to the day it was generated.

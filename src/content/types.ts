@@ -108,8 +108,7 @@ export interface Role {
   id: string;
   title: string;
   employer: string;
-  period: Period | null;
-  months: number | null;
+  period: Period;
   summary: string;
   stack: string[];
   links: ExternalLink[];

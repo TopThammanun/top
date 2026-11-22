@@ -22,11 +22,11 @@ describe("toJsonResume", () => {
     });
   });
 
-  it("maps roles to work and dates only the ones with a known period", () => {
+  it("maps roles to work and leaves the end date off the current one", () => {
     expect(json.work.map((work) => work.position)).toEqual(resume.career.map((role) => role.title));
     expect(json.work[0]).toMatchObject({ name: "Chanwanich Company Limited", startDate: "2026-03" });
     expect(json.work[0]).not.toHaveProperty("endDate");
-    expect(json.work[1]).not.toHaveProperty("startDate");
+    expect(json.work[2]).toMatchObject({ startDate: "2022-12", endDate: "2024-03" });
   });
 
   it("lists every project, company work first", () => {

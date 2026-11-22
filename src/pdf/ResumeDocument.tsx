@@ -1,7 +1,7 @@
 import { Document, Font, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 import type { Education, Project, Resume, Role } from "@/content/types";
-import { educationDegree, educationWhen, roleWhen } from "@/lib/career";
+import { educationDegree, educationWhen } from "@/lib/career";
 import { profileEndpoints } from "@/lib/endpoints";
 import { formatFormalPeriod } from "@/lib/format";
 import { fullName } from "@/lib/identity";
@@ -94,12 +94,12 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function EntryHead({ title, subtitle, aside }: { title: string; subtitle: string; aside: string | null }) {
+function EntryHead({ title, subtitle, aside }: { title: string; subtitle: string; aside: string }) {
   return (
     <View>
       <View style={styles.entryHead}>
         <Text style={styles.entryTitle}>{title}</Text>
-        {aside ? <Text style={styles.entryPeriod}>{aside}</Text> : null}
+        <Text style={styles.entryPeriod}>{aside}</Text>
       </View>
       <Text style={styles.entrySubtitle}>{subtitle}</Text>
     </View>
@@ -118,7 +118,7 @@ function Labelled({ label, items }: { label: string; items: string[] }) {
 function RoleEntry({ role }: { role: Role }) {
   return (
     <View style={styles.entry} wrap={false}>
-      <EntryHead title={role.title} subtitle={role.employer} aside={roleWhen(role)} />
+      <EntryHead title={role.title} subtitle={role.employer} aside={formatFormalPeriod(role.period)} />
       <Text>{role.summary}</Text>
       {role.stack.length > 0 ? <Labelled label="Technologies" items={role.stack} /> : null}
     </View>

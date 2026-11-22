@@ -10,15 +10,13 @@ import {
   educationProjects,
   educationWhen,
   roleHeading,
-  roleWhen,
 } from "./career";
 
 const role: Role = {
   id: "role",
   title: "Developer",
   employer: "Employer",
-  period: null,
-  months: null,
+  period: { start: "2024-04", end: "2026-03" },
   summary: "Summary.",
   stack: ["React"],
   links: [{ label: "Product", href: "https://example.com" }],
@@ -32,22 +30,6 @@ const education: Education = {
   coursework: ["Course"],
   projects: [],
 };
-
-describe("roleWhen", () => {
-  it("prefers the period", () => {
-    expect(roleWhen({ ...role, period: { start: "2026-03", end: null }, months: 3 })).toBe(
-      "Mar 2026 – Present",
-    );
-  });
-
-  it("falls back to the length in months", () => {
-    expect(roleWhen({ ...role, months: 14 })).toBe("14 months");
-  });
-
-  it("is null when neither is known", () => {
-    expect(roleWhen(role)).toBeNull();
-  });
-});
 
 describe("careerLadder", () => {
   const titled = (...titles: string[]): Resume => ({
@@ -80,12 +62,14 @@ describe("careerLadder", () => {
 });
 
 describe("roleHeading", () => {
-  it("names the title and employer", () => {
-    expect(roleHeading(role)).toBe("Developer, Employer");
+  it("names the title, employer and period", () => {
+    expect(roleHeading(role)).toBe("Developer, Employer (Apr 2024 – Mar 2026)");
   });
 
-  it("adds the period or length when known", () => {
-    expect(roleHeading({ ...role, months: 14 })).toBe("Developer, Employer (14 months)");
+  it("shows an open period as Present", () => {
+    expect(roleHeading({ ...role, period: { start: "2026-03", end: null } })).toBe(
+      "Developer, Employer (Mar 2026 – Present)",
+    );
   });
 });
 
@@ -152,7 +136,7 @@ describe("careerSteps", () => {
       title: "Developer",
       subtitle: "Employer",
       distinction: null,
-      when: null,
+      when: "Apr 2024 – Mar 2026",
       summary: "Summary.",
       chips: { label: "Stack", items: ["React"] },
       links: role.links,
@@ -162,7 +146,7 @@ describe("careerSteps", () => {
 
 describe("career content", () => {
   it("has one current role and its title is the profile title", () => {
-    expect(resume.career.filter((step) => step.period?.end === null)).toHaveLength(1);
+    expect(resume.career.filter((step) => step.period.end === null)).toHaveLength(1);
     expect(currentRole(resume)?.title).toBe(resume.profile.title);
   });
 });
