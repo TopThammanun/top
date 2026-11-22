@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { activity } from "@/content/activity";
 import { resume } from "@/content/resume";
+import { projectAnchor } from "@/lib/anchors";
 import { careerSteps } from "@/lib/career";
 import { buildCalendar, describeSummary } from "@/lib/commit-calendar";
 import { AI_CRAWLERS } from "@/lib/crawlers";
@@ -13,6 +14,8 @@ import { seoDescription, seoTitle, structuredData } from "@/lib/seo";
 import { distanceFromTop, gotoHydrated } from "./helpers";
 
 const LINKEDIN_RESUME_MAX_BYTES = 2 * 1024 * 1024;
+const RESUME_MAX_PAGES = 2;
+const PDF_PAGE_OBJECT = /\/Type\s*\/Page(?![a-zA-Z])/g;
 const GALLERY_PROJECT = personalProjects(resume).find((project) => projectImages(project).length > 1);
 if (!GALLERY_PROJECT) throw new Error("expected a personal project with a gallery");
 const CALENDAR = buildCalendar(activity);
@@ -22,6 +25,7 @@ test.describe("home page", () => {
   test("renders every section and the name", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(fullName(resume.profile));
+    await expect(page.locator("section#home").getByText(resume.profile.title, { exact: true })).toBeVisible();
     for (const section of SECTIONS) {
       await expect(page.locator(`section#${section.id}`)).toHaveCount(1);
     }
@@ -66,10 +70,15 @@ test.describe("home page", () => {
 
   test("lists the career path from education to the current role", async ({ page }) => {
     await page.goto("/");
-    const steps = page.locator("section#log ol").first().getByRole("listitem");
+    const steps = page.locator("section#log ol").first().locator("> li");
     const expected = careerSteps(resume);
     await expect(steps.getByRole("heading", { level: 4 })).toHaveText(expected.map((step) => step.title));
     await expect(steps.last().getByText("now", { exact: true })).toBeVisible();
+    const [currentProject] = expected.at(-1)?.projects ?? [];
+    await expect(steps.last().getByRole("link", { name: currentProject.name })).toHaveAttribute(
+      "href",
+      `#${projectAnchor(currentProject.slug)}`,
+    );
     const [studentProject] = expected[0].projects;
     await steps.first().getByRole("link", { name: studentProject.name }).click();
     await expect(page).toHaveURL(new RegExp(`${projectPath(studentProject.slug)}$`));
@@ -95,6 +104,16 @@ test.describe("home page", () => {
     await expect(contact.getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute(
       "href",
       linkedin,
+    );
+  });
+
+  test("links the source of the site from the footer", async ({ page }) => {
+    const { sourceUrl } = resume.meta;
+    if (!sourceUrl) throw new Error("expected the source url to be set");
+    await page.goto("/");
+    await expect(page.locator("footer").getByRole("link", { name: "source" })).toHaveAttribute(
+      "href",
+      sourceUrl,
     );
   });
 
@@ -293,13 +312,14 @@ test.describe("machine-readable routes", () => {
     expect(text).toContain(`Sitemap: ${absoluteUrl(resume, "/sitemap.xml")}`);
   });
 
-  test("/resume.pdf is a PDF small enough to upload to LinkedIn", async ({ request }) => {
+  test("/resume.pdf is a two-page PDF small enough to upload to LinkedIn", async ({ request }) => {
     const response = await request.get("/resume.pdf");
     expect(response.ok()).toBe(true);
     expect(response.headers()["content-type"]).toBe("application/pdf");
     const body = await response.body();
     expect(body.subarray(0, 5).toString()).toBe("%PDF-");
     expect(body.byteLength).toBeLessThan(LINKEDIN_RESUME_MAX_BYTES);
+    expect(body.toString("latin1").match(PDF_PAGE_OBJECT)?.length).toBeLessThanOrEqual(RESUME_MAX_PAGES);
   });
 
   test("/resume.txt and /llms.txt are plain text", async ({ request }) => {

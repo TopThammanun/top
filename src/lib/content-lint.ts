@@ -1,5 +1,5 @@
 import type { Period, Resume } from "@/content/types";
-import { projectGroup, projectImages } from "./selectors";
+import { companyProjects, projectGroup, projectImages } from "./selectors";
 
 const YEAR_MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
 
@@ -36,9 +36,11 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
   const categoryIds = new Set(r.categories.map((c) => c.id));
   const techIds = new Set(r.tech.map((t) => t.id));
   const slugs = new Set(r.projects.map((p) => p.slug));
+  const companySlugs = new Set(companyProjects(r).map((p) => p.slug));
 
   r.profile.links.forEach((link, i) => errors.push(...lintHref(link.href, `profile.links[${i}].href`)));
   if (r.profile.linkedin !== null) errors.push(...lintHref(r.profile.linkedin, "profile.linkedin"));
+  if (r.meta.sourceUrl !== null) errors.push(...lintHref(r.meta.sourceUrl, "meta.sourceUrl"));
 
   duplicates(r.tech.map((t) => t.id)).forEach((i) =>
     errors.push(`tech[${i}].id is duplicated: "${r.tech[i].id}"`),
@@ -88,9 +90,19 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
     errors.push(...lintPeriod(role.period, `${path}.period`));
     if (!role.summary) errors.push(`${path}.summary is empty`);
     role.links.forEach((link, j) => errors.push(...lintHref(link.href, `${path}.links[${j}].href`)));
+    role.projects.forEach((slug, j) => {
+      if (!companySlugs.has(slug)) errors.push(`${path}.projects[${j}] is not a company project: "${slug}"`);
+    });
   });
   const current = r.career.filter((role) => role.period.end === null).length;
   if (current > 1) errors.push(`career has ${current} current roles, expected at most 1`);
+  if (r.career.length > 0) {
+    const placed = r.career.flatMap((role) => role.projects);
+    companySlugs.forEach((slug) => {
+      const roles = placed.filter((placedSlug) => placedSlug === slug).length;
+      if (roles !== 1) errors.push(`company project "${slug}" is listed under ${roles} roles, expected 1`);
+    });
+  }
 
   r.education.forEach((education, i) => {
     const path = `education[${i}]`;

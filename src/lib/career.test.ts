@@ -6,24 +6,29 @@ import {
   careerSteps,
   currentRole,
   educationDegree,
+  educationField,
   educationHeadline,
   educationProjects,
   educationWhen,
   roleHeading,
+  roleProjects,
 } from "./career";
 
 const role: Role = {
   id: "role",
   title: "Developer",
   employer: "Employer",
+  employment: "full-time",
   period: { start: "2024-04", end: "2026-03" },
   summary: "Summary.",
   stack: ["React"],
   links: [{ label: "Product", href: "https://example.com" }],
+  projects: [],
 };
 
 const education: Education = {
   school: "School",
+  degree: "Degree",
   program: "Program",
   honors: "Honors",
   graduated: "2024-03",
@@ -73,6 +78,23 @@ describe("roleHeading", () => {
   });
 });
 
+describe("roleProjects", () => {
+  it("resolves the projects of a role in the order the role lists them", () => {
+    const [first, second] = resume.projects.map((p) => p.slug);
+    const listed = roleProjects(resume, { ...role, projects: [second, first] });
+    expect(listed.map((p) => p.slug)).toEqual([second, first]);
+  });
+
+  it("is empty for a role without projects", () => {
+    expect(roleProjects(resume, role)).toEqual([]);
+  });
+
+  it("places every company project of the real career under one role", () => {
+    const placed = resume.career.flatMap((step) => roleProjects(resume, step).map((p) => p.slug));
+    expect(placed).toEqual(["epermit", "abc", "tch"]);
+  });
+});
+
 describe("currentRole", () => {
   it("is the role with an open period", () => {
     const open: Role = { ...role, id: "open", period: { start: "2026-03", end: null } };
@@ -85,9 +107,15 @@ describe("currentRole", () => {
 });
 
 describe("education helpers", () => {
-  it("joins the program and honors", () => {
-    expect(educationDegree(education)).toBe("Program · Honors");
-    expect(educationDegree({ ...education, honors: null })).toBe("Program");
+  it("names the degree before the program", () => {
+    expect(educationField(education)).toBe("Degree, Program");
+    expect(educationField({ ...education, degree: null })).toBe("Program");
+  });
+
+  it("joins the degree, program and honors", () => {
+    expect(educationDegree(education)).toBe("Degree, Program · Honors");
+    expect(educationDegree({ ...education, honors: null })).toBe("Degree, Program");
+    expect(educationDegree({ ...education, degree: null })).toBe("Program · Honors");
   });
 
   it("joins the school and honors", () => {
@@ -116,6 +144,12 @@ describe("careerSteps", () => {
     expect(steps.map((step) => step.kind)).toEqual(["education", "role", "role"]);
   });
 
+  it("gives a role step the company projects done in that role", () => {
+    const real = careerSteps(resume);
+    expect(real.at(-1)?.projects.map((p) => p.slug)).toEqual(["epermit"]);
+    expect(real.at(-2)?.projects.map((p) => p.slug)).toEqual(["abc", "tch"]);
+  });
+
   it("marks only the open role as current", () => {
     expect(steps.map((step) => step.current)).toEqual([false, false, true]);
   });
@@ -123,7 +157,7 @@ describe("careerSteps", () => {
   it("describes an education step", () => {
     expect(steps[0]).toMatchObject({
       title: "School",
-      subtitle: "Program",
+      subtitle: "Degree, Program",
       distinction: "Honors",
       when: "Graduated Mar 2024",
       summary: null,

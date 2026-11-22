@@ -1,4 +1,5 @@
 import type { Education, LinkId, Period, Project, Resume, Role } from "@/content/types";
+import { roleProjects } from "./career";
 import { fullName } from "./identity";
 import { absoluteUrl, linkHref } from "./routes";
 import { skillGroups, techName } from "./selectors";
@@ -20,11 +21,13 @@ interface JsonResumeWork extends JsonResumeDates {
   name: string;
   position: string;
   summary: string;
+  highlights: string[];
 }
 
 interface JsonResumeEducation {
   institution: string;
   area: string;
+  studyType?: string;
   endDate: string;
   courses: string[];
 }
@@ -84,11 +87,12 @@ function profiles(r: Resume): JsonResumeProfile[] {
     : social;
 }
 
-function toWork(role: Role): JsonResumeWork {
+function toWork(r: Resume, role: Role): JsonResumeWork {
   return {
     name: role.employer,
     position: role.title,
     summary: role.summary,
+    highlights: roleProjects(r, role).flatMap((p) => p.highlights.map((h) => `${p.name}: ${h}`)),
     ...dates(role.period),
   };
 }
@@ -97,6 +101,7 @@ function toEducation(education: Education): JsonResumeEducation {
   return {
     institution: education.school,
     area: education.program,
+    ...(education.degree ? { studyType: education.degree } : {}),
     endDate: education.graduated,
     courses: education.coursework,
   };
@@ -135,7 +140,7 @@ export function toJsonResume(r: Resume): JsonResume {
       location: { region: profile.location.label },
       profiles: profiles(r),
     },
-    work: r.career.map(toWork),
+    work: r.career.map((role) => toWork(r, role)),
     education: r.education.map(toEducation),
     awards: r.education.flatMap(toAwards),
     projects: r.projects.map((p) => toProject(r, p)),

@@ -39,7 +39,7 @@ describe("toLlmsTxt", () => {
 
   it("lists education with the graduation month and coursework", () => {
     expect(text).toContain(
-      "- Chiang Mai University: Digital Industry Integration (DII) · First-Class Honors. Graduated Mar 2024. Coursework: Programming Logical Thinking,",
+      "- Chiang Mai University: Bachelor's degree, Digital Industry Integration (DII) · First-Class Honors. Graduated Mar 2024. Coursework: Programming Logical Thinking,",
     );
   });
 
@@ -51,7 +51,11 @@ describe("toLlmsTxt", () => {
   it("lists skills by category", () => {
     expect(text).toContain("## Skills");
     expect(text).toContain("- Languages: C#, TypeScript, JavaScript, SQL, Python, GDScript");
-    expect(text).toContain("- Database performance: SQL optimisation, Database indexing,");
+    expect(text).toContain("- Database performance: SQL optimization, Database indexing,");
+  });
+
+  it("writes project periods with month names", () => {
+    expect(text).toContain("Senior Full Stack Developer, Jul 2026 – Present. Online permit applications");
   });
 
   it("links the machine-readable routes", () => {

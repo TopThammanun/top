@@ -1,13 +1,13 @@
 import type { Education, Project, Resume, Role } from "@/content/types";
 import { projectAnchor } from "./anchors";
 import { educationDegree, educationWhen, roleHeading } from "./career";
-import { formatPeriod } from "./format";
+import { formatFormalPeriod } from "./format";
 import { fullName } from "./identity";
 import { absoluteUrl, MACHINE_ROUTES, projectPath } from "./routes";
 import { companyProjects, personalProjects, skillGroups } from "./selectors";
 
 function projectLine(r: Resume, p: Project, path: string): string {
-  return `- [${p.name}](${absoluteUrl(r, path)}): ${p.role}, ${formatPeriod(p.period)}. ${p.summary}`;
+  return `- [${p.name}](${absoluteUrl(r, path)}): ${p.role}, ${formatFormalPeriod(p.period)}. ${p.summary}`;
 }
 
 function roleLine(role: Role): string {

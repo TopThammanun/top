@@ -40,8 +40,16 @@ export function roleHeading(role: Role): string {
   return `${role.title}, ${role.employer} (${formatFormalPeriod(role.period)})`;
 }
 
+export function roleProjects(r: Resume, role: Role): Project[] {
+  return role.projects.flatMap((slug) => r.projects.filter((project) => project.slug === slug));
+}
+
+export function educationField(education: Education): string {
+  return [education.degree, education.program].filter(Boolean).join(", ");
+}
+
 export function educationDegree(education: Education): string {
-  return [education.program, education.honors].filter(Boolean).join(" · ");
+  return [educationField(education), education.honors].filter(Boolean).join(" · ");
 }
 
 export function educationHeadline(education: Education): string {
@@ -61,7 +69,7 @@ function educationStep(r: Resume, education: Education): CareerStep {
     id: education.school,
     kind: "education",
     title: education.school,
-    subtitle: education.program,
+    subtitle: educationField(education),
     distinction: education.honors,
     when: educationWhen(education),
     current: false,
@@ -72,7 +80,7 @@ function educationStep(r: Resume, education: Education): CareerStep {
   };
 }
 
-function roleStep(role: Role): CareerStep {
+function roleStep(r: Resume, role: Role): CareerStep {
   return {
     id: role.id,
     kind: "role",
@@ -84,13 +92,13 @@ function roleStep(role: Role): CareerStep {
     summary: role.summary,
     chips: { label: "Stack", items: role.stack },
     links: role.links,
-    projects: [],
+    projects: roleProjects(r, role),
   };
 }
 
 export function careerSteps(r: Resume): CareerStep[] {
   return [
     ...r.education.map((education) => educationStep(r, education)),
-    ...r.career.map(roleStep).reverse(),
+    ...r.career.map((role) => roleStep(r, role)).reverse(),
   ];
 }

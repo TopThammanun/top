@@ -5,7 +5,6 @@ import {
   formatFormalPeriod,
   formatIndex,
   formatNumber,
-  formatPeriod,
   formatQuantity,
   formatUsage,
   monthName,
@@ -29,20 +28,6 @@ describe("formatDuration", () => {
     [0, "1m"],
   ])("%i months -> %s", (months, expected) => {
     expect(formatDuration(months)).toBe(expected);
-  });
-});
-
-describe("formatPeriod", () => {
-  it("shows both ends", () => {
-    expect(formatPeriod({ start: "2024-03", end: "2026-07" })).toBe("2024-03 → 2026-07");
-  });
-
-  it("shows an open end as now", () => {
-    expect(formatPeriod({ start: "2026-07", end: null })).toBe("2026-07 → now");
-  });
-
-  it("shows a single month once", () => {
-    expect(formatPeriod({ start: "2022-11", end: "2022-11" })).toBe("2022-11");
   });
 });
 

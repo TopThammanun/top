@@ -23,10 +23,6 @@ export function formatDuration(months: number): string {
   return [years ? `${years}y` : "", rest ? `${rest}m` : ""].filter(Boolean).join(" ");
 }
 
-export function formatPeriod(p: Period): string {
-  return p.end === p.start ? p.start : `${p.start} → ${p.end ?? "now"}`;
-}
-
 export function monthName(month: number): string {
   return MONTH_NAMES[month - 1];
 }

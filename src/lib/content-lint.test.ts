@@ -48,6 +48,7 @@ describe("lintResume", () => {
       (r) => (r.profile.links[0].href = "http://github.com/TopThammanun"),
       "profile.links[0].href",
     ],
+    ["non-https source link", (r) => (r.meta.sourceUrl = "http://github.com/x/y"), "meta.sourceUrl"],
     [
       "non-https project link",
       (r) => (r.projects[4].links = [{ label: "Demo", href: "http://example.com" }]),
@@ -71,6 +72,21 @@ describe("lintResume", () => {
       "career[2].links[0].href",
     ],
     ["two current roles", (r) => (r.career[1].period.end = null), "career has 2 current roles"],
+    [
+      "role project that is not company work",
+      (r) => r.career[0].projects.push("tcg-simulator"),
+      "career[0].projects[1] is not a company project",
+    ],
+    [
+      "company project under two roles",
+      (r) => r.career[0].projects.push("abc"),
+      'company project "abc" is listed under 2 roles',
+    ],
+    [
+      "company project under no role",
+      (r) => (r.career[1].projects = ["abc"]),
+      'company project "tch" is listed under 0 roles',
+    ],
     [
       "bad graduation month",
       (r) => (r.education[0].graduated = "2024-3" as YearMonth),

@@ -30,6 +30,15 @@ describe("toJsonResume", () => {
     expect(json.work[2]).toMatchObject({ startDate: "2022-12", endDate: "2024-03" });
   });
 
+  it("gives each role the highlights of its projects, named by project", () => {
+    expect(json.work[0].highlights).toHaveLength(resume.projects[0].highlights.length);
+    expect(json.work[0].highlights[0]).toMatch(/^Industrial-estate e-Permit platform: Work across four/);
+    expect(
+      json.work[1].highlights.filter((h) => h.startsWith("Company website, admin console and API: ")),
+    ).toHaveLength(2);
+    expect(json.work[2].highlights).toEqual([]);
+  });
+
   it("lists every project, company work first", () => {
     expect(json.projects.map((project) => project.name)).toEqual(resume.projects.map((p) => p.name));
     expect(json.projects[0].type).toBe("client");
@@ -40,6 +49,7 @@ describe("toJsonResume", () => {
       {
         institution: "Chiang Mai University",
         area: "Digital Industry Integration (DII)",
+        studyType: "Bachelor's degree",
         endDate: "2024-03",
         courses: resume.education[0].coursework,
       },

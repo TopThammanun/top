@@ -1,5 +1,5 @@
 import type { Resume } from "@/content/types";
-import { absoluteUrl, MACHINE_ROUTES } from "./routes";
+import { absoluteUrl, displayUrl, MACHINE_ROUTES } from "./routes";
 
 export interface Endpoint {
   path: string;
@@ -38,7 +38,7 @@ export function profileEndpoints(r: Resume): Endpoint[] {
           {
             path: "/linkedin",
             label: "LinkedIn",
-            value: linkedin.replace(/^https:\/\/(www\.)?/, ""),
+            value: displayUrl(linkedin),
             href: linkedin,
             copy: linkedin,
             external: true,

@@ -4,6 +4,7 @@ export type ProjectKind = "client" | "tooling" | "side";
 export type ProjectGroup = "company" | "personal";
 export type Lane = "main" | "branch";
 export type LinkId = "github" | "website" | "email" | "linkedin";
+export type Employment = "full-time" | "internship";
 
 export interface ContactLink {
   id: LinkId;
@@ -19,7 +20,7 @@ export interface Profile {
   nickname: string;
   displayName: string;
   title: string;
-  roles: string[];
+  specialties: string[];
   tagline: string;
   summary: string[];
   now: string;
@@ -108,14 +109,17 @@ export interface Role {
   id: string;
   title: string;
   employer: string;
+  employment: Employment;
   period: Period;
   summary: string;
   stack: string[];
   links: ExternalLink[];
+  projects: string[];
 }
 
 export interface Education {
   school: string;
+  degree: string | null;
   program: string;
   honors: string | null;
   graduated: YearMonth;
@@ -140,6 +144,7 @@ export interface ResumeMeta {
   version: string;
   updated: string;
   siteUrl: string;
+  sourceUrl: string | null;
   statsAsOf: string;
 }
 

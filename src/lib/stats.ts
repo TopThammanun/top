@@ -40,25 +40,32 @@ function sumStat(projects: Project[], label: string): Count | null {
   };
 }
 
+function experienceStat(r: Resume, now: YearMonth): CareerStat | null {
+  const start = r.career.map((role) => role.period.start).sort()[0];
+  if (!start) return null;
+  const end =
+    r.career
+      .map((role) => role.period.end ?? now)
+      .sort()
+      .at(-1) ?? now;
+  const internship = r.career.some((role) => role.employment === "internship");
+  return {
+    value: formatDuration(monthsBetween(start, end)),
+    label: "Experience",
+    note: `since ${formatMonth(start)}${internship ? ", incl. internship" : ""}`,
+  };
+}
+
 export function careerStats(r: Resume, now: YearMonth): CareerStat[] {
   const company = companyProjects(r);
   if (company.length === 0) return [];
 
-  const start = company.map((p) => p.period.start).sort()[0];
-  const end =
-    company
-      .map((p) => p.period.end ?? now)
-      .sort()
-      .at(-1) ?? now;
+  const experience = experienceStat(r, now);
   const repos = sumStat(company, "repos");
   const commits = sumStat(company, "commits");
 
   return [
-    {
-      value: formatDuration(monthsBetween(start, end)),
-      label: "On company projects",
-      note: `since ${formatMonth(start)}`,
-    },
+    ...(experience ? [experience] : []),
     { value: String(company.length), label: "Company projects" },
     ...(repos ? [{ value: formatCount(repos), label: "Repositories" }] : []),
     ...(commits ? [{ value: formatCount(commits), label: "Commits" }] : []),

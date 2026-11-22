@@ -40,11 +40,12 @@ export function Hero() {
             <span className="text-accent">~</span>/{profile.handle}
           </p>
           <h1 className="mt-5 text-display">{fullName(profile)}</h1>
-          <p className="mt-6 min-h-[3.2em] font-mono text-sm text-fg sm:min-h-[1.6em] sm:text-lg">
+          <p className="mt-4 text-xl font-medium text-fg sm:text-2xl">{profile.title}</p>
+          <p className="mt-4 min-h-[3.2em] font-mono text-sm text-fg-muted sm:min-h-[1.6em] sm:text-base">
             <span aria-hidden className="text-accent">
               {"> "}
             </span>
-            <ScrambleText phrases={profile.roles} label={profile.title} />
+            <ScrambleText phrases={profile.specialties} label={profile.specialties.join(", ")} />
             <span aria-hidden className="caret ml-0.5 text-accent">
               ▍
             </span>

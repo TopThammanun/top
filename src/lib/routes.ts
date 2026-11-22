@@ -21,6 +21,10 @@ export function absoluteUrl(r: Resume, path: string): string {
   return new URL(path, r.meta.siteUrl).toString();
 }
 
+export function displayUrl(href: string): string {
+  return href.replace(/^https:\/\/(www\.)?/, "");
+}
+
 export function linkHref(r: Resume, id: string): string | null {
   return r.profile.links.find((link) => link.id === id)?.href ?? null;
 }

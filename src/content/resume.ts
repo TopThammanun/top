@@ -27,6 +27,7 @@ export const resume: Resume = {
     version: "0.1.0",
     updated: "2026-11-22",
     siteUrl: SITE_URL,
+    sourceUrl: "https://github.com/TopThammanun/top",
     statsAsOf: "2026-11-22",
   },
 
@@ -37,16 +38,11 @@ export const resume: Resume = {
     nickname: "Top",
     displayName: "Top Thammanun",
     title: "Senior Full Stack Developer",
-    roles: [
-      "Senior Full Stack Developer",
-      ".NET services, Next.js front ends",
-      "TypeScript end to end",
-      "Ships with coding agents",
-    ],
+    specialties: [".NET services, Next.js front ends", "TypeScript end to end", "Ships with coding agents"],
     tagline:
       "I build enterprise systems end to end: C#/.NET and NestJS services, Next.js front ends, and the tooling around them.",
     summary: [
-      "Senior Full Stack Developer specialising in government and enterprise systems, where forms are long, business rules are strict and data accuracy is critical.",
+      "Senior Full Stack Developer specializing in government and enterprise systems, where forms are long, business rules are strict and data accuracy is critical.",
       "Progressed from intern to Senior Full Stack Developer at one company in just over three years.",
       "Experienced on both sides of the API: ASP.NET Core and NestJS services on PostgreSQL, with React and Next.js applications built on top of them.",
       "Also builds the tooling used in day-to-day work, including skills and hooks that keep AI coding agents aligned with a defined engineering process.",
@@ -82,7 +78,7 @@ export const resume: Resume = {
     { id: "data", label: "Data & messaging" },
     { id: "platform", label: "Auth, ops & observability" },
     { id: "testing", label: "Testing" },
-    { id: "special", label: "Specialised" },
+    { id: "special", label: "Specialized" },
     { id: "tooling", label: "Tooling" },
   ],
 
@@ -96,7 +92,7 @@ export const resume: Resume = {
 
     { id: "nextjs", name: "Next.js", category: "frontend" },
     { id: "react", name: "React", category: "frontend" },
-    { id: "mui", name: "MUI", category: "frontend" },
+    { id: "mui", name: "Material UI (MUI)", category: "frontend" },
     { id: "heroui", name: "HeroUI", category: "frontend" },
     { id: "tailwind", name: "Tailwind CSS", category: "frontend" },
     { id: "redux-toolkit", name: "Redux Toolkit", category: "frontend" },
@@ -107,11 +103,13 @@ export const resume: Resume = {
     { id: "svelte", name: "Svelte", category: "frontend" },
 
     { id: "dotnet", name: "ASP.NET Core (.NET 8)", category: "backend" },
-    { id: "ef-core", name: "EF Core", category: "backend" },
+    { id: "ef-core", name: "Entity Framework Core", category: "backend" },
+    { id: "nodejs", name: "Node.js", category: "backend" },
     { id: "nestjs", name: "NestJS", category: "backend" },
     { id: "mikro-orm", name: "MikroORM", category: "backend" },
     { id: "express", name: "Express", category: "backend" },
     { id: "prisma", name: "Prisma", category: "backend" },
+    { id: "rest", name: "REST APIs", category: "backend" },
     { id: "signalr", name: "SignalR", category: "backend" },
     { id: "socketio", name: "Socket.IO", category: "backend" },
 
@@ -125,7 +123,7 @@ export const resume: Resume = {
     { id: "airflow", name: "Apache Airflow", category: "data" },
 
     { id: "fusionauth", name: "FusionAuth", category: "platform" },
-    { id: "oidc", name: "OAuth 2.0 / OIDC", category: "platform" },
+    { id: "oidc", name: "OAuth 2.0 / OpenID Connect", category: "platform" },
     { id: "docker", name: "Docker", category: "platform" },
     { id: "serilog", name: "Serilog", category: "platform" },
     { id: "elastic-apm", name: "Elastic APM", category: "platform" },
@@ -161,8 +159,8 @@ export const resume: Resume = {
         "Work across four repositories at once: two Next.js apps (applicant and officer) and two NestJS services on PostgreSQL.",
         "Built multi-tab application forms with file uploads, bilingual labels and draft/resubmit flows, plus the officer side: per-field comments, return rounds and OTP-confirmed approval.",
         "Made saved applications read as a frozen snapshot instead of live registry data, so an approved request always shows what was submitted.",
-        "New front-end code is typed only from OpenAPI-generated clients, with no `any`.",
-        "Run agent-assisted Playwright end-to-end passes: fill, submit, review, approve, pay, generated PDF.",
+        "Type new front-end code only from OpenAPI-generated clients, with no `any`.",
+        "Run agent-assisted Playwright end-to-end passes over the whole flow: fill, submit, review, approve, pay and the generated PDF.",
       ],
       layers: [
         { label: "Clients", items: ["Applicant web · Next.js 16", "Officer web · Next.js 16"] },
@@ -184,8 +182,10 @@ export const resume: Resume = {
         "mui",
         "react-hook-form",
         "tanstack-query",
+        "nodejs",
         "nestjs",
         "mikro-orm",
+        "rest",
         "postgresql",
         "redis",
         "minio",
@@ -210,7 +210,7 @@ export const resume: Resume = {
       highlights: [
         "Built the central management console (Next.js, MUI) and its ASP.NET Core API, the primary codebases of the role.",
         "Wrote the reporting service and scheduled jobs, Airflow DAGs for data work and a ClickHouse store for analytics.",
-        "Worked across the event-driven side as well: a Kafka consumer service, SignalR real-time updates and Redis caching.",
+        "Worked on the event-driven side: a Kafka consumer service, SignalR real-time updates and Redis caching.",
         "Built desktop diagnostic tools: OpenCV analysis of passport data-page read failures and a Tesseract OCR scanner.",
         "Structured logging with Serilog into Elasticsearch, tracing with Elastic APM, sign-in through FusionAuth (OIDC).",
       ],
@@ -231,6 +231,7 @@ export const resume: Resume = {
         "csharp",
         "dotnet",
         "ef-core",
+        "rest",
         "postgresql",
         "redis",
         "kafka",
@@ -263,12 +264,12 @@ export const resume: Resume = {
       name: "Company website, admin console and API",
       kind: "client",
       domain: "Corporate web",
-      role: "Full Stack Developer",
+      role: "Junior Full Stack Developer",
       period: { start: "2024-07", end: "2025-06" },
       summary: "A public website, the admin console that manages it and the Node API behind both.",
       highlights: [
-        "Next.js and HeroUI front ends with i18n, built on a shared starter kit.",
-        "Express API with Prisma and TSOA-generated OpenAPI, FusionAuth sign-in, Redis, MinIO storage and Socket.IO.",
+        "Built the Next.js and HeroUI front ends with i18n, on a shared starter kit.",
+        "Built the Express API with Prisma and TSOA-generated OpenAPI, FusionAuth sign-in, Redis, MinIO storage and Socket.IO.",
       ],
       layers: [
         { label: "Clients", items: ["Public website · Next.js", "Admin console · Next.js"] },
@@ -288,8 +289,10 @@ export const resume: Resume = {
         "tailwind",
         "redux-toolkit",
         "tanstack-query",
+        "nodejs",
         "express",
         "prisma",
+        "rest",
         "openapi",
         "fusionauth",
         "redis",
@@ -669,7 +672,7 @@ export const resume: Resume = {
         { label: "commits", value: "65" },
         { label: "days", value: "11" },
       ],
-      stack: ["javascript", "react", "express", "mongodb"],
+      stack: ["javascript", "react", "nodejs", "express", "mongodb"],
       links: [
         { label: "API on GitHub", href: "https://github.com/TopThammanun/Hackaton-IBRAND-API" },
         { label: "App on GitHub", href: "https://github.com/TopThammanun/Hackaton-IBRAND-App" },
@@ -741,7 +744,7 @@ export const resume: Resume = {
         { label: "commits", value: "98" },
         { label: "repos", value: "2" },
       ],
-      stack: ["javascript", "react", "express"],
+      stack: ["javascript", "react", "nodejs", "express"],
       links: [
         { label: "App on GitHub", href: "https://github.com/TopThammanun/TEP-lnW_Project_Frontend" },
         { label: "API on GitHub", href: "https://github.com/TopThammanun/TEP-lnW_Project-Back" },
@@ -807,7 +810,7 @@ export const resume: Resume = {
         { label: "repos", value: "4" },
         { label: "commits", value: "26" },
       ],
-      stack: ["csharp", "dotnet", "ef-core", "typescript", "nestjs", "express", "prisma"],
+      stack: ["csharp", "dotnet", "ef-core", "typescript", "nodejs", "nestjs", "express", "prisma"],
       links: [
         {
           label: "EF Core repository and unit of work",
@@ -948,8 +951,8 @@ export const resume: Resume = {
       body: "One model plans, another implements, and nothing counts as done without a build, a test run or a screenshot.",
     },
     {
-      title: "Time is logged, not guessed",
-      body: "A session hook records the task; hours are rebuilt from git history and transcripts.",
+      title: "Root cause before code",
+      body: "A fix starts by tracing the value to its API and table, so the change lands where the problem starts.",
     },
   ],
 
@@ -957,7 +960,7 @@ export const resume: Resume = {
     {
       label: "Git workflow",
       items: [
-        "Branch control",
+        "Branch management",
         "Dev and production branches",
         "Merge requests",
         "Pull requests",
@@ -968,11 +971,11 @@ export const resume: Resume = {
     },
     {
       label: "Problem solving",
-      items: ["Root-cause analysis", "Solution analysis for fixes"],
+      items: ["Root-cause analysis", "Solution analysis before a fix"],
     },
     {
       label: "Database performance",
-      items: ["SQL optimisation", "Database indexing", "Query optimisation for large datasets"],
+      items: ["SQL optimization", "Database indexing", "Query optimization for large datasets"],
     },
   ],
 
@@ -981,25 +984,31 @@ export const resume: Resume = {
       id: "senior",
       title: "Senior Full Stack Developer",
       employer: EMPLOYER,
+      employment: "full-time",
       period: { start: "2026-03", end: null },
       summary:
         "Promoted in March 2026 while on the Automated Border Control platform, now on the Industrial-estate e-Permit platform.",
       stack: [],
       links: [],
+      projects: ["epermit"],
     },
     {
       id: "junior",
       title: "Junior Full Stack Developer",
       employer: EMPLOYER,
+      employment: "full-time",
       period: { start: "2024-04", end: "2026-03" },
-      summary: "Worked on phase 1 of the Automated Border Control platform.",
+      summary:
+        "Worked on phase 1 of the Automated Border Control platform and built a company website with its admin console and API.",
       stack: [],
       links: [],
+      projects: ["abc", "tch"],
     },
     {
       id: "intern",
       title: "Intern Full Stack Developer",
       employer: EMPLOYER,
+      employment: "internship",
       period: { start: "2022-12", end: "2024-03" },
       summary:
         "An internship on HealthTeams, a management platform for hospitals and sub-district health promoting hospitals.",
@@ -1008,12 +1017,14 @@ export const resume: Resume = {
         { label: "HealthTeams product page", href: "https://www.chanwanich.digital/healthteams/" },
         { label: "HealthTeams on Facebook", href: "https://www.facebook.com/healthteams.in.th/" },
       ],
+      projects: [],
     },
   ],
 
   education: [
     {
       school: "Chiang Mai University",
+      degree: "Bachelor's degree",
       program: "Digital Industry Integration (DII)",
       honors: "First-Class Honors",
       graduated: "2024-03",

@@ -29,19 +29,37 @@ describe("formatCount", () => {
 });
 
 describe("careerStats", () => {
-  it("summarises company work only", () => {
+  it("leads with the time since the first role and then counts company work", () => {
     expect(careerStats(resume, "2026-11")).toEqual([
-      { value: "2y 9m", label: "On company projects", note: "since Mar 2024" },
+      { value: "4y", label: "Experience", note: "since Dec 2022, incl. internship" },
       { value: "3", label: "Company projects" },
       { value: "24", label: "Repositories" },
       { value: "2.8k+", label: "Commits" },
     ]);
   });
 
-  it("stops the clock at the last end date when no company project is open", () => {
+  it("stops the clock at the last end date when no role is open", () => {
     const closed = structuredClone(resume);
-    closed.projects[0].period.end = "2026-09";
-    expect(careerStats(closed, "2030-01")[0].value).toBe("2y 7m");
+    closed.career[0].period.end = "2026-09";
+    expect(careerStats(closed, "2030-01")[0].value).toBe("3y 10m");
+  });
+
+  it("does not mention an internship that is not in the career", () => {
+    const hired = structuredClone(resume);
+    hired.career = hired.career.filter((role) => role.employment !== "internship");
+    expect(careerStats(hired, "2026-11")[0]).toEqual({
+      value: "2y 8m",
+      label: "Experience",
+      note: "since Apr 2024",
+    });
+  });
+
+  it("leaves the experience out without a career", () => {
+    expect(careerStats({ ...resume, career: [] }, "2026-11").map((stat) => stat.label)).toEqual([
+      "Company projects",
+      "Repositories",
+      "Commits",
+    ]);
   });
 
   it("returns nothing without company projects", () => {

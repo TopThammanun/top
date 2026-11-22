@@ -1,5 +1,6 @@
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { ProjectLink } from "@/components/shell/ProjectLink";
 import { Chip } from "@/components/ui/Chip";
 import { ChipList } from "@/components/ui/ChipList";
 import { Reveal } from "@/components/ui/Reveal";
@@ -7,6 +8,7 @@ import type { CareerStep } from "@/lib/career";
 import { cx } from "@/lib/cx";
 import { formatIndex } from "@/lib/format";
 import { projectPath } from "@/lib/routes";
+import { projectGroup } from "@/lib/selectors";
 
 const NODE: Record<CareerStep["kind"], string> = {
   education: "border-fg-muted",
@@ -54,10 +56,17 @@ export function CareerStepCard({ step, order, last }: CareerStepCardProps) {
           <ul className="mt-4 space-y-1.5">
             {step.projects.map((project) => (
               <li key={project.slug}>
-                <Link href={projectPath(project.slug)} className={LINK}>
-                  {project.name}
-                  <ArrowRight aria-hidden className="size-3.5" />
-                </Link>
+                {projectGroup(project) === "company" ? (
+                  <ProjectLink slug={project.slug} className={LINK}>
+                    {project.name}
+                    <ArrowDown aria-hidden className="size-3.5" />
+                  </ProjectLink>
+                ) : (
+                  <Link href={projectPath(project.slug)} className={LINK}>
+                    {project.name}
+                    <ArrowRight aria-hidden className="size-3.5" />
+                  </Link>
+                )}
               </li>
             ))}
             {step.links.map((link) => (

@@ -1,12 +1,14 @@
 import { Document, Font, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
 import type { Education, Project, Resume, Role } from "@/content/types";
-import { educationDegree, educationWhen } from "@/lib/career";
+import { educationDegree, educationWhen, roleProjects } from "@/lib/career";
 import { profileEndpoints, type Endpoint } from "@/lib/endpoints";
-import { formatFormalPeriod } from "@/lib/format";
+import { formatFormalPeriod, formatQuantity } from "@/lib/format";
 import { fullName } from "@/lib/identity";
 import { splitCode } from "@/lib/rich-text";
-import { companyProjects, personalProjects, skillGroups, techName } from "@/lib/selectors";
+import { absoluteUrl, displayUrl } from "@/lib/routes";
+import type { SectionId } from "@/lib/sections";
+import { personalProjects, skillGroups, techName } from "@/lib/selectors";
 import { seoKeywords } from "@/lib/seo";
 
 const INK = "#000000";
@@ -15,14 +17,17 @@ const MARGIN_X = 54;
 const FOOTER_TOP = 800;
 const CONTACT_SEPARATOR = "   |   ";
 const DIRECT_CONTACTS: ReadonlySet<string> = new Set(["/email", "/linkedin"]);
+const LISTED_PERSONAL_PROJECTS = 2;
+const ORPHAN_GUARD = 48;
+const PERSONAL_SECTION: SectionId = "personal";
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 46,
-    paddingBottom: 58,
+    paddingTop: 40,
+    paddingBottom: 52,
     paddingHorizontal: MARGIN_X,
     fontFamily: "Times-Roman",
-    fontSize: 10.5,
+    fontSize: 10,
     lineHeight: 1.35,
     color: INK,
   },
@@ -32,7 +37,7 @@ const styles = StyleSheet.create({
   contact: { fontSize: 10, marginTop: 5, textAlign: "center" },
   contactNext: { fontSize: 10, marginTop: 2, textAlign: "center" },
   link: { color: INK, textDecoration: "none" },
-  section: { marginTop: 13 },
+  section: { marginTop: 10 },
   heading: {
     fontFamily: "Times-Bold",
     fontSize: 11,
@@ -40,21 +45,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.75,
     borderBottomColor: INK,
     paddingBottom: 2,
-    marginBottom: 6,
+    marginBottom: 5,
   },
-  entry: { marginBottom: 9 },
+  entry: { marginBottom: 7 },
   entryHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
   entryTitle: { flex: 1, fontFamily: "Times-Bold", fontSize: 11, paddingRight: 12 },
-  entryPeriod: { fontSize: 10.5 },
+  entryPeriod: { fontSize: 10 },
   entrySubtitle: { fontFamily: "Times-Italic", marginBottom: 2 },
+  roleProject: { marginTop: 5 },
+  projectTitle: { flex: 1, paddingRight: 12 },
   bullet: { flexDirection: "row", marginTop: 1.5, paddingLeft: 6 },
   bulletMark: { width: 11 },
   bulletText: { flex: 1 },
-  code: { fontFamily: "Courier", fontSize: 9.5 },
+  code: { fontFamily: "Courier", fontSize: 9 },
   technologies: { marginTop: 3 },
   label: { fontFamily: "Times-Bold" },
   row: { flexDirection: "row", marginBottom: 2 },
-  rowLabel: { width: 142, fontFamily: "Times-Bold" },
+  rowLabel: { width: 128, fontFamily: "Times-Bold" },
   rowValue: { flex: 1 },
   footer: {
     position: "absolute",
@@ -104,7 +111,7 @@ function ContactLine({ lead, contacts, first }: { lead?: string; contacts: Endpo
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <View style={styles.section}>
-      <Text style={styles.heading} minPresenceAhead={48}>
+      <Text style={styles.heading} minPresenceAhead={ORPHAN_GUARD}>
         {title.toUpperCase()}
       </Text>
       {children}
@@ -133,41 +140,75 @@ function Labelled({ label, items }: { label: string; items: string[] }) {
   );
 }
 
-function RoleEntry({ role }: { role: Role }) {
+function Highlights({ items }: { items: string[] }) {
+  return items.map((item) => (
+    <View key={item} style={styles.bullet} wrap={false}>
+      <Text style={styles.bulletMark}>•</Text>
+      <RichText text={item} />
+    </View>
+  ));
+}
+
+function technologies(resume: Resume, project: Project): string[] {
+  return project.stack.map((id) => techName(resume, id));
+}
+
+function RoleProject({ project, resume }: { project: Project; resume: Resume }) {
   return (
-    <View style={styles.entry} wrap={false}>
-      <EntryHead title={role.title} subtitle={role.employer} aside={formatFormalPeriod(role.period)} />
-      <Text>{role.summary}</Text>
-      {role.stack.length > 0 ? <Labelled label="Technologies" items={role.stack} /> : null}
+    <View style={styles.roleProject}>
+      <View wrap={false} minPresenceAhead={ORPHAN_GUARD}>
+        <Text>
+          <Text style={styles.label}>Project: {project.name}</Text>
+          {` · ${project.domain} · ${formatFormalPeriod(project.period)}`}
+        </Text>
+        <Text>{project.summary}</Text>
+      </View>
+      <Highlights items={project.highlights} />
+      <Labelled label="Technologies" items={technologies(resume, project)} />
     </View>
   );
 }
 
-interface ProjectEntryProps {
-  project: Project;
-  resume: Resume;
-  detailed?: boolean;
+function RoleEntry({ role, resume }: { role: Role; resume: Resume }) {
+  return (
+    <View style={styles.entry}>
+      <View wrap={false}>
+        <EntryHead title={role.title} subtitle={role.employer} aside={formatFormalPeriod(role.period)} />
+        <Text>{role.summary}</Text>
+        {role.stack.length > 0 ? <Labelled label="Technologies" items={role.stack} /> : null}
+      </View>
+      {roleProjects(resume, role).map((project) => (
+        <RoleProject key={project.slug} project={project} resume={resume} />
+      ))}
+    </View>
+  );
 }
 
-function ProjectEntry({ project, resume, detailed = false }: ProjectEntryProps) {
+function ProjectEntry({ project, resume }: { project: Project; resume: Resume }) {
   return (
     <View style={styles.entry} wrap={false}>
-      <EntryHead
-        title={project.name}
-        subtitle={`${project.role} · ${project.domain}`}
-        aside={formatFormalPeriod(project.period)}
-      />
+      <View style={styles.entryHead}>
+        <Text style={styles.projectTitle}>
+          <Text style={styles.label}>{project.name}</Text>
+          {` · ${project.domain}`}
+        </Text>
+        <Text style={styles.entryPeriod}>{formatFormalPeriod(project.period)}</Text>
+      </View>
       <Text>{project.summary}</Text>
-      {detailed
-        ? project.highlights.map((highlight) => (
-            <View key={highlight} style={styles.bullet}>
-              <Text style={styles.bulletMark}>•</Text>
-              <RichText text={highlight} />
-            </View>
-          ))
-        : null}
-      <Labelled label="Technologies" items={project.stack.map((id) => techName(resume, id))} />
+      <Labelled label="Technologies" items={technologies(resume, project)} />
     </View>
+  );
+}
+
+function MoreProjects({ resume, count }: { resume: Resume; count: number }) {
+  const href = absoluteUrl(resume, `/#${PERSONAL_SECTION}`);
+  return (
+    <Text>
+      {formatQuantity(count, "more project")} with screenshots:{" "}
+      <Link src={href} style={styles.link}>
+        {displayUrl(href)}
+      </Link>
+    </Text>
   );
 }
 
@@ -190,6 +231,8 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
   const contacts = profileEndpoints(resume);
   const direct = contacts.filter((contact) => DIRECT_CONTACTS.has(contact.path));
   const web = contacts.filter((contact) => !DIRECT_CONTACTS.has(contact.path));
+  const personal = personalProjects(resume);
+  const listed = personal.slice(0, LISTED_PERSONAL_PROJECTS);
 
   return (
     <Document
@@ -216,22 +259,21 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
         {resume.career.length > 0 ? (
           <Section title="Professional Experience">
             {resume.career.map((role) => (
-              <RoleEntry key={role.id} role={role} />
+              <RoleEntry key={role.id} role={role} resume={resume} />
             ))}
           </Section>
         ) : null}
 
-        <Section title="Company Projects">
-          {companyProjects(resume).map((project) => (
-            <ProjectEntry key={project.slug} project={project} resume={resume} detailed />
-          ))}
-        </Section>
-
-        <Section title="Personal Projects">
-          {personalProjects(resume).map((project) => (
-            <ProjectEntry key={project.slug} project={project} resume={resume} />
-          ))}
-        </Section>
+        {listed.length > 0 ? (
+          <Section title="Projects">
+            {listed.map((project) => (
+              <ProjectEntry key={project.slug} project={project} resume={resume} />
+            ))}
+            {personal.length > listed.length ? (
+              <MoreProjects resume={resume} count={personal.length - listed.length} />
+            ) : null}
+          </Section>
+        ) : null}
 
         <Section title="Technical Skills">
           {skillGroups(resume).map((group) => (

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resume } from "@/content/resume";
-import { absoluteUrl, linkHref, MACHINE_ROUTES } from "./routes";
+import { absoluteUrl, displayUrl, linkHref, MACHINE_ROUTES } from "./routes";
 
 describe("routes", () => {
   it("builds absolute urls from the site url", () => {
@@ -14,6 +14,11 @@ describe("routes", () => {
       "/resume.txt",
       "/llms.txt",
     ]);
+  });
+
+  it("shows a url without the scheme and the www", () => {
+    expect(displayUrl("https://www.topthammanun.dev/#personal")).toBe("topthammanun.dev/#personal");
+    expect(displayUrl("https://github.com/TopThammanun")).toBe("github.com/TopThammanun");
   });
 
   it("finds a profile link by id", () => {
