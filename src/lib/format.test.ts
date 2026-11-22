@@ -3,6 +3,7 @@ import {
   formatDuration,
   formatIndex,
   formatPeriod,
+  formatUsage,
   monthsBetween,
   periodDuration,
   toYearMonth,
@@ -43,6 +44,13 @@ describe("periodDuration", () => {
 
   it("ignores now for a closed period", () => {
     expect(periodDuration({ start: "2024-03", end: "2026-07" }, "2030-01")).toBe("2y 5m");
+  });
+});
+
+describe("formatUsage", () => {
+  it("pluralises projects", () => {
+    expect(formatUsage(1)).toBe("used in 1 project");
+    expect(formatUsage(2)).toBe("used in 2 projects");
   });
 });
 

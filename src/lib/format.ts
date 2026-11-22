@@ -28,6 +28,10 @@ export function periodDuration(p: Period, now: YearMonth): string {
   return formatDuration(monthsBetween(p.start, p.end ?? now));
 }
 
+export function formatUsage(projects: number): string {
+  return `used in ${projects} project${projects === 1 ? "" : "s"}`;
+}
+
 export function formatIndex(n: number): string {
   return String(n).padStart(2, "0");
 }
