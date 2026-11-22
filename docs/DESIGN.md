@@ -1,4 +1,4 @@
-# topthammanun.com v2 — Design Spec
+# topthammanun.dev v2 — Design Spec
 
 Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`). Minimal, geek/nerd, Awwwards-level craft,
 Mobbin-style product UI patterns.
@@ -170,7 +170,7 @@ skills and contact links. Every section is in the prerendered HTML, so nothing d
   names that are not in it. `null` fields and empty arrays mean "not provided yet": render nothing for them.
 - Pending owner input: `profile.email`, `profile.linkedin`, `education`.
 - `meta.siteUrl` follows the deployment: Vercel's production domain when it is set, otherwise
-  `www.topthammanun.com`.
+  `www.topthammanun.dev`.
 - Client names are intentionally absent. Commit counts are rounded figures from local clones on `meta.statsAsOf`.
 - English only. Keep copy plain; no marketing adjectives.
 

@@ -21,7 +21,7 @@ describe("toLlmsTxt", () => {
   });
 
   it("links the machine-readable routes", () => {
-    expect(text).toContain("https://www.topthammanun.com/resume.json");
-    expect(text).toContain("https://www.topthammanun.com/resume.txt");
+    expect(text).toContain("https://www.topthammanun.dev/resume.json");
+    expect(text).toContain("https://www.topthammanun.dev/resume.txt");
   });
 });

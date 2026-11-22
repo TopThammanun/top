@@ -24,7 +24,7 @@ describe("machineEndpoints", () => {
     expect(pdf).toMatchObject({
       path: "/resume.pdf",
       href: "/resume.pdf",
-      copy: "https://www.topthammanun.com/resume.pdf",
+      copy: "https://www.topthammanun.dev/resume.pdf",
     });
   });
 });

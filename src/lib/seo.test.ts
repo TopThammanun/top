@@ -10,7 +10,7 @@ import {
   type JsonLdNode,
 } from "./seo";
 
-const SITE = "https://www.topthammanun.com/";
+const SITE = "https://www.topthammanun.dev/";
 
 function hasEmptyValue(value: unknown): boolean {
   if (value === null || value === undefined) return true;

@@ -1,6 +1,6 @@
 # topthammanun-resume
 
-Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanun.com v2). Spec:
+Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanun.dev v2). Spec:
 `docs/DESIGN.md`. Plan: `docs/PLAN.md`.
 
 ## Rules

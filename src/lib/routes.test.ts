@@ -4,7 +4,7 @@ import { absoluteUrl, linkHref, MACHINE_ROUTES } from "./routes";
 
 describe("routes", () => {
   it("builds absolute urls from the site url", () => {
-    expect(absoluteUrl(resume, "/resume.json")).toBe("https://www.topthammanun.com/resume.json");
+    expect(absoluteUrl(resume, "/resume.json")).toBe("https://www.topthammanun.dev/resume.json");
   });
 
   it("lists the four machine-readable routes", () => {

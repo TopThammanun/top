@@ -1,6 +1,6 @@
 import type { Resume } from "./types";
 
-const SITE_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.topthammanun.com";
+const SITE_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.topthammanun.dev";
 const SITE_URL = `https://${SITE_HOST}`;
 
 export const resume: Resume = {
@@ -341,7 +341,7 @@ export const resume: Resume = {
     },
     {
       slug: "site-v1",
-      name: "topthammanun.com v1",
+      name: "topthammanun.dev v1",
       kind: "side",
       domain: "Personal site",
       role: "Author",
@@ -422,7 +422,7 @@ export const resume: Resume = {
       project: "abc",
       message: "feat(abc): management console, API and reports",
     },
-    { date: "2023-09", lane: "branch", project: "site-v1", message: "init: topthammanun.com v1" },
+    { date: "2023-09", lane: "branch", project: "site-v1", message: "init: topthammanun.dev v1" },
   ],
 
   practices: [

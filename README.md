@@ -1,4 +1,4 @@
-# topthammanun.com v2
+# topthammanun.dev v2
 
 Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`), built as a small documented system:
 projects are indexed entries, the career is a git graph, skills are a dependency matrix and contact details are
@@ -63,7 +63,7 @@ Client and employer names are intentionally left out. Commit counts are rounded 
   then work, skills and contact links.
 - `meta.siteUrl` follows the deployment: it reads `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links, the
   sitemap and the PDF use whichever production domain the Vercel project has. Without it the fallback is
-  `www.topthammanun.com`.
+  `www.topthammanun.dev`.
 - Optional environment variables: `GOOGLE_SITE_VERIFICATION` (Google Search Console) and
   `BING_SITE_VERIFICATION` (Bing Webmaster Tools, which also feeds ChatGPT search and Copilot). Each adds its
   verification meta tag on the next build.
