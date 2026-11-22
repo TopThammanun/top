@@ -1,0 +1,38 @@
+import { SECTIONS, type SectionId } from "./sections";
+
+export type Intent =
+  | { type: "section"; id: SectionId }
+  | { type: "theme" }
+  | { type: "help" }
+  | { type: "next" }
+  | { type: "prev" };
+
+export interface ShortcutState {
+  pendingG: number | null;
+}
+
+export const G_WINDOW_MS = 1000;
+
+const SINGLE_KEYS: Readonly<Record<string, Intent>> = {
+  t: { type: "theme" },
+  "?": { type: "help" },
+  j: { type: "next" },
+  k: { type: "prev" },
+};
+
+const IDLE: ShortcutState = { pendingG: null };
+
+export function reduceShortcut(
+  state: ShortcutState,
+  key: string,
+  now: number,
+): { state: ShortcutState; intent: Intent | null } {
+  const gActive = state.pendingG !== null && now - state.pendingG <= G_WINDOW_MS;
+
+  if (gActive) {
+    const section = SECTIONS.find((s) => s.key === key);
+    if (section) return { state: IDLE, intent: { type: "section", id: section.id } };
+  }
+  if (key === "g") return { state: { pendingG: now }, intent: null };
+  return { state: IDLE, intent: gActive ? null : (SINGLE_KEYS[key] ?? null) };
+}

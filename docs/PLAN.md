@@ -144,7 +144,7 @@ export function toLlmsTxt(r: Resume): string;
 export type CommandAction =
   | { type: "section"; id: SectionId } | { type: "project"; slug: string }
   | { type: "href"; href: string; newTab: boolean } | { type: "copy"; text: string }
-  | { type: "theme" } | { type: "none" };
+  | { type: "theme" } | { type: "help" };
 export interface Command { id: string; group: "Navigate" | "Projects" | "Actions" | "Open" | "Help";
   label: string; hint?: string; keywords?: string[]; action: CommandAction }
 export function buildCommands(r: Resume): Command[];
