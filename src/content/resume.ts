@@ -141,7 +141,10 @@ export const resume: Resume = {
       ],
       layers: [
         { label: "Clients", items: ["Applicant web · Next.js 16", "Officer web · Next.js 16"] },
-        { label: "Services", items: ["Permit service · NestJS", "Master-data service · NestJS", "Auth", "PDF", "Reports"] },
+        {
+          label: "Services",
+          items: ["Permit service · NestJS", "Master-data service · NestJS", "Auth", "PDF", "Reports"],
+        },
         { label: "Data", items: ["PostgreSQL", "Redis", "Object storage"] },
         { label: "Platform", items: ["OpenTelemetry", "OpenAPI codegen", "Playwright"] },
       ],
@@ -188,7 +191,10 @@ export const resume: Resume = {
       ],
       layers: [
         { label: "Clients", items: ["Management console · Next.js", "Gate software · .NET"] },
-        { label: "Services", items: ["Management API", "Report service", "Schedule service", "SignalR hub", "Kafka consumer"] },
+        {
+          label: "Services",
+          items: ["Management API", "Report service", "Schedule service", "SignalR hub", "Kafka consumer"],
+        },
         { label: "Data", items: ["PostgreSQL", "Redis", "ClickHouse", "Elasticsearch"] },
         { label: "Platform", items: ["FusionAuth", "Airflow", "Elastic APM", "Docker"] },
       ],
@@ -294,7 +300,8 @@ export const resume: Resume = {
       domain: "Game simulation",
       role: "Author",
       period: { start: "2026-11", end: null },
-      summary: "A trading-card-game simulator in the browser, with bots that play it and a test suite that keeps the rules honest.",
+      summary:
+        "A trading-card-game simulator in the browser, with bots that play it and a test suite that keeps the rules honest.",
       highlights: [
         "Astro and Svelte front end in TypeScript.",
         "Rules engine covered by Vitest, battles checked end to end with Playwright.",
@@ -315,8 +322,12 @@ export const resume: Resume = {
       domain: "Games",
       role: "Author",
       period: { start: "2026-06", end: "2026-07" },
-      summary: "Two tactical game prototypes in Godot 4, built with headless test gates so changes can be checked without opening the editor.",
-      highlights: ["GDScript gameplay, data-driven units and generated UI themes.", "Headless test runs as a gate before each change lands."],
+      summary:
+        "Two tactical game prototypes in Godot 4, built with headless test gates so changes can be checked without opening the editor.",
+      highlights: [
+        "GDScript gameplay, data-driven units and generated UI themes.",
+        "Headless test runs as a gate before each change lands.",
+      ],
       layers: [
         { label: "Game", items: ["Scenes", "Autoloads", "Data"] },
         { label: "Checks", items: ["Headless tests"] },
@@ -331,28 +342,82 @@ export const resume: Resume = {
       domain: "Personal site",
       role: "Author",
       period: { start: "2023-09", end: "2024-09" },
-      summary: "My first personal site: a Notion-style block editor on Tiptap with slash commands, i18n and PWA support.",
-      highlights: ["Custom Tiptap extensions for root blocks, slash commands and drag handles.", "Its indigo, gold and violet palette is the one this site still uses."],
+      summary:
+        "My first personal site: a Notion-style block editor on Tiptap with slash commands, i18n and PWA support.",
+      highlights: [
+        "Custom Tiptap extensions for root blocks, slash commands and drag handles.",
+        "Its indigo, gold and violet palette is the one this site still uses.",
+      ],
       layers: [
         { label: "UI", items: ["Next.js 14", "NextUI", "Tiptap"] },
         { label: "State", items: ["Redux Toolkit", "TanStack Query"] },
       ],
       stats: [{ label: "commits", value: "50+" }],
-      stack: ["typescript", "nextjs", "react", "heroui", "tailwind", "tiptap", "redux-toolkit", "tanstack-query"],
+      stack: [
+        "typescript",
+        "nextjs",
+        "react",
+        "heroui",
+        "tailwind",
+        "tiptap",
+        "redux-toolkit",
+        "tanstack-query",
+      ],
     },
   ],
 
   timeline: [
-    { date: "2026-11", lane: "branch", project: "tcg-simulator", message: "feat(tcg): card-game simulator with bots" },
-    { date: "2026-07", lane: "main", project: "epermit", message: "feat(epermit): permit forms, review flow and services", head: true },
-    { date: "2026-07", lane: "main", project: "abc", message: "chore(abc): wrap up after 1.9k commits across 16 repos" },
-    { date: "2026-06", lane: "branch", project: "godot-games", message: "feat(games): two Godot 4 prototypes" },
-    { date: "2026-05", lane: "branch", project: "agent-tooling", message: "feat(tooling): first agent skills and hooks" },
+    {
+      date: "2026-11",
+      lane: "branch",
+      project: "tcg-simulator",
+      message: "feat(tcg): card-game simulator with bots",
+    },
+    {
+      date: "2026-07",
+      lane: "main",
+      project: "epermit",
+      message: "feat(epermit): permit forms, review flow and services",
+      head: true,
+    },
+    {
+      date: "2026-07",
+      lane: "main",
+      project: "abc",
+      message: "chore(abc): wrap up after 1.9k commits across 16 repos",
+    },
+    {
+      date: "2026-06",
+      lane: "branch",
+      project: "godot-games",
+      message: "feat(games): two Godot 4 prototypes",
+    },
+    {
+      date: "2026-05",
+      lane: "branch",
+      project: "agent-tooling",
+      message: "feat(tooling): first agent skills and hooks",
+    },
     { date: "2025-09", lane: "main", project: "abc", message: "feat(abc): ClickHouse analytics store" },
-    { date: "2025-06", lane: "branch", project: "tch", message: "chore(tch): shipped website, admin and API" },
+    {
+      date: "2025-06",
+      lane: "branch",
+      project: "tch",
+      message: "chore(tch): shipped website, admin and API",
+    },
     { date: "2024-10", lane: "main", project: "abc", message: "feat(abc): Airflow data jobs" },
-    { date: "2024-07", lane: "branch", project: "tch", message: "feat(tch): company website, admin console, API" },
-    { date: "2024-03", lane: "main", project: "abc", message: "feat(abc): management console, API and reports" },
+    {
+      date: "2024-07",
+      lane: "branch",
+      project: "tch",
+      message: "feat(tch): company website, admin console, API",
+    },
+    {
+      date: "2024-03",
+      lane: "main",
+      project: "abc",
+      message: "feat(abc): management console, API and reports",
+    },
     { date: "2023-09", lane: "branch", project: "site-v1", message: "init: topthammanun.com v1" },
   ],
 

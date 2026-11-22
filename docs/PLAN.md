@@ -37,11 +37,12 @@ lucide-react · @react-pdf/renderer · Vitest · Playwright · pnpm.
 src/app/            layout.tsx, page.tsx, globals.css, sitemap.ts, robots.ts, opengraph-image.tsx,
                     resume.json/route.ts, resume.txt/route.ts, llms.txt/route.ts
 src/content/        types.ts, resume.ts                      (exists)
-src/lib/            sections.ts, format.ts, scramble.ts, content-lint.ts, selectors.ts, json-resume.ts,
+src/lib/            cx.ts, sections.ts, format.ts, scramble.ts, content-lint.ts, selectors.ts, json-resume.ts,
                     plain-text.ts, llms.ts, commands.ts, shortcuts.ts   (+ *.test.ts beside each)
-src/components/ui/        Section.tsx, Chip.tsx, Reveal.tsx, CopyButton.tsx
-src/components/sections/  Hero.tsx, ScrambleText.tsx, LiveClock.tsx, DotField.tsx, Work.tsx, ProjectRow.tsx,
-                          LayerDiagram.tsx, Log.tsx, GitGraph.tsx, Stack.tsx, Agents.tsx, Contact.tsx, Footer.tsx
+src/components/ui/        Section.tsx, Chip.tsx, Button.tsx, Kbd.tsx, Reveal.tsx, CopyButton.tsx
+src/components/sections/  hero/{Hero,ScrambleText,LiveClock,DotField}.tsx,
+                          work/{Work,WorkFilters,ProjectRow,LayerDiagram}.tsx, log/{Log,GitGraph}.tsx,
+                          stack/Stack.tsx, agents/Agents.tsx, contact/Contact.tsx, footer/Footer.tsx
 src/components/shell/     Shell.tsx, ui-store.tsx, Dock.tsx, CommandPalette.tsx, ThemeToggle.tsx,
                           theme-script.ts, useSectionSpy.ts, useShortcuts.ts, ConsoleGreeting.tsx
 src/pdf/            ResumeDocument.tsx

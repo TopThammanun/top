@@ -12,6 +12,17 @@ Web resume for Top Thammanun (topthammanun.com v2). Spec: `docs/DESIGN.md`. Plan
 - Commits: one short conventional subject line, no body, no trailers. Push only when asked.
 - No analytics, cookies or runtime third-party requests.
 
+## Components
+
+- `src/components/ui/` holds content-agnostic primitives (Section, Chip, Button, Kbd, CopyButton, Reveal).
+  Reuse them instead of repeating class strings.
+- `src/components/sections/<name>/` holds one folder per page section; its sub-components live beside it.
+- `src/components/shell/` holds the dock, palette, theme and shortcuts.
+- Server components by default; `"use client"` only on small interactive leaves. Pass data down as props.
+- One component per file, named export, file name = component name, props typed with an interface.
+- Pure logic goes in `src/lib/` with a test beside it; components stay presentational. Join classes with `cx`.
+- No dead code, no unused props, no duplicated markup.
+
 ## Commands
 
 - `pnpm dev` · `pnpm build` · `pnpm start`
