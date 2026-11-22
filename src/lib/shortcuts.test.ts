@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { SECTIONS } from "./sections";
 import { reduceShortcut, shortcutHelp, type ShortcutState } from "./shortcuts";
 
 const idle: ShortcutState = { pendingG: null };
@@ -11,6 +12,12 @@ describe("reduceShortcut", () => {
       state: idle,
       intent: { type: "section", id: "work" },
     });
+  });
+
+  it("reads t as the Timeline section after g and as the theme toggle on its own", () => {
+    const { state } = reduceShortcut(idle, "g", 0);
+    expect(reduceShortcut(state, "t", 10).intent).toEqual({ type: "section", id: "log" });
+    expect(reduceShortcut(idle, "t", 10).intent).toEqual({ type: "theme" });
   });
 
   it("forgets g after 1000ms", () => {
@@ -36,7 +43,8 @@ describe("shortcutHelp", () => {
   it("lists the palette key and a g-jump per section", () => {
     const help = shortcutHelp("⌘");
     expect(help[0]).toEqual({ keys: ["⌘", "K"], label: "Command palette" });
-    expect(help.filter((h) => h.keys[0] === "g")).toHaveLength(6);
+    expect(help.filter((h) => h.keys[0] === "g")).toHaveLength(SECTIONS.length);
+    expect(help).toContainEqual({ keys: ["g", "t"], label: "Go to Timeline" });
     expect(help.at(-1)).toEqual({ keys: ["g", "c"], label: "Go to Contact" });
   });
 });

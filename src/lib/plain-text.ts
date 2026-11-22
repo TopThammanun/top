@@ -2,7 +2,7 @@ import type { Project, Resume, YearMonth } from "@/content/types";
 import { formatPeriod, periodDuration } from "./format";
 import { fullName } from "./identity";
 import { absoluteUrl, MACHINE_ROUTES } from "./routes";
-import { skillGroups, techName } from "./selectors";
+import { companyProjects, personalProjects, skillGroups, techName } from "./selectors";
 
 const WIDTH = 80;
 const INDENT = "  ";
@@ -64,9 +64,9 @@ export function toPlainText(r: Resume, now: YearMonth): string {
     ...heading("Summary"),
     ...profile.summary.flatMap((s) => wrap(s, WIDTH)),
     ...heading("Experience"),
-    ...r.projects.filter((p) => p.kind === "client").flatMap((p) => projectBlock(r, p, now)),
+    ...companyProjects(r).flatMap((p) => projectBlock(r, p, now)),
     ...heading("Projects"),
-    ...r.projects.filter((p) => p.kind !== "client").flatMap((p) => projectBlock(r, p, now)),
+    ...personalProjects(r).flatMap((p) => projectBlock(r, p, now)),
     ...heading("Skills"),
     ...skillGroups(r).flatMap((group) => hanging(group.names.join(", "), `${group.label}: `, INDENT)),
     ...heading("Languages"),

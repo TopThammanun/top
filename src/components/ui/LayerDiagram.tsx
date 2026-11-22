@@ -1,4 +1,4 @@
-import { Chip } from "@/components/ui/Chip";
+import { Chip } from "./Chip";
 import type { Layer } from "@/content/types";
 
 export function LayerDiagram({ layers }: { layers: Layer[] }) {

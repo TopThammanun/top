@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono, Prompt } from "next/font/google";
-import { Shell } from "@/components/shell/Shell";
 import { headScript } from "@/components/shell/head-script";
 import { resume } from "@/content/resume";
 import { fullName } from "@/lib/identity";
@@ -88,9 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: headScript }} />
       </head>
-      <body className="min-h-dvh">
-        <Shell>{children}</Shell>
-      </body>
+      <body className="min-h-dvh">{children}</body>
     </html>
   );
 }

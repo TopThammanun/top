@@ -2,15 +2,18 @@ import { expect, test } from "@playwright/test";
 import { resume } from "@/content/resume";
 import { AI_CRAWLERS } from "@/lib/crawlers";
 import { fullName } from "@/lib/identity";
-import { absoluteUrl, MACHINE_ROUTES } from "@/lib/routes";
+import { absoluteUrl, MACHINE_ROUTES, projectPath } from "@/lib/routes";
 import { SECTIONS } from "@/lib/sections";
+import { companyProjects, personalProjects, projectImages } from "@/lib/selectors";
 import { seoDescription, seoTitle, structuredData } from "@/lib/seo";
 import { distanceFromTop, gotoHydrated } from "./helpers";
 
 const LINKEDIN_RESUME_MAX_BYTES = 2 * 1024 * 1024;
+const GALLERY_PROJECT = personalProjects(resume).find((project) => projectImages(project).length > 1);
+if (!GALLERY_PROJECT) throw new Error("expected a personal project with a gallery");
 
 test.describe("home page", () => {
-  test("renders the six sections and the name", async ({ page }) => {
+  test("renders every section and the name", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(fullName(resume.profile));
     for (const section of SECTIONS) {
@@ -72,15 +75,39 @@ test.describe("home page", () => {
     await expect(html).toHaveAttribute("data-theme", "light");
   });
 
-  test("opening a project row shows its highlights", async ({ page }) => {
-    const project = resume.projects[1];
+  test("keeps company work and personal projects in separate sections", async ({ page }) => {
+    await page.goto("/");
+    const work = page.locator("section#work");
+    const personal = page.locator("section#personal");
+    for (const project of companyProjects(resume)) {
+      await expect(work.getByRole("heading", { name: project.name })).toHaveCount(1);
+      await expect(personal.getByRole("heading", { name: project.name })).toHaveCount(0);
+    }
+    for (const project of personalProjects(resume)) {
+      await expect(personal.getByRole("heading", { name: project.name })).toHaveCount(1);
+      await expect(work.getByRole("heading", { name: project.name })).toHaveCount(0);
+    }
+  });
+
+  test("a company project shows its highlights and opens its architecture", async ({ page }) => {
+    const project = companyProjects(resume)[1];
     await gotoHydrated(page);
-    const row = page.locator(`#work-${project.slug}-button`);
-    await row.scrollIntoViewIfNeeded();
-    await expect(row).toHaveAttribute("aria-expanded", "false");
-    await row.click();
-    await expect(row).toHaveAttribute("aria-expanded", "true");
     await expect(page.getByText(project.highlights[0])).toBeVisible();
+    const toggle = page.locator(`#work-${project.slug}-button`);
+    await toggle.scrollIntoViewIfNeeded();
+    await expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await toggle.click();
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      page.locator(`#work-${project.slug}-panel`).getByRole("list", { name: "Architecture layers" }),
+    ).toBeVisible();
+  });
+
+  test("a personal project card opens its own page", async ({ page }) => {
+    await gotoHydrated(page);
+    await page.locator("section#personal").getByRole("link", { name: GALLERY_PROJECT.name }).click();
+    await expect(page).toHaveURL(new RegExp(`${projectPath(GALLERY_PROJECT.slug)}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(GALLERY_PROJECT.name);
   });
 
   test("has no horizontal scroll at 360px", async ({ page }) => {
@@ -101,6 +128,42 @@ test.describe("home page", () => {
   });
 });
 
+test.describe("project page", () => {
+  const path = projectPath(GALLERY_PROJECT.slug);
+
+  test("shows the write-up with every screenshot and its own canonical url", async ({ page }) => {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(GALLERY_PROJECT.name);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", absoluteUrl(resume, path));
+    await expect(page.locator("main figure img")).toHaveCount(projectImages(GALLERY_PROJECT).length);
+  });
+
+  test("opens a screenshot in the viewer and steps through it with the keyboard", async ({ page }) => {
+    const [first, second] = projectImages(GALLERY_PROJECT);
+    await page.goto(path, { waitUntil: "networkidle" });
+    await page.getByRole("button", { name: `Enlarge screenshot: ${first.caption}` }).click();
+    const viewer = page.getByRole("dialog", { name: "Screenshot viewer" });
+    await expect(viewer).toBeVisible();
+    await expect(viewer.getByText(first.caption)).toBeVisible();
+    await page.keyboard.press("ArrowRight");
+    await expect(viewer.getByText(second.caption)).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(viewer).toBeHidden();
+  });
+
+  test("has no horizontal scroll at 360px and no console errors", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto(path, { waitUntil: "networkidle" });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBe(0);
+    expect(errors).toEqual([]);
+  });
+});
+
 test.describe("machine-readable routes", () => {
   test("/resume.json is a JSON Resume", async ({ request }) => {
     const response = await request.get("/resume.json");
@@ -109,9 +172,16 @@ test.describe("machine-readable routes", () => {
     expect(body.basics.name).toBe(fullName(resume.profile));
   });
 
-  test("/sitemap.xml lists the page and every machine-readable route", async ({ request }) => {
+  test("/sitemap.xml lists the page, the project pages and every machine-readable route", async ({
+    request,
+  }) => {
     const xml = await (await request.get("/sitemap.xml")).text();
-    for (const path of ["/", ...MACHINE_ROUTES.map((route) => route.path)]) {
+    const paths = [
+      "/",
+      ...personalProjects(resume).map((project) => projectPath(project.slug)),
+      ...MACHINE_ROUTES.map((route) => route.path),
+    ];
+    for (const path of paths) {
       expect(xml).toContain(`<loc>${absoluteUrl(resume, path)}</loc>`);
     }
   });

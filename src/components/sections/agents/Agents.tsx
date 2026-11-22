@@ -1,8 +1,11 @@
 import { Chip } from "@/components/ui/Chip";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
+import { WordReveal } from "@/components/ui/WordReveal";
 import { resume } from "@/content/resume";
 import { formatIndex } from "@/lib/format";
+
+const STATEMENT = "I work with coding agents the way I work with a team: written process, guardrails, proof.";
 
 const SAMPLE_SKILL = `---
 name: verify-change
@@ -16,10 +19,8 @@ description: >
 
 export function Agents() {
   return (
-    <Section id="agents" index="04" label="Agents" meta="process">
-      <p className="max-w-[24ch] text-statement">
-        I work with coding agents the way I work with a team: written process, guardrails, proof.
-      </p>
+    <Section id="agents" meta="process">
+      <WordReveal text={STATEMENT} className="max-w-[24ch] text-statement" />
       <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
         {resume.practices.map((practice, i) => (
           <li key={practice.title} className="bg-bg">

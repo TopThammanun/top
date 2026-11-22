@@ -19,7 +19,7 @@ export function StackStatus({ names, usage }: StackStatusProps) {
           <span className="text-accent">{names[tech] ?? tech}</span> → {formatUsage(usage[tech] ?? 0)}
         </>
       ) : (
-        "hover or focus a dependency to trace it"
+        "select a skill to see where it was used"
       )}
     </p>
   );

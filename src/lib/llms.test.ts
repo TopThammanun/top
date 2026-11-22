@@ -15,6 +15,15 @@ describe("toLlmsTxt", () => {
     );
   });
 
+  it("separates company projects from personal ones", () => {
+    const company = text.indexOf("## Company projects");
+    const personal = text.indexOf("## Personal projects");
+    expect(company).toBeGreaterThan(0);
+    expect(personal).toBeGreaterThan(company);
+    expect(text.indexOf("Automated Border Control platform")).toBeLessThan(personal);
+    expect(text.indexOf("TCG Simulator")).toBeGreaterThan(personal);
+  });
+
   it("lists skills by category", () => {
     expect(text).toContain("## Skills");
     expect(text).toContain("- Languages: C#, TypeScript, JavaScript, SQL, Python, GDScript");

@@ -140,6 +140,14 @@
   transform: translateY(8px);
 }
 
+[data-word] {
+  transition: opacity 500ms var(--ease-out-expo);
+}
+
+:where([data-js]) [data-word]:not([data-lit]) {
+  opacity: 0.5;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;
@@ -159,6 +167,10 @@
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  [data-word] {
+    opacity: 1 !important;
   }
 }
 

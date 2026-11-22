@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import type { Lane } from "@/content/types";
+import type { Lane, ProjectGroup } from "@/content/types";
 import { graphPaths, type GraphEvent, type GraphPath } from "@/lib/git-graph";
 
-const LANE_STROKE: Record<Lane, string> = {
-  main: "stroke-accent",
-  branch: "stroke-violet",
+const GROUP_STROKE: Record<ProjectGroup, string> = {
+  company: "stroke-accent",
+  personal: "stroke-violet",
 };
 
 interface Geometry {
@@ -63,7 +63,7 @@ export function GitGraph({ events, children }: GitGraphProps) {
           height={geometry.height}
         >
           {geometry.paths.map((path, i) => (
-            <path key={i} d={path.d} fill="none" strokeWidth={1.5} className={LANE_STROKE[path.lane]} />
+            <path key={i} d={path.d} fill="none" strokeWidth={1.5} className={GROUP_STROKE[path.group]} />
           ))}
         </svg>
       ) : null}

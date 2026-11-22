@@ -5,7 +5,7 @@ import { profileEndpoints } from "@/lib/endpoints";
 import { formatFormalPeriod } from "@/lib/format";
 import { fullName } from "@/lib/identity";
 import { splitCode } from "@/lib/rich-text";
-import { skillGroups, techName } from "@/lib/selectors";
+import { companyProjects, personalProjects, skillGroups, techName } from "@/lib/selectors";
 import { seoKeywords } from "@/lib/seo";
 
 const INK = "#000000";
@@ -190,19 +190,15 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
         </Section>
 
         <Section title="Professional Experience">
-          {resume.projects
-            .filter((project) => project.kind === "client")
-            .map((project) => (
-              <ExperienceEntry key={project.slug} project={project} resume={resume} />
-            ))}
+          {companyProjects(resume).map((project) => (
+            <ExperienceEntry key={project.slug} project={project} resume={resume} />
+          ))}
         </Section>
 
         <Section title="Selected Projects">
-          {resume.projects
-            .filter((project) => project.kind !== "client")
-            .map((project) => (
-              <ProjectEntry key={project.slug} project={project} resume={resume} />
-            ))}
+          {personalProjects(resume).map((project) => (
+            <ProjectEntry key={project.slug} project={project} resume={resume} />
+          ))}
         </Section>
 
         <Section title="Technical Skills">

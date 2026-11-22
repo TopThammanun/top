@@ -1,9 +1,11 @@
-import { ArrowDown, Download } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import type { ReactNode } from "react";
 import { LinkButton } from "@/components/ui/Button";
+import { DownloadButton } from "@/components/ui/DownloadButton";
 import { Section } from "@/components/ui/Section";
 import { resume } from "@/content/resume";
 import { fullName, resumeFileName } from "@/lib/identity";
+import { CareerStats } from "./CareerStats";
 import { DotField } from "./DotField";
 import { LiveClock } from "./LiveClock";
 import { MASCOT } from "./mascot";
@@ -23,7 +25,7 @@ export function Hero() {
   ];
 
   return (
-    <Section id="home" index="00" label="Home" heading="p" meta={`v${meta.version} · ${meta.updated}`}>
+    <Section id="home" heading="p" meta={`v${meta.version} · ${meta.updated}`}>
       <div className="grid gap-10 md:grid-cols-12 md:gap-12">
         <div className="md:col-span-7">
           <p className="font-mono text-sm text-fg-muted">
@@ -41,13 +43,12 @@ export function Hero() {
           </p>
           <p className="mt-5 max-w-[52ch] text-fg-muted sm:text-lg">{profile.tagline}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <LinkButton href="#work" variant="primary">
-              View work
+            <DownloadButton href="/resume.pdf" fileName={resumeFileName(profile)}>
+              Download resume
+            </DownloadButton>
+            <LinkButton href="#work">
+              View company work
               <ArrowDown aria-hidden className="size-4" />
-            </LinkButton>
-            <LinkButton href="/resume.pdf" download={resumeFileName(profile)}>
-              <Download aria-hidden className="size-4" />
-              Download PDF
             </LinkButton>
             <PaletteHint />
           </div>
@@ -71,6 +72,7 @@ export function Hero() {
           </figcaption>
         </figure>
       </div>
+      <CareerStats />
     </Section>
   );
 }

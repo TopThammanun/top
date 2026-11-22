@@ -25,7 +25,7 @@ export function formatPeriod(p: Period): string {
   return `${p.start} → ${p.end ?? "now"}`;
 }
 
-function formatMonth(value: YearMonth): string {
+export function formatMonth(value: YearMonth): string {
   const { year, month } = parseYearMonth(value);
   return `${MONTH_NAMES[month - 1]} ${year}`;
 }

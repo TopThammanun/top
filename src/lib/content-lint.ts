@@ -24,6 +24,8 @@ function lintPeriod(period: Period, path: string): string[] {
   return errors;
 }
 
+const PROJECT_MEDIA_ROOT = "/projects/";
+
 function lintHref(href: string, path: string): string[] {
   return href.startsWith("https://") ? [] : [`${path} must be https: "${href}"`];
 }
@@ -53,6 +55,16 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
     if (p.highlights.length === 0) errors.push(`${path}.highlights is empty`);
     p.stack.forEach((id, j) => {
       if (!techIds.has(id)) errors.push(`${path}.stack[${j}] is an unknown tech: "${id}"`);
+    });
+    p.links?.forEach((link, j) => errors.push(...lintHref(link.href, `${path}.links[${j}].href`)));
+    p.chapters?.forEach((chapter, j) => {
+      if (chapter.body.length === 0) errors.push(`${path}.chapters[${j}].body is empty`);
+      chapter.images.forEach((image, k) => {
+        const at = `${path}.chapters[${j}].images[${k}]`;
+        if (!image.src.startsWith(PROJECT_MEDIA_ROOT))
+          errors.push(`${at}.src is outside ${PROJECT_MEDIA_ROOT}`);
+        if (!image.alt || !image.caption) errors.push(`${at} needs alt text and a caption`);
+      });
     });
   });
 

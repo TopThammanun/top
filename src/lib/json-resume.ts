@@ -1,7 +1,7 @@
 import type { LinkId, Period, Project, Resume } from "@/content/types";
 import { fullName } from "./identity";
 import { absoluteUrl, linkHref } from "./routes";
-import { skillGroups, techName } from "./selectors";
+import { companyProjects, personalProjects, skillGroups, techName } from "./selectors";
 
 const SCHEMA_URL = "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json";
 
@@ -97,16 +97,14 @@ export function toJsonResume(r: Resume): JsonResume {
       location: { region: profile.location.label },
       profiles: profiles(r),
     },
-    work: r.projects
-      .filter((p) => p.kind === "client")
-      .map((p) => ({
-        name: p.name,
-        position: p.role,
-        summary: p.summary,
-        highlights: p.highlights,
-        ...dates(p.period),
-      })),
-    projects: r.projects.filter((p) => p.kind !== "client").map((p) => toProject(r, p)),
+    work: companyProjects(r).map((p) => ({
+      name: p.name,
+      position: p.role,
+      summary: p.summary,
+      highlights: p.highlights,
+      ...dates(p.period),
+    })),
+    projects: personalProjects(r).map((p) => toProject(r, p)),
     skills: skillGroups(r).map((group) => ({ name: group.label, keywords: group.names })),
     languages: profile.languages.map((l) => ({ language: l.name, fluency: l.level })),
     meta: {

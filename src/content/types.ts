@@ -1,6 +1,7 @@
 export type YearMonth = `${number}-${number}`;
 
 export type ProjectKind = "client" | "tooling" | "side";
+export type ProjectGroup = "company" | "personal";
 export type Lane = "main" | "branch";
 export type LinkId = "github" | "website" | "email" | "linkedin";
 
@@ -55,6 +56,25 @@ export interface Stat {
   value: string;
 }
 
+export interface ExternalLink {
+  label: string;
+  href: string;
+}
+
+export interface ProjectImage {
+  src: string;
+  alt: string;
+  caption: string;
+  width: number;
+  height: number;
+}
+
+export interface ProjectChapter {
+  title: string;
+  body: string[];
+  images: ProjectImage[];
+}
+
 export interface Project {
   slug: string;
   name: string;
@@ -67,6 +87,8 @@ export interface Project {
   layers: Layer[];
   stats: Stat[];
   stack: string[];
+  links?: ExternalLink[];
+  chapters?: ProjectChapter[];
 }
 
 export interface TimelineEvent {

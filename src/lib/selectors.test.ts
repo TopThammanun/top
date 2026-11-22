@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { resume } from "@/content/resume";
-import { countByKind, projectsUsing, skillGroups, techName, techUsage } from "./selectors";
+import {
+  companyProjects,
+  personalProjects,
+  projectGroup,
+  projectImages,
+  projectsUsing,
+  skillGroups,
+  techGroups,
+  techName,
+  techUsage,
+} from "./selectors";
 
 describe("projectsUsing", () => {
   it("finds the projects whose stack has the tech", () => {
@@ -18,9 +28,34 @@ describe("techUsage", () => {
   });
 });
 
-describe("countByKind", () => {
-  it("counts projects per kind", () => {
-    expect(countByKind(resume)).toEqual({ all: 7, client: 3, tooling: 1, side: 3 });
+describe("project groups", () => {
+  it("treats client work as company projects and the rest as personal", () => {
+    expect(companyProjects(resume).map((p) => p.slug)).toEqual(["epermit", "abc", "tch"]);
+    expect(personalProjects(resume).map((p) => p.slug)).toEqual([
+      "agent-tooling",
+      "tcg-simulator",
+      "godot-games",
+      "site-v1",
+    ]);
+    expect(projectGroup(resume.projects[0])).toBe("company");
+  });
+});
+
+describe("projectImages", () => {
+  it("collects the images of every chapter and is empty without chapters", () => {
+    const godot = resume.projects.find((p) => p.slug === "godot-games");
+    expect(godot && projectImages(godot)).toHaveLength(14);
+    expect(projectImages(resume.projects[0])).toEqual([]);
+  });
+});
+
+describe("techGroups", () => {
+  it("marks tech by the most serious place it was used", () => {
+    const groups = techGroups(resume);
+    expect(groups.postgresql).toBe("company");
+    expect(groups.typescript).toBe("company");
+    expect(groups.svelte).toBe("personal");
+    expect(groups.javascript).toBeNull();
   });
 });
 

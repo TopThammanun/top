@@ -1,5 +1,6 @@
 import type { Resume } from "@/content/types";
 import { linkHref } from "./routes";
+import { projectGroup } from "./selectors";
 import { SECTIONS, type SectionId } from "./sections";
 
 export type CommandAction =
@@ -42,7 +43,7 @@ export function buildCommands(r: Resume): Command[] {
     id: `project-${p.slug}`,
     group: "Projects",
     label: p.name,
-    hint: p.kind,
+    hint: projectGroup(p),
     keywords: [p.domain, ...p.stack],
     action: { type: "project", slug: p.slug },
   }));

@@ -1,7 +1,11 @@
-import type { Resume } from "./types";
+import type { ProjectImage, Resume } from "./types";
 
 const SITE_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.topthammanun.dev";
 const SITE_URL = `https://${SITE_HOST}`;
+
+function gameShot(file: string, alt: string, caption: string): ProjectImage {
+  return { src: `/projects/godot-games/${file}.webp`, alt, caption, width: 1280, height: 720 };
+}
 
 export const resume: Resume = {
   meta: {
@@ -296,6 +300,12 @@ export const resume: Resume = {
       ],
       stats: [{ label: "packs", value: "3" }],
       stack: ["claude-code", "python", "git", "playwright"],
+      links: [
+        {
+          label: "Timesheet skill on GitHub",
+          href: "https://github.com/TopThammanun/claude-secretary-timesheet-sync-skill",
+        },
+      ],
     },
     {
       slug: "tcg-simulator",
@@ -318,6 +328,10 @@ export const resume: Resume = {
       ],
       stats: [{ label: "commits", value: "80+" }],
       stack: ["typescript", "astro", "svelte", "vitest", "playwright"],
+      links: [
+        { label: "Live site", href: "https://tcg-simulator-lilac.vercel.app" },
+        { label: "Source on GitHub", href: "https://github.com/TopThammanun/tcg-simulator" },
+      ],
     },
     {
       slug: "godot-games",
@@ -338,6 +352,100 @@ export const resume: Resume = {
       ],
       stats: [{ label: "commits", value: "130+" }],
       stack: ["godot", "gdscript"],
+      chapters: [
+        {
+          title: "Idle roguelite auto-battler",
+          body: [
+            "A party of four cats fights through stages on its own while the player picks the party, drafts boons between fights and spends gold on upgrades. Every fifth stage is a boss.",
+            "The code is split into three layers. Presentation only listens to signals, a tick manager is the single frame consumer and emits a tick every 0.1 seconds, and all combat advances inside that tick. That keeps a run deterministic, fast-forwardable and testable without the editor.",
+            "The party is data: four entries of race, class and row, with class and race stats loaded from resource files.",
+            "Pure-logic unit tests and an integration smoke scene both run headless, and they are the gate before a change lands.",
+          ],
+          images: [
+            gameShot(
+              "idle-roguelite-battle",
+              "Four cats face a golem under a stage and health bar, with the party bar and navigation below",
+              "The start of a run: the party against a golem.",
+            ),
+            gameShot(
+              "idle-roguelite-wraith",
+              "The cat party fights a wraith while damage numbers float above it",
+              "A wraith fight a few stages in.",
+            ),
+            gameShot(
+              "idle-roguelite-boss",
+              "A red dragon boss cat with a long health bar at stage five",
+              "The first boss at stage 5.",
+            ),
+            gameShot(
+              "idle-roguelite-boss-late",
+              "The stage ten boss surrounded by damage numbers",
+              "The stage 10 boss with damage numbers.",
+            ),
+            gameShot(
+              "idle-roguelite-boon-draft",
+              "A draft panel with three boon cards to choose from",
+              "The boon draft: pick one of three.",
+            ),
+            gameShot(
+              "idle-roguelite-hero-selection",
+              "A hero selection panel listing front and back row cats with their class and race",
+              "Hero selection by row, class and race.",
+            ),
+          ],
+        },
+        {
+          title: "Idle RPG with roguelike drafts",
+          body: [
+            "A second prototype in the same cat world. The party fights waves on a compact battle strip while the player chooses a starting clan, drafts a card on each level-up and moves between map, party, base and hero screens.",
+            "Design lives in data: regions, clans, the starter party and a ten-wave combat plan are JSON files, and an asset registry loads a catalog generated from every asset file, so sprites are referenced by role instead of by path.",
+            "Run state and the battle engine own the results. Attack lunges, floating numbers and the rest of the game feel are presenter-only and never change an outcome.",
+            "Progress saves locally with a schema version, and a gate script runs the headless tests together with a runtime screenshot check.",
+          ],
+          images: [
+            gameShot(
+              "auto-battler-starter-draft",
+              "Six clan cards to choose from before a run starts",
+              "Choosing a starting clan.",
+            ),
+            gameShot(
+              "auto-battler-battle",
+              "A cat hero fights a monster on a tile map, with a skill button at the bottom",
+              "The first wave on the battle strip.",
+            ),
+            gameShot(
+              "auto-battler-wave",
+              "One hero faces three monsters on the battle strip",
+              "One hero against a wave of three.",
+            ),
+            gameShot(
+              "auto-battler-level-up-draft",
+              "A level-up overlay with three cards to pick from",
+              "The level-up draft: pick one of three cards.",
+            ),
+            gameShot(
+              "auto-battler-map",
+              "A world map screen listing five regions, the first one current and the second unlocked",
+              "The world map with its five regions.",
+            ),
+            gameShot(
+              "auto-battler-party",
+              "A party screen showing the active hero and empty roster slots",
+              "The party screen.",
+            ),
+            gameShot(
+              "auto-battler-base",
+              "A base screen with four buildings that produce yarn, gold and gems over time",
+              "The base, where buildings produce resources over time.",
+            ),
+            gameShot(
+              "auto-battler-hero",
+              "A hero screen with a portrait, stat bars, equipment slots and level up and ascend buttons",
+              "The hero screen with stats, level up and ascend.",
+            ),
+          ],
+        },
+      ],
     },
     {
       slug: "site-v1",

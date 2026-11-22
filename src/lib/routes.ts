@@ -13,6 +13,10 @@ export const MACHINE_ROUTES: readonly MachineRoute[] = [
   { path: "/llms.txt", label: "Summary for LLMs", type: "text/plain" },
 ];
 
+export function projectPath(slug: string): string {
+  return `/projects/${slug}`;
+}
+
 export function absoluteUrl(r: Resume, path: string): string {
   return new URL(path, r.meta.siteUrl).toString();
 }

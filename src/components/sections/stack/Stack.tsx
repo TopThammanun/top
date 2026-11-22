@@ -1,16 +1,18 @@
+import { GroupLegend } from "@/components/ui/GroupLegend";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 import { resume } from "@/content/resume";
-import { techUsage } from "@/lib/selectors";
+import { techGroups, techUsage } from "@/lib/selectors";
 import { StackStatus } from "./StackStatus";
 import { TechChip } from "./TechChip";
 
 export function Stack() {
   const usage = techUsage(resume);
+  const groups = techGroups(resume);
   const names = Object.fromEntries(resume.tech.map((t) => [t.id, t.name]));
 
   return (
-    <Section id="stack" index="03" label="Stack" meta={`${resume.tech.length} packages`}>
+    <Section id="stack" meta={`${resume.tech.length} technologies`}>
       <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
         <p aria-hidden className="font-mono text-sm text-fg-muted">
           <span className="text-accent">&quot;dependencies&quot;</span>: {"{"}
@@ -27,7 +29,12 @@ export function Stack() {
                   .filter((tech) => tech.category === category.id)
                   .map((tech) => (
                     <li key={tech.id}>
-                      <TechChip id={tech.id} name={tech.name} usage={usage[tech.id] ?? 0} />
+                      <TechChip
+                        id={tech.id}
+                        name={tech.name}
+                        usage={usage[tech.id]}
+                        group={groups[tech.id]}
+                      />
                     </li>
                   ))}
               </ul>
@@ -35,9 +42,12 @@ export function Stack() {
           </Reveal>
         ))}
       </div>
-      <p aria-hidden className="mt-4 font-mono text-sm text-fg-muted">
-        {"}"}
-      </p>
+      <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
+        <p aria-hidden className="font-mono text-sm text-fg-muted">
+          {"}"}
+        </p>
+        <GroupLegend />
+      </div>
     </Section>
   );
 }

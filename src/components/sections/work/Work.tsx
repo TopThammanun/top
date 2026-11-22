@@ -1,28 +1,27 @@
 import { Section } from "@/components/ui/Section";
+import { SectionIntro } from "@/components/ui/SectionIntro";
 import { resume } from "@/content/resume";
-import { buildMonth } from "@/lib/build-info";
-import { formatIndex, formatPeriod, periodDuration } from "@/lib/format";
-import { countByKind } from "@/lib/selectors";
-import { ProjectDetails } from "./ProjectDetails";
-import { WorkList, type WorkItem } from "./WorkList";
+import { formatIndex } from "@/lib/format";
+import { companyProjects } from "@/lib/selectors";
+import { CompanyCase } from "./CompanyCase";
+import { TechFilterNotice } from "./TechFilterNotice";
 
 export function Work() {
-  const items: WorkItem[] = resume.projects.map((project, i) => ({
-    slug: project.slug,
-    kind: project.kind,
-    stack: project.stack,
-    index: formatIndex(i + 1),
-    name: project.name,
-    domain: project.domain,
-    period: formatPeriod(project.period),
-    duration: periodDuration(project.period, buildMonth),
-    details: <ProjectDetails project={project} />,
-  }));
+  const projects = companyProjects(resume);
   const techNames = Object.fromEntries(resume.tech.map((t) => [t.id, t.name]));
 
   return (
-    <Section id="work" index="01" label="Work" meta={`${items.length} entries`}>
-      <WorkList items={items} counts={countByKind(resume)} techNames={techNames} />
+    <Section id="work" meta={`${projects.length} company projects`}>
+      <SectionIntro title="Company work.">
+        Platforms built as a full-stack developer for government and enterprise clients. Company and client
+        names are left out on purpose, so each entry describes what the system does.
+      </SectionIntro>
+      <TechFilterNotice names={techNames} />
+      <ol className="mt-10 border-t border-line">
+        {projects.map((project, i) => (
+          <CompanyCase key={project.slug} project={project} index={formatIndex(i + 1)} />
+        ))}
+      </ol>
     </Section>
   );
 }

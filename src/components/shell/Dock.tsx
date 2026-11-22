@@ -5,6 +5,7 @@ import {
   Bot,
   BriefcaseBusiness,
   Command as CommandIcon,
+  FlaskConical,
   GitBranch,
   House,
   Layers,
@@ -20,6 +21,7 @@ import { useActivePill } from "./useActivePill";
 const ICONS: Record<SectionId, LucideIcon> = {
   home: House,
   work: BriefcaseBusiness,
+  personal: FlaskConical,
   log: GitBranch,
   stack: Layers,
   agents: Bot,
@@ -33,7 +35,7 @@ export function Dock({ active }: { active: SectionId }) {
   return (
     <div
       data-print="hide"
-      className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4"
+      className="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-2 sm:px-4"
     >
       <nav
         aria-label="Sections"
@@ -59,18 +61,18 @@ export function Dock({ active }: { active: SectionId }) {
                   href={`#${section.id}`}
                   aria-current={current ? "location" : undefined}
                   className={cx(
-                    "relative flex h-9 items-center gap-2 rounded-full px-2.5 text-sm transition-colors duration-150 md:px-3",
+                    "relative flex h-9 items-center gap-2 rounded-full px-1.5 text-sm transition-colors duration-150 min-[380px]:px-2.5 lg:px-3",
                     current ? "text-fg" : "text-fg-muted hover:text-fg",
                   )}
                 >
                   <Icon aria-hidden className="size-4" />
-                  <span className="sr-only md:not-sr-only">{section.label}</span>
+                  <span className="sr-only lg:not-sr-only">{section.label}</span>
                 </a>
               </li>
             );
           })}
         </ul>
-        <span aria-hidden className="mx-1 h-5 w-px bg-line" />
+        <span aria-hidden className="mx-0.5 h-5 w-px bg-line min-[380px]:mx-1" />
         <Button
           variant="icon"
           aria-label="Open command palette"
