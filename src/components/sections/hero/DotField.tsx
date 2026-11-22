@@ -1,7 +1,7 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { cx } from "@/lib/cx";
 import {
   applyMask,
@@ -118,7 +118,7 @@ interface DotFieldProps {
 export function DotField({ word, portrait, className }: DotFieldProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const wrap = wrapRef.current;

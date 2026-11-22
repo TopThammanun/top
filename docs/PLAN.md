@@ -10,7 +10,7 @@ content in `src/content/resume.ts`.
 read the typed content module; small client components add the effects (scramble, dot field, dock, palette).
 Pure logic lives in `src/lib` with unit tests; the browser behaviour is covered by Playwright smoke tests.
 
-**Tech Stack:** Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · motion (`motion/react`) · cmdk ·
+**Tech Stack:** Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · cmdk ·
 lucide-react · @react-pdf/renderer · Vitest · Playwright · pnpm.
 
 ## Global Constraints
@@ -277,3 +277,19 @@ opengraph-image.tsx,favicon.ico}`, `src/pdf/ResumeDocument.tsx`, `scripts/build-
 - [ ] `README.md`: what this is, commands, where content lives, the pending content fields, how to deploy.
 - [ ] Final screenshots at the three widths in both themes; fix spacing, overflow and contrast issues.
 - [ ] Verify including `pnpm e2e`, commit `test: add e2e and accessibility checks`.
+
+## Implementation notes
+
+Where the build differs from the task text above, and why:
+
+- **No `motion` dependency.** The dock pill is a CSS transform transition (`useActivePill`), reduced motion is
+  read with `usePrefersReducedMotion`. Removing motion was needed to keep Lighthouse Performance at 90 or more.
+- **`Reveal` uses an IntersectionObserver and CSS**, not `whileInView`. Hidden states only apply under
+  `[data-js]` (set by the head script), so every section stays readable without JavaScript. Collapsed Work
+  panels use the same rule.
+- **Command palette** is cmdk's `Command` inside a native `<dialog>` with a labelled title (focus trap, Escape
+  and focus return come from the browser). The search UI is code-split and prefetched 1.5s after load.
+- **`CommandAction`** has `{ type: "help" }` instead of `{ type: "none" }`.
+- **Fonts:** only Geist is preloaded; JetBrains Mono and Prompt load on use.
+- **`"type": "module"`** in `package.json`, because `@react-pdf/renderer`'s hyphenation package is ESM only.
+- **Hero meta keys** use `--fg-muted`, since `--fg-faint` fails AA at that size.

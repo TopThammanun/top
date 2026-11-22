@@ -13,12 +13,14 @@ const geist = Geist({
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  preload: false,
 });
 
 const prompt = Prompt({
   variable: "--font-prompt",
   subsets: ["thai", "latin"],
   weight: ["400", "500", "600"],
+  preload: false,
 });
 
 const { profile, meta } = resume;

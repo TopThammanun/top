@@ -1,16 +1,23 @@
 "use client";
 
-import { Command } from "cmdk";
-import { Search } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { Kbd } from "@/components/ui/Kbd";
-import { COMMAND_GROUPS, type Command as PaletteCommand, type CommandAction } from "@/lib/commands";
+import type { Command as PaletteCommand, CommandAction } from "@/lib/commands";
 import { scrollToId } from "./navigation";
 import { ShortcutList } from "./ShortcutList";
 import { toggleTheme } from "./theme";
 import { useUi } from "./ui-store";
 
 const STATUS_MS = 1500;
+const PREFETCH_DELAY_MS = 1500;
+
+const loadCommandSearch = () => import("./CommandSearch");
+
+const CommandSearch = dynamic(loadCommandSearch, {
+  ssr: false,
+  loading: () => <div className="h-12 border-b border-line" />,
+});
 
 export function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
   const { paletteOpen, setPaletteOpen, paletteView, setPaletteView, showProject } = useUi();
@@ -27,6 +34,11 @@ export function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
     if (!dialog.open) dialog.showModal();
     dialog.querySelector<HTMLElement>("[data-autofocus]")?.focus();
   }, [paletteOpen, paletteView]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void loadCommandSearch(), PREFETCH_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!status) return;
@@ -87,42 +99,7 @@ export function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
       </h2>
       {paletteOpen && paletteView === "help" ? <ShortcutList onBack={() => setPaletteView("root")} /> : null}
       {paletteOpen && paletteView === "root" ? (
-        <Command label="Commands" loop>
-          <div className="flex items-center gap-2 border-b border-line px-4">
-            <Search aria-hidden className="size-4 text-fg-muted" />
-            <Command.Input
-              data-autofocus
-              placeholder="Type a command or search…"
-              className="h-12 w-full bg-transparent text-sm text-fg outline-none placeholder:text-fg-muted"
-            />
-          </div>
-          <Command.List className="max-h-[min(24rem,60vh)] overflow-y-auto p-1.5">
-            <Command.Empty className="px-3 py-6 text-center text-sm text-fg-muted">No results.</Command.Empty>
-            {COMMAND_GROUPS.map((group) => (
-              <Command.Group
-                key={group}
-                heading={<span className="block px-3 pt-2.5 pb-1 mono-label text-fg-muted">{group}</span>}
-              >
-                {commands
-                  .filter((command) => command.group === group)
-                  .map((command) => (
-                    <Command.Item
-                      key={command.id}
-                      value={command.id}
-                      keywords={[command.label, command.group, ...(command.keywords ?? [])]}
-                      onSelect={() => void run(command.action)}
-                      className="flex h-10 cursor-pointer items-center justify-between gap-4 rounded-md px-3 text-sm text-fg data-[selected=true]:bg-line"
-                    >
-                      <span className="truncate">{command.label}</span>
-                      {command.hint ? (
-                        <span className="shrink-0 font-mono text-xs text-fg-muted">{command.hint}</span>
-                      ) : null}
-                    </Command.Item>
-                  ))}
-              </Command.Group>
-            ))}
-          </Command.List>
-        </Command>
+        <CommandSearch commands={commands} onRun={(action) => void run(action)} />
       ) : null}
       <div className="flex items-center justify-between gap-4 border-t border-line px-4 py-2 font-mono text-xs text-fg-muted">
         <span className="flex items-center gap-1.5">

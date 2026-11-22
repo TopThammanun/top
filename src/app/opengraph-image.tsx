@@ -35,9 +35,7 @@ export default function OpengraphImage() {
         <span>~/{profile.handle}</span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        <div style={{ fontSize: 112, letterSpacing: -4, lineHeight: 1 }}>
-          {profile.displayName}
-        </div>
+        <div style={{ fontSize: 112, letterSpacing: -4, lineHeight: 1 }}>{profile.displayName}</div>
         <div style={{ display: "flex", fontSize: 40, color: COLORS.muted }}>
           <span style={{ color: COLORS.accent, marginRight: 16 }}>&gt;</span>
           {profile.title}

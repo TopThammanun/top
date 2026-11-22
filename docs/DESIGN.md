@@ -68,7 +68,7 @@ meta right-aligned), and is a landmark with an accessible name.
 - Left (7/12): mono path label `~/topthammanun`; display name `Top Thammanun`; role line that cycles
   `profile.roles` with a scramble/decode effect (every 3.2s, 600ms decode); tagline; buttons
   `View work`, `Download PDF`, and a `Ctrl K` / `⌘ K` hint button that opens the palette.
-- Meta table in mono, key column faint: `now`, `loc` (`Thailand · UTC+7`), `time` (live `HH:mm:ss` in
+- Meta table in mono, key column muted: `now`, `loc` (`Thailand · UTC+7`), `time` (live `HH:mm:ss` in
   Asia/Bangkok, rendered only after mount), `focus` (`.NET · TypeScript · Next.js`).
 - Right (5/12): **dot field**. A canvas grid of small dots; dots inside a mask drawn from the text `TOP`
   are brighter; the pointer brightens nearby dots to gold and pushes them slightly. If
@@ -121,7 +121,7 @@ meta right-aligned), and is a landmark with an accessible name.
 
 - **Dock**: fixed, bottom-centre, pill, blurred `--bg-raised` at 80% with a hairline border. Items: Home, Work,
   Log, Stack, Agents, Contact, a divider, palette button, theme toggle. Icons (lucide) plus labels from 768px,
-  icons only below. Active item has a sliding pill (`layoutId`). Section spy with IntersectionObserver.
+  icons only below. Active item has a sliding pill (CSS transform transition). Section spy with IntersectionObserver.
   Hidden in print. Page has bottom padding so the dock never covers the footer.
 - **Command palette** (cmdk): opens with `Ctrl/⌘ K` or the dock button. Groups: Navigate (6 sections),
   Projects (open a project), Actions (Download PDF, Toggle theme, Copy GitHub URL, Copy site URL),

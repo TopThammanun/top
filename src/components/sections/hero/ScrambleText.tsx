@@ -1,7 +1,7 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { scrambleFrame } from "@/lib/scramble";
 
 const HOLD_MS = 3200;
@@ -13,7 +13,7 @@ interface ScrambleTextProps {
 }
 
 export function ScrambleText({ phrases, label }: ScrambleTextProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const [text, setText] = useState(phrases[0] ?? "");
 
   useEffect(() => {
