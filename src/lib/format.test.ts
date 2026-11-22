@@ -35,6 +35,10 @@ describe("formatPeriod", () => {
   it("shows an open end as now", () => {
     expect(formatPeriod({ start: "2026-07", end: null })).toBe("2026-07 → now");
   });
+
+  it("takes a custom separator", () => {
+    expect(formatPeriod({ start: "2024-03", end: "2026-07" }, "–")).toBe("2024-03 – 2026-07");
+  });
 });
 
 describe("periodDuration", () => {

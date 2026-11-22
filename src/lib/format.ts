@@ -20,8 +20,8 @@ export function formatDuration(months: number): string {
   return [years ? `${years}y` : "", rest ? `${rest}m` : ""].filter(Boolean).join(" ");
 }
 
-export function formatPeriod(p: Period): string {
-  return `${p.start} → ${p.end ?? "now"}`;
+export function formatPeriod(p: Period, separator = "→"): string {
+  return `${p.start} ${separator} ${p.end ?? "now"}`;
 }
 
 export function periodDuration(p: Period, now: YearMonth): string {

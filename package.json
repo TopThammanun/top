@@ -2,8 +2,10 @@
   "name": "topthammanun-resume",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "pnpm build:pdf",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
