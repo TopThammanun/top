@@ -53,7 +53,7 @@ test.describe("home page", () => {
     const hero = page.locator("section#home");
     const calendar = hero.getByRole("img", { name: /^Commit calendar/ });
     await expect(calendar).toHaveAttribute("aria-label", new RegExp(`${describeSummary(CALENDAR.summary)}$`));
-    await expect(calendar.locator("circle")).toHaveCount(CALENDAR.weeks.flat().filter(Boolean).length);
+    await expect(calendar.locator("rect")).toHaveCount(CALENDAR.weeks.flat().filter(Boolean).length);
     await expect(
       hero.getByText(formatQuantity(CALENDAR.summary.total, "commit"), { exact: true }),
     ).toBeVisible();

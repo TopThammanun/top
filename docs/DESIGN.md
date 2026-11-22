@@ -86,13 +86,13 @@ live in `src/lib/sections.ts`.
   The mascot blinks every few seconds, and the pointer brightens nearby dots to gold and pushes them
   slightly. Static render under reduced motion. Hidden from assistive tech. On mobile it
   sits above the text at 40vh max.
-- Under the mascot: **commit calendar** (`fig. 01`), drawn in the same dot language. One dot per day for the
-  53 weeks in `src/content/activity.ts`, Monday at the top. Dot size is the day's rank among active days
-  (quartiles, `src/lib/commit-calendar.ts`); gold when most commits that day were company work, violet when
-  most were personal. The weeks wrap into two half-year strips in a narrow card and run as one strip from
-  576px of card width. A line above the dots gives the total, the active days and the longest streak; pointing
-  at or tapping a day replaces it with that day's date and counts and rings the dot. The grid is one image
-  for assistive tech, labelled with the range and the totals. Below 1024px the calendar spans the full
+- Under the mascot: **commit calendar** (`fig. 01`), a contribution graph of rounded squares. One square per
+  day for the 53 weeks in `src/content/activity.ts`, Monday at the top. Colour strength is the day's rank
+  among active days (quartiles, `src/lib/commit-calendar.ts`); gold when most commits that day were company
+  work, violet when most were personal. The weeks wrap into two half-year strips in a narrow card and run as
+  one strip from 576px of card width. A line above the grid gives the total, the active days and the longest
+  streak; pointing at or tapping a day replaces it with that day's date and counts and outlines the square.
+  The grid is one image for assistive tech, labelled with the range and the totals. Below 1024px the calendar spans the full
   width; on mobile it follows the meta table.
 - **Career stats** under both columns, computed from company projects only (`src/lib/stats.ts`): time on
   company projects with its start month, number of company projects, repositories and commits, plus a
