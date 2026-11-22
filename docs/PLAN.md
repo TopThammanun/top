@@ -315,5 +315,7 @@ Requested by the owner once the seven tasks were done. These replace the matchin
 - **Formal PDF.** Times, black on white, centred header, `Professional Summary`, `Professional Experience`,
   `Selected Projects`, `Technical Skills`, `Education` (when present) and `Languages`, month-name dates, a
   `Technologies` line per entry and page numbers. `profile.summary` is written without first-person pronouns.
+  For LinkedIn and ATS parsers the name is in normal case, experience entries lead with the job title, and an
+  e2e test keeps the file under 2 MB.
 - **Site URL.** `meta.siteUrl` reads `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links, the sitemap and the
   PDF follow whichever production domain the Vercel project has.

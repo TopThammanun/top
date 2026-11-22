@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     color: INK,
   },
   header: { alignItems: "center", borderBottomWidth: 1, borderBottomColor: INK, paddingBottom: 10 },
-  name: { fontFamily: "Times-Bold", fontSize: 22, letterSpacing: 1.6, lineHeight: 1.2 },
+  name: { fontFamily: "Times-Bold", fontSize: 24, lineHeight: 1.2 },
   title: { fontSize: 12, marginTop: 2 },
   contact: { fontSize: 10, marginTop: 5, textAlign: "center" },
   link: { color: INK, textDecoration: "none" },
@@ -105,13 +105,41 @@ function EntryHead({ title, subtitle, period }: { title: string; subtitle: strin
   );
 }
 
-interface ProjectEntryProps {
+interface EntryProps {
   project: Project;
   resume: Resume;
-  detailed?: boolean;
 }
 
-function ProjectEntry({ project, resume, detailed = false }: ProjectEntryProps) {
+function Technologies({ project, resume }: EntryProps) {
+  return (
+    <Text style={styles.technologies}>
+      <Text style={styles.label}>Technologies: </Text>
+      {project.stack.map((id) => techName(resume, id)).join(", ")}
+    </Text>
+  );
+}
+
+function ExperienceEntry({ project, resume }: EntryProps) {
+  return (
+    <View style={styles.entry} wrap={false}>
+      <EntryHead
+        title={project.role}
+        subtitle={`${project.name} · ${project.domain}`}
+        period={project.period}
+      />
+      <Text>{project.summary}</Text>
+      {project.highlights.map((highlight) => (
+        <View key={highlight} style={styles.bullet}>
+          <Text style={styles.bulletMark}>•</Text>
+          <RichText text={highlight} />
+        </View>
+      ))}
+      <Technologies project={project} resume={resume} />
+    </View>
+  );
+}
+
+function ProjectEntry({ project, resume }: EntryProps) {
   return (
     <View style={styles.entry} wrap={false}>
       <EntryHead
@@ -120,18 +148,7 @@ function ProjectEntry({ project, resume, detailed = false }: ProjectEntryProps) 
         period={project.period}
       />
       <Text>{project.summary}</Text>
-      {detailed
-        ? project.highlights.map((highlight) => (
-            <View key={highlight} style={styles.bullet}>
-              <Text style={styles.bulletMark}>•</Text>
-              <RichText text={highlight} />
-            </View>
-          ))
-        : null}
-      <Text style={styles.technologies}>
-        <Text style={styles.label}>Technologies: </Text>
-        {project.stack.map((id) => techName(resume, id)).join(", ")}
-      </Text>
+      <Technologies project={project} resume={resume} />
     </View>
   );
 }
@@ -153,7 +170,7 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
     >
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.name}>{name.toUpperCase()}</Text>
+          <Text style={styles.name}>{name}</Text>
           <Text style={styles.title}>{profile.title}</Text>
           <Text style={styles.contact}>
             {profile.location.label}
@@ -176,7 +193,7 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
           {resume.projects
             .filter((project) => project.kind === "client")
             .map((project) => (
-              <ProjectEntry key={project.slug} project={project} resume={resume} detailed />
+              <ExperienceEntry key={project.slug} project={project} resume={resume} />
             ))}
         </Section>
 

@@ -146,7 +146,7 @@ All generated from `src/content/resume.ts` and prerendered at build.
 | `/resume.json` | JSON Resume schema v1.0.0 (`basics`, `work` from client projects, `projects` from the rest, `skills` by category, `languages`, `meta`) |
 | `/resume.txt` | plain text, lines ≤ 80 columns |
 | `/llms.txt` | short markdown summary with links to the other routes |
-| `/resume.pdf` | formal resume for job applications: two A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, month-name dates, page numbers, real text, written to `public/` before `next build` |
+| `/resume.pdf` | formal resume for job applications and LinkedIn uploads: two A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, selectable text in reading order, experience entries as title, organisation and month-name dates, visible URLs, page numbers, under LinkedIn's recommended 2 MB, written to `public/` before `next build` |
 | `/sitemap.xml` | the page and the four routes above |
 | `/robots.txt` | allow all, with the AI search and assistant agents named explicitly |
 | Open Graph image | 1200×630, `#1c1740`, full name, title, mascot, gold index mark |

@@ -7,6 +7,8 @@ import { SECTIONS } from "@/lib/sections";
 import { seoDescription, seoTitle, structuredData } from "@/lib/seo";
 import { distanceFromTop, gotoHydrated } from "./helpers";
 
+const LINKEDIN_RESUME_MAX_BYTES = 2 * 1024 * 1024;
+
 test.describe("home page", () => {
   test("renders the six sections and the name", async ({ page }) => {
     await page.goto("/");
@@ -121,11 +123,13 @@ test.describe("machine-readable routes", () => {
     expect(text).toContain(`Sitemap: ${absoluteUrl(resume, "/sitemap.xml")}`);
   });
 
-  test("/resume.pdf is a PDF", async ({ request }) => {
+  test("/resume.pdf is a PDF small enough to upload to LinkedIn", async ({ request }) => {
     const response = await request.get("/resume.pdf");
     expect(response.ok()).toBe(true);
     expect(response.headers()["content-type"]).toBe("application/pdf");
-    expect((await response.body()).subarray(0, 5).toString()).toBe("%PDF-");
+    const body = await response.body();
+    expect(body.subarray(0, 5).toString()).toBe("%PDF-");
+    expect(body.byteLength).toBeLessThan(LINKEDIN_RESUME_MAX_BYTES);
   });
 
   test("/resume.txt and /llms.txt are plain text", async ({ request }) => {
