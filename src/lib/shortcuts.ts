@@ -22,6 +22,22 @@ const SINGLE_KEYS: Readonly<Record<string, Intent>> = {
 
 const IDLE: ShortcutState = { pendingG: null };
 
+export interface ShortcutHelp {
+  keys: string[];
+  label: string;
+}
+
+export function shortcutHelp(modKey: string): ShortcutHelp[] {
+  return [
+    { keys: [modKey, "K"], label: "Command palette" },
+    { keys: ["?"], label: "Keyboard shortcuts" },
+    { keys: ["t"], label: "Toggle theme" },
+    { keys: ["j"], label: "Next section" },
+    { keys: ["k"], label: "Previous section" },
+    ...SECTIONS.map((s) => ({ keys: ["g", s.key], label: `Go to ${s.label}` })),
+  ];
+}
+
 export function reduceShortcut(
   state: ShortcutState,
   key: string,

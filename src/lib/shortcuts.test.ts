@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { reduceShortcut, type ShortcutState } from "./shortcuts";
+import { reduceShortcut, shortcutHelp, type ShortcutState } from "./shortcuts";
 
 const idle: ShortcutState = { pendingG: null };
 
@@ -29,5 +29,14 @@ describe("reduceShortcut", () => {
 
   it("ignores other keys", () => {
     expect(reduceShortcut(idle, "x", 0)).toEqual({ state: idle, intent: null });
+  });
+});
+
+describe("shortcutHelp", () => {
+  it("lists the palette key and a g-jump per section", () => {
+    const help = shortcutHelp("⌘");
+    expect(help[0]).toEqual({ keys: ["⌘", "K"], label: "Command palette" });
+    expect(help.filter((h) => h.keys[0] === "g")).toHaveLength(6);
+    expect(help.at(-1)).toEqual({ keys: ["g", "c"], label: "Go to Contact" });
   });
 });
