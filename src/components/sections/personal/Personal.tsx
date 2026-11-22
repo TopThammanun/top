@@ -12,10 +12,10 @@ export function Personal() {
   return (
     <Section id="personal" meta={`${cards.length} personal projects`}>
       <SectionIntro title="Personal projects.">
-        Built outside company work: tooling for my own workflow, game experiments and the first version of
-        this site.
+        Built outside company work: tooling for my own workflow, game experiments, a university hackathon
+        project and the first version of this site.
       </SectionIntro>
-      <ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="mt-10 grid gap-4 md:grid-cols-2">
         {cards.map(({ project, images }, i) => (
           <PersonalCard key={project.slug} project={project} images={images} order={i} />
         ))}

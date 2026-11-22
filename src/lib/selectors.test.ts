@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resume } from "@/content/resume";
+import type { Resume } from "@/content/types";
 import {
   companyProjects,
   personalProjects,
@@ -12,6 +13,11 @@ import {
   techUsage,
 } from "./selectors";
 
+const withUnusedTech: Resume = {
+  ...resume,
+  tech: [...resume.tech, { id: "unused", name: "Unused", category: "languages" }],
+};
+
 describe("projectsUsing", () => {
   it("finds the projects whose stack has the tech", () => {
     expect(projectsUsing(resume, "postgresql").map((p) => p.slug)).toEqual(["epermit", "abc"]);
@@ -20,11 +26,11 @@ describe("projectsUsing", () => {
 
 describe("techUsage", () => {
   it("counts every tech, including unused ones", () => {
-    const usage = techUsage(resume);
-    expect(Object.keys(usage)).toHaveLength(resume.tech.length);
+    const usage = techUsage(withUnusedTech);
+    expect(Object.keys(usage)).toHaveLength(withUnusedTech.tech.length);
     expect(usage.postgresql).toBe(2);
     expect(usage.typescript).toBe(5);
-    expect(usage.javascript).toBe(0);
+    expect(usage.unused).toBe(0);
   });
 });
 
@@ -36,6 +42,7 @@ describe("project groups", () => {
       "tcg-simulator",
       "godot-games",
       "site-v1",
+      "ibrand",
     ]);
     expect(projectGroup(resume.projects[0])).toBe("company");
   });
@@ -51,11 +58,11 @@ describe("projectImages", () => {
 
 describe("techGroups", () => {
   it("marks tech by the most serious place it was used", () => {
-    const groups = techGroups(resume);
+    const groups = techGroups(withUnusedTech);
     expect(groups.postgresql).toBe("company");
     expect(groups.typescript).toBe("company");
     expect(groups.svelte).toBe("personal");
-    expect(groups.javascript).toBeNull();
+    expect(groups.unused).toBeNull();
   });
 });
 
@@ -70,13 +77,21 @@ describe("techName", () => {
 });
 
 describe("skillGroups", () => {
+  const groups = skillGroups(resume);
+
   it("names the tech of every category in content order", () => {
-    const groups = skillGroups(resume);
-    expect(groups.map((g) => g.label)).toEqual(resume.categories.map((c) => c.label));
-    expect(groups[0]).toEqual({
+    const categories = groups.slice(0, resume.categories.length);
+    expect(categories.map((g) => g.label)).toEqual(resume.categories.map((c) => c.label));
+    expect(categories[0]).toEqual({
       label: "Languages",
       names: ["C#", "TypeScript", "JavaScript", "SQL", "Python", "GDScript"],
     });
-    expect(groups.flatMap((g) => g.names)).toHaveLength(resume.tech.length);
+    expect(categories.flatMap((g) => g.names)).toHaveLength(resume.tech.length);
+  });
+
+  it("ends with the practice skills", () => {
+    expect(groups.slice(resume.categories.length)).toEqual(
+      resume.competencies.map((c) => ({ label: c.label, names: c.items })),
+    );
   });
 });

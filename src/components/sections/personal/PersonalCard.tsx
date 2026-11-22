@@ -27,7 +27,7 @@ export function PersonalCard({ project, images, order }: PersonalCardProps) {
     <TechFocus
       stack={project.stack}
       id={projectAnchor(project.slug)}
-      className={cx("group scroll-mt-6", cover && "md:col-span-2 lg:col-span-3")}
+      className={cx("group scroll-mt-6", cover && "md:col-span-2")}
     >
       <Reveal
         order={order}

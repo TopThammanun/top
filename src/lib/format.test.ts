@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
+  formatDate,
   formatDuration,
   formatFormalPeriod,
   formatIndex,
+  formatNumber,
   formatPeriod,
+  formatQuantity,
   formatUsage,
+  monthName,
   monthsBetween,
   periodDuration,
   toYearMonth,
@@ -36,6 +40,10 @@ describe("formatPeriod", () => {
   it("shows an open end as now", () => {
     expect(formatPeriod({ start: "2026-07", end: null })).toBe("2026-07 → now");
   });
+
+  it("shows a single month once", () => {
+    expect(formatPeriod({ start: "2022-11", end: "2022-11" })).toBe("2022-11");
+  });
 });
 
 describe("formatFormalPeriod", () => {
@@ -45,6 +53,10 @@ describe("formatFormalPeriod", () => {
 
   it("shows an open end as Present", () => {
     expect(formatFormalPeriod({ start: "2026-01", end: null })).toBe("Jan 2026 – Present");
+  });
+
+  it("shows a single month once", () => {
+    expect(formatFormalPeriod({ start: "2022-11", end: "2022-11" })).toBe("Nov 2022");
   });
 });
 
@@ -75,5 +87,34 @@ describe("formatIndex", () => {
 describe("toYearMonth", () => {
   it("pads the month", () => {
     expect(toYearMonth(new Date(Date.UTC(2026, 0, 15)))).toBe("2026-01");
+  });
+});
+
+describe("monthName", () => {
+  it("names a month by its number", () => {
+    expect(monthName(1)).toBe("Jan");
+    expect(monthName(12)).toBe("Dec");
+  });
+});
+
+describe("formatDate", () => {
+  it("writes the weekday, day, month and year", () => {
+    expect(formatDate("2026-07-14")).toBe("Tue 14 Jul 2026");
+    expect(formatDate("2026-11-01")).toBe("Sun 1 Nov 2026");
+  });
+});
+
+describe("formatNumber", () => {
+  it("groups thousands", () => {
+    expect(formatNumber(1738)).toBe("1,738");
+    expect(formatNumber(248)).toBe("248");
+  });
+});
+
+describe("formatQuantity", () => {
+  it("pluralises the noun", () => {
+    expect(formatQuantity(1, "commit")).toBe("1 commit");
+    expect(formatQuantity(0, "commit")).toBe("0 commits");
+    expect(formatQuantity(1467, "commit")).toBe("1,467 commits");
   });
 });

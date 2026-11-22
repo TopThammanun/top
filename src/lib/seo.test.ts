@@ -21,7 +21,7 @@ function hasEmptyValue(value: unknown): boolean {
 
 describe("seo text", () => {
   it("leads the title with the full name and the handle", () => {
-    expect(seoTitle(resume)).toBe("Thammanun Aikhamdaeng (topthammanun) — Full-Stack Developer");
+    expect(seoTitle(resume)).toBe("Thammanun Aikhamdaeng (topthammanun) — Senior Full Stack Developer");
   });
 
   it("leads the description with every name people search for", () => {
@@ -61,7 +61,7 @@ describe("structuredData", () => {
       givenName: "Thammanun",
       familyName: "Aikhamdaeng",
       alternateName: ["topthammanun", "Top Thammanun", "Top"],
-      jobTitle: "Full-Stack Developer",
+      jobTitle: "Senior Full Stack Developer",
       url: SITE,
     });
   });
@@ -73,6 +73,27 @@ describe("structuredData", () => {
   it("only claims technology used in more than one project", () => {
     expect(node("Person").knowsAbout).toContain("TypeScript");
     expect(node("Person").knowsAbout).not.toContain("GDScript");
+  });
+
+  it("claims the practice skills", () => {
+    expect(node("Person").knowsAbout).toEqual(
+      expect.arrayContaining(["Git workflow", "Database performance"]),
+    );
+  });
+
+  it("names the employer and the university", () => {
+    expect(node("Person")).toMatchObject({
+      worksFor: { "@type": "Organization", name: "Chanwanich Company Limited" },
+      alumniOf: [{ "@type": "CollegeOrUniversity", name: "Chiang Mai University" }],
+    });
+  });
+
+  it("leaves the employer and university out when they are unknown", () => {
+    const person = structuredData({ ...resume, career: [], education: [] })["@graph"].find(
+      (n) => n["@type"] === "Person",
+    );
+    expect(person).not.toHaveProperty("worksFor");
+    expect(person).not.toHaveProperty("alumniOf");
   });
 
   it("names the site after the person and points the profile page at them", () => {

@@ -104,10 +104,37 @@ export interface Practice {
   body: string;
 }
 
+export interface Role {
+  id: string;
+  title: string;
+  employer: string;
+  period: Period | null;
+  months: number | null;
+  summary: string;
+  stack: string[];
+  links: ExternalLink[];
+}
+
 export interface Education {
   school: string;
-  degree: string;
-  period: Period;
+  program: string;
+  honors: string | null;
+  graduated: YearMonth;
+  coursework: string[];
+  projects: string[];
+}
+
+export interface Competency {
+  label: string;
+  items: string[];
+}
+
+export type DayCommits = readonly [company: number, personal: number];
+
+export interface CommitActivity {
+  from: string;
+  to: string;
+  days: Record<string, DayCommits>;
 }
 
 export interface ResumeMeta {
@@ -125,5 +152,7 @@ export interface Resume {
   projects: Project[];
   timeline: TimelineEvent[];
   practices: Practice[];
+  competencies: Competency[];
+  career: Role[];
   education: Education[];
 }

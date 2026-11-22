@@ -49,8 +49,11 @@ export interface SkillGroup {
 }
 
 export function skillGroups(r: Resume): SkillGroup[] {
-  return r.categories.map((c) => ({
-    label: c.label,
-    names: r.tech.filter((t) => t.category === c.id).map((t) => t.name),
-  }));
+  return [
+    ...r.categories.map((c) => ({
+      label: c.label,
+      names: r.tech.filter((t) => t.category === c.id).map((t) => t.name),
+    })),
+    ...r.competencies.map((c) => ({ label: c.label, names: c.items })),
+  ];
 }

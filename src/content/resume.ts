@@ -2,6 +2,7 @@ import type { ProjectImage, Resume } from "./types";
 
 const SITE_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.topthammanun.dev";
 const SITE_URL = `https://${SITE_HOST}`;
+const EMPLOYER = "Chanwanich Company Limited";
 
 function gameShot(file: string, alt: string, caption: string): ProjectImage {
   return { src: `/projects/godot-games/${file}.webp`, alt, caption, width: 1280, height: 720 };
@@ -21,9 +22,9 @@ export const resume: Resume = {
     familyName: "Aikhamdaeng",
     nickname: "Top",
     displayName: "Top Thammanun",
-    title: "Full-Stack Developer",
+    title: "Senior Full Stack Developer",
     roles: [
-      "Full-Stack Developer",
+      "Senior Full Stack Developer",
       ".NET services, Next.js front ends",
       "TypeScript end to end",
       "Ships with coding agents",
@@ -31,7 +32,8 @@ export const resume: Resume = {
     tagline:
       "I build enterprise systems end to end: C#/.NET and NestJS services, Next.js front ends, and the tooling around them.",
     summary: [
-      "Full-Stack Developer specialising in government and enterprise systems, where forms are long, business rules are strict and data accuracy is critical.",
+      "Senior Full Stack Developer specialising in government and enterprise systems, where forms are long, business rules are strict and data accuracy is critical.",
+      `Progressed from intern to Senior Full Stack Developer at ${EMPLOYER}.`,
       "Experienced on both sides of the API: ASP.NET Core and NestJS services on PostgreSQL, with React and Next.js applications built on top of them.",
       "Also builds the tooling used in day-to-day work, including skills and hooks that keep AI coding agents aligned with a defined engineering process.",
     ],
@@ -104,6 +106,7 @@ export const resume: Resume = {
     { id: "elasticsearch", name: "Elasticsearch", category: "data" },
     { id: "clickhouse", name: "ClickHouse", category: "data" },
     { id: "minio", name: "MinIO (S3)", category: "data" },
+    { id: "mongodb", name: "MongoDB", category: "data" },
     { id: "kafka", name: "Apache Kafka", category: "data" },
     { id: "airflow", name: "Apache Airflow", category: "data" },
 
@@ -135,7 +138,7 @@ export const resume: Resume = {
       name: "Industrial-estate e-Permit platform",
       kind: "client",
       domain: "GovTech · permits",
-      role: "Full-Stack Developer",
+      role: "Senior Full Stack Developer",
       period: { start: "2026-07", end: null },
       summary:
         "Online permit applications for factory operators and the officer-side review system: long multi-tab forms, document handling, approvals and generated letters.",
@@ -185,7 +188,7 @@ export const resume: Resume = {
       name: "Automated Border Control platform",
       kind: "client",
       domain: "Border control · government",
-      role: "Full-Stack Developer",
+      role: "Junior, then Senior Full Stack Developer",
       period: { start: "2024-03", end: "2026-07" },
       summary:
         "Back-office and service layer for automated border-control gates: a management console, the .NET services behind it, reporting and data jobs.",
@@ -245,7 +248,7 @@ export const resume: Resume = {
       name: "Company website, admin console and API",
       kind: "client",
       domain: "Corporate web",
-      role: "Full-Stack Developer",
+      role: "Full Stack Developer",
       period: { start: "2024-07", end: "2025-06" },
       summary: "A public website, the admin console that manages it and the Node API behind both.",
       highlights: [
@@ -476,6 +479,48 @@ export const resume: Resume = {
         "tanstack-query",
       ],
     },
+    {
+      slug: "ibrand",
+      name: "IBRAND hackathon project",
+      kind: "side",
+      domain: "Hackathon · made-to-order products",
+      role: "Back-end developer",
+      period: { start: "2022-11", end: "2022-11" },
+      summary:
+        "A hackathon project from university: a web platform where a customer picks a factory and a product formula, then follows the order from price estimate to delivery.",
+      highlights: [
+        "Wrote the REST API in Express on MongoDB, with Mongoose models for factories, users and order transactions.",
+        "Sign-in hashes passwords with bcrypt and returns a JWT that a middleware checks on protected routes.",
+        "An order is one transaction with a current step, and the factory side queries the orders waiting at each step.",
+        "The React front end lives in a second repository: a customer app and a factory console.",
+      ],
+      layers: [
+        { label: "Clients", items: ["Customer app · React", "Factory console · React"] },
+        { label: "API", items: ["Factories", "Users", "Sign-in · JWT", "Order transactions"] },
+        { label: "Data", items: ["MongoDB · Mongoose"] },
+      ],
+      stats: [
+        { label: "API commits", value: "30" },
+        { label: "days", value: "11" },
+      ],
+      stack: ["javascript", "express", "mongodb", "react"],
+      links: [
+        { label: "API on GitHub", href: "https://github.com/TopThammanun/Hackaton-IBRAND-API" },
+        { label: "App on GitHub", href: "https://github.com/TopThammanun/Hackaton-IBRAND-App" },
+      ],
+      chapters: [
+        {
+          title: "From formula to delivery",
+          body: [
+            "IBRAND was built for a hackathon in November 2022, while studying at Chiang Mai University. A customer searches factories by province, product type and category, picks a formula and opens an order.",
+            "From there the order moves through nine steps: formula, price estimate, test product, deposit, packaging, FDA registration, production, payment and delivery.",
+            "The API keeps each order as a transaction that records its current step. The customer app shows that step on a timeline, and the factory console lists the orders waiting at each step.",
+            "Both repositories are public. The API repository holds the back-end work described here.",
+          ],
+          images: [],
+        },
+      ],
+    },
   ],
 
   timeline: [
@@ -510,6 +555,12 @@ export const resume: Resume = {
       project: "agent-tooling",
       message: "feat(tooling): first agent skills and hooks",
     },
+    {
+      date: "2026-03",
+      lane: "main",
+      project: "abc",
+      message: "chore(career): promoted to Senior Full Stack Developer",
+    },
     { date: "2025-09", lane: "main", project: "abc", message: "feat(abc): ClickHouse analytics store" },
     {
       date: "2025-06",
@@ -531,6 +582,12 @@ export const resume: Resume = {
       message: "feat(abc): management console, API and reports",
     },
     { date: "2023-09", lane: "branch", project: "site-v1", message: "init: topthammanun.dev v1" },
+    {
+      date: "2022-11",
+      lane: "main",
+      project: "ibrand",
+      message: "feat(ibrand): hackathon API on Express and MongoDB",
+    },
   ],
 
   practices: [
@@ -552,5 +609,82 @@ export const resume: Resume = {
     },
   ],
 
-  education: [],
+  competencies: [
+    {
+      label: "Git workflow",
+      items: [
+        "Branch control",
+        "Dev and production branches",
+        "Merge requests",
+        "Pull requests",
+        "Squash commits",
+        "Merging",
+        "Versioning",
+      ],
+    },
+    {
+      label: "Problem solving",
+      items: ["Root-cause analysis", "Solution analysis for fixes"],
+    },
+    {
+      label: "Database performance",
+      items: ["SQL optimisation", "Database indexing", "Query optimisation for large datasets"],
+    },
+  ],
+
+  career: [
+    {
+      id: "senior",
+      title: "Senior Full Stack Developer",
+      employer: EMPLOYER,
+      period: { start: "2026-03", end: null },
+      months: null,
+      summary:
+        "Promoted in March 2026 while on the Automated Border Control platform, now on the Industrial-estate e-Permit platform.",
+      stack: [],
+      links: [],
+    },
+    {
+      id: "junior",
+      title: "Junior Full Stack Developer",
+      employer: EMPLOYER,
+      period: null,
+      months: null,
+      summary: "Worked on phase 1 of the Automated Border Control platform.",
+      stack: [],
+      links: [],
+    },
+    {
+      id: "intern",
+      title: "Intern Full Stack Developer",
+      employer: EMPLOYER,
+      period: null,
+      months: 14,
+      summary:
+        "A 14-month internship on HealthTeams, a management platform for hospitals and sub-district health promoting hospitals.",
+      stack: ["React", ".NET", "Amazon Cognito", "AWS services"],
+      links: [
+        { label: "HealthTeams product page", href: "https://www.chanwanich.digital/healthteams/" },
+        { label: "HealthTeams on Facebook", href: "https://www.facebook.com/healthteams.in.th/" },
+      ],
+    },
+  ],
+
+  education: [
+    {
+      school: "Chiang Mai University",
+      program: "Digital Industry Integration (DII)",
+      honors: "First-Class Honors",
+      graduated: "2024-03",
+      coursework: [
+        "Programming Logical Thinking",
+        "Object-Oriented Programming",
+        "Front-End Development (React)",
+        "Back-End Development (Node.js)",
+        "Database Normalization",
+        "Digital Industry Solutions",
+      ],
+      projects: ["ibrand"],
+    },
+  ],
 };

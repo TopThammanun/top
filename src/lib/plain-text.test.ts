@@ -25,6 +25,24 @@ describe("toPlainText", () => {
     resume.projects.forEach((p) => expect(text).toContain(p.name));
   });
 
+  it("lists the roles with their employer", () => {
+    resume.career.forEach((role) => expect(text).toContain(role.title));
+    expect(lines).toContain("  Chanwanich Company Limited");
+    expect(lines).toContain("  Stack: React, .NET, Amazon Cognito, AWS services");
+  });
+
+  it("puts experience first and education after skills", () => {
+    const order = ["EXPERIENCE", "COMPANY PROJECTS", "PERSONAL PROJECTS", "SKILLS", "EDUCATION"];
+    const positions = order.map((title) => lines.indexOf(title));
+    expect(positions.every((position) => position > 0)).toBe(true);
+    expect([...positions].sort((a, b) => a - b)).toEqual(positions);
+  });
+
+  it("writes education with the graduation month", () => {
+    expect(text).toMatch(/Chiang Mai University +Graduated Mar 2024/);
+    expect(lines).toContain("  Digital Industry Integration (DII) · First-Class Honors");
+  });
+
   it("starts with the name", () => {
     expect(lines[0]).toBe("THAMMANUN AIKHAMDAENG");
   });

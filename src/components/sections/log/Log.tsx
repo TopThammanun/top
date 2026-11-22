@@ -7,6 +7,7 @@ import { resume } from "@/content/resume";
 import type { ProjectGroup, TimelineEvent } from "@/content/types";
 import { cx } from "@/lib/cx";
 import { projectGroup } from "@/lib/selectors";
+import { CareerPath } from "./CareerPath";
 import { GitGraph } from "./GitGraph";
 
 const NODE: Record<ProjectGroup, string> = {
@@ -50,10 +51,14 @@ export function Log() {
 
   return (
     <Section id="log" meta={`${rows.length} commits`}>
+      <CareerPath />
       <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-3">
-        <p className="font-mono text-sm text-fg-muted">
-          <span className="text-accent">$</span> git log --graph --author=top
-        </p>
+        <h3 className="font-mono text-sm font-normal text-fg-muted">
+          <span aria-hidden className="text-accent">
+            ${" "}
+          </span>
+          git log --graph --author=top
+        </h3>
         <GroupLegend />
       </div>
       <Reveal>

@@ -24,7 +24,7 @@ describe("buildCommands", () => {
 
   it("labels each project as company or personal work", () => {
     const hints = commands.filter((c) => c.group === "Projects").map((c) => c.hint);
-    expect(hints).toEqual(["company", "company", "company", "personal", "personal", "personal", "personal"]);
+    expect(hints).toEqual(resume.projects.map((p) => (p.kind === "client" ? "company" : "personal")));
   });
 
   it("has no command for missing contact fields", () => {

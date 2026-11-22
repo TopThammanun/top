@@ -1,4 +1,5 @@
 import type { Resume } from "@/content/types";
+import { currentRole } from "./career";
 import { alternateNames, fullName } from "./identity";
 import { absoluteUrl, MACHINE_ROUTES } from "./routes";
 import { techUsage } from "./selectors";
@@ -63,7 +64,14 @@ function sameAs(r: Resume): string[] {
 
 function knowsAbout(r: Resume): string[] {
   const usage = techUsage(r);
-  return r.tech.filter((tech) => (usage[tech.id] ?? 0) >= MIN_PROJECTS_TO_KNOW).map((tech) => tech.name);
+  return [
+    ...r.tech.filter((tech) => (usage[tech.id] ?? 0) >= MIN_PROJECTS_TO_KNOW).map((tech) => tech.name),
+    ...r.competencies.map((competency) => competency.label),
+  ];
+}
+
+function organization(type: string, name: string): { "@type": string; name: string } {
+  return { "@type": type, name };
 }
 
 export function structuredData(r: Resume): JsonLdGraph {
@@ -72,6 +80,7 @@ export function structuredData(r: Resume): JsonLdGraph {
   const name = fullName(profile);
   const person = { "@id": `${site}#person` };
   const website = { "@id": `${site}#website` };
+  const employer = currentRole(r)?.employer;
 
   return {
     "@context": SCHEMA_CONTEXT,
@@ -111,6 +120,10 @@ export function structuredData(r: Resume): JsonLdGraph {
         address: { "@type": "PostalAddress", addressCountry: profile.location.label },
         knowsAbout: knowsAbout(r),
         knowsLanguage: profile.languages.map((language) => language.name),
+        ...(employer ? { worksFor: organization("Organization", employer) } : {}),
+        ...(r.education.length > 0
+          ? { alumniOf: r.education.map((e) => organization("CollegeOrUniversity", e.school)) }
+          : {}),
         ...(profile.email ? { email: `mailto:${profile.email}` } : {}),
       },
     ],

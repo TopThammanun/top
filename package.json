@@ -13,7 +13,8 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "format": "prettier --write .",
-    "build:pdf": "tsx scripts/build-pdf.tsx"
+    "build:pdf": "tsx scripts/build-pdf.tsx",
+    "build:activity": "tsx scripts/build-activity.ts"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",

@@ -1,4 +1,5 @@
-import type { Project, Resume, YearMonth } from "@/content/types";
+import type { Education, Project, Resume, Role, YearMonth } from "@/content/types";
+import { educationDegree, educationWhen, roleWhen } from "./career";
 import { formatPeriod, periodDuration } from "./format";
 import { fullName } from "./identity";
 import { absoluteUrl, MACHINE_ROUTES } from "./routes";
@@ -50,6 +51,32 @@ function projectBlock(r: Resume, p: Project, now: YearMonth): string[] {
   ];
 }
 
+function roleBlock(role: Role): string[] {
+  const when = roleWhen(role);
+  return [
+    "",
+    ...(when ? spread(role.title, when) : [role.title]),
+    ...hanging(role.employer, INDENT, INDENT),
+    ...hanging(role.summary, INDENT, INDENT),
+    ...(role.stack.length > 0 ? hanging(`Stack: ${role.stack.join(", ")}`, INDENT, INDENT) : []),
+  ];
+}
+
+function educationBlock(education: Education): string[] {
+  return [
+    "",
+    ...spread(education.school, educationWhen(education)),
+    ...hanging(educationDegree(education), INDENT, INDENT),
+    ...(education.coursework.length > 0
+      ? hanging(`Coursework: ${education.coursework.join(", ")}`, INDENT, INDENT)
+      : []),
+  ];
+}
+
+function titled(title: string, lines: string[]): string[] {
+  return lines.length > 0 ? [...heading(title), ...lines] : [];
+}
+
 export function toPlainText(r: Resume, now: YearMonth): string {
   const { profile, meta } = r;
   const contacts = [...profile.links.map((l) => l.value), profile.email, profile.linkedin].filter(
@@ -63,12 +90,14 @@ export function toPlainText(r: Resume, now: YearMonth): string {
     "=".repeat(WIDTH),
     ...heading("Summary"),
     ...profile.summary.flatMap((s) => wrap(s, WIDTH)),
-    ...heading("Experience"),
+    ...titled("Experience", r.career.flatMap(roleBlock)),
+    ...heading("Company projects"),
     ...companyProjects(r).flatMap((p) => projectBlock(r, p, now)),
-    ...heading("Projects"),
+    ...heading("Personal projects"),
     ...personalProjects(r).flatMap((p) => projectBlock(r, p, now)),
     ...heading("Skills"),
     ...skillGroups(r).flatMap((group) => hanging(group.names.join(", "), `${group.label}: `, INDENT)),
+    ...titled("Education", r.education.flatMap(educationBlock)),
     ...heading("Languages"),
     ...wrap(profile.languages.map((l) => `${l.name} (${l.level})`).join(" · "), WIDTH),
     ...heading("Machine-readable"),

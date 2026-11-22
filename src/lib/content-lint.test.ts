@@ -21,12 +21,16 @@ describe("lintResume", () => {
   it("passes the real resume and lists pending fields", () => {
     expect(lintResume(resume)).toEqual({
       errors: [],
-      pending: ["profile.email", "profile.linkedin", "education"],
+      pending: ["profile.email", "profile.linkedin", "career[1].period", "career[2].period"],
     });
   });
 
   it.each<[string, (r: Resume) => void, string]>([
-    ["duplicate slug", (r) => r.projects.push({ ...r.projects[0] }), "projects[7].slug"],
+    [
+      "duplicate slug",
+      (r) => r.projects.push({ ...r.projects[0] }),
+      `projects[${resume.projects.length}].slug`,
+    ],
     ["duplicate tech id", (r) => r.tech.push({ ...r.tech[0] }), `tech[${resume.tech.length}].id`],
     ["unknown category", (r) => (r.tech[0].category = "nope"), "tech[0].category"],
     ["unknown stack id", (r) => r.projects[0].stack.push("nope"), "projects[0].stack"],
@@ -50,6 +54,30 @@ describe("lintResume", () => {
       (r) => (galleryImage(r).src = "/elsewhere/shot.webp"),
       "projects[5].chapters[0].images[0].src",
     ],
+    ["empty competency", (r) => (r.competencies[0].items = []), "competencies[0].items"],
+    [
+      "role period out of order",
+      (r) => (r.career[0].period = { start: "2026-03", end: "2026-01" }),
+      "career[0].period",
+    ],
+    ["role shorter than a month", (r) => (r.career[2].months = 0), "career[2].months"],
+    ["role without a summary", (r) => (r.career[1].summary = ""), "career[1].summary"],
+    [
+      "non-https role link",
+      (r) => (r.career[2].links[0].href = "http://example.com"),
+      "career[2].links[0].href",
+    ],
+    [
+      "two current roles",
+      (r) => (r.career[1].period = { start: "2024-03", end: null }),
+      "career has 2 current roles",
+    ],
+    [
+      "bad graduation month",
+      (r) => (r.education[0].graduated = "2024-3" as YearMonth),
+      "education[0].graduated",
+    ],
+    ["unknown education project", (r) => (r.education[0].projects = ["nope"]), "education[0].projects[0]"],
     [
       "chapter image without a caption",
       (r) => (galleryImage(r).caption = ""),
@@ -59,6 +87,10 @@ describe("lintResume", () => {
     const { errors } = lintResume(withChange(change));
     expect(errors).toHaveLength(1);
     expect(errors[0]).toContain(path);
+  });
+
+  it("lists education as pending while it is empty", () => {
+    expect(lintResume(withChange((r) => (r.education = []))).pending).toContain("education");
   });
 
   it("ships every chapter image under public", () => {

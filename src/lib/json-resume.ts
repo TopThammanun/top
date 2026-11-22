@@ -1,7 +1,7 @@
-import type { LinkId, Period, Project, Resume } from "@/content/types";
+import type { Education, LinkId, Period, Project, Resume, Role } from "@/content/types";
 import { fullName } from "./identity";
 import { absoluteUrl, linkHref } from "./routes";
-import { companyProjects, personalProjects, skillGroups, techName } from "./selectors";
+import { skillGroups, techName } from "./selectors";
 
 const SCHEMA_URL = "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json";
 
@@ -16,11 +16,23 @@ interface JsonResumeDates {
   endDate?: string;
 }
 
-interface JsonResumeWork extends JsonResumeDates {
+interface JsonResumeWork extends Partial<JsonResumeDates> {
   name: string;
   position: string;
   summary: string;
-  highlights: string[];
+}
+
+interface JsonResumeEducation {
+  institution: string;
+  area: string;
+  endDate: string;
+  courses: string[];
+}
+
+interface JsonResumeAward {
+  title: string;
+  awarder: string;
+  date: string;
 }
 
 interface JsonResumeProject extends JsonResumeDates {
@@ -44,6 +56,8 @@ export interface JsonResume {
     profiles: JsonResumeProfile[];
   };
   work: JsonResumeWork[];
+  education: JsonResumeEducation[];
+  awards: JsonResumeAward[];
   projects: JsonResumeProject[];
   skills: { name: string; keywords: string[] }[];
   languages: { language: string; fluency: string }[];
@@ -68,6 +82,30 @@ function profiles(r: Resume): JsonResumeProfile[] {
   return linkedin
     ? [...social, { network: "LinkedIn", username: username(linkedin), url: linkedin }]
     : social;
+}
+
+function toWork(role: Role): JsonResumeWork {
+  return {
+    name: role.employer,
+    position: role.title,
+    summary: role.summary,
+    ...(role.period ? dates(role.period) : {}),
+  };
+}
+
+function toEducation(education: Education): JsonResumeEducation {
+  return {
+    institution: education.school,
+    area: education.program,
+    endDate: education.graduated,
+    courses: education.coursework,
+  };
+}
+
+function toAwards(education: Education): JsonResumeAward[] {
+  return education.honors
+    ? [{ title: education.honors, awarder: education.school, date: education.graduated }]
+    : [];
 }
 
 function toProject(r: Resume, p: Project): JsonResumeProject {
@@ -97,14 +135,10 @@ export function toJsonResume(r: Resume): JsonResume {
       location: { region: profile.location.label },
       profiles: profiles(r),
     },
-    work: companyProjects(r).map((p) => ({
-      name: p.name,
-      position: p.role,
-      summary: p.summary,
-      highlights: p.highlights,
-      ...dates(p.period),
-    })),
-    projects: personalProjects(r).map((p) => toProject(r, p)),
+    work: r.career.map(toWork),
+    education: r.education.map(toEducation),
+    awards: r.education.flatMap(toAwards),
+    projects: r.projects.map((p) => toProject(r, p)),
     skills: skillGroups(r).map((group) => ({ name: group.label, keywords: group.names })),
     languages: profile.languages.map((l) => ({ language: l.name, fluency: l.level })),
     meta: {

@@ -1,7 +1,9 @@
 import type { Period, YearMonth } from "@/content/types";
+import { weekdayIndex } from "./days";
 
 const MONTHS_PER_YEAR = 12;
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const WEEKDAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function parseYearMonth(value: YearMonth): { year: number; month: number } {
   const [year, month] = value.split("-").map(Number);
@@ -22,15 +24,33 @@ export function formatDuration(months: number): string {
 }
 
 export function formatPeriod(p: Period): string {
-  return `${p.start} → ${p.end ?? "now"}`;
+  return p.end === p.start ? p.start : `${p.start} → ${p.end ?? "now"}`;
+}
+
+export function monthName(month: number): string {
+  return MONTH_NAMES[month - 1];
 }
 
 export function formatMonth(value: YearMonth): string {
   const { year, month } = parseYearMonth(value);
-  return `${MONTH_NAMES[month - 1]} ${year}`;
+  return `${monthName(month)} ${year}`;
+}
+
+export function formatDate(day: string): string {
+  const [year, month, date] = day.split("-").map(Number);
+  return `${WEEKDAY_NAMES[weekdayIndex(day)]} ${date} ${monthName(month)} ${year}`;
+}
+
+export function formatNumber(value: number): string {
+  return value.toLocaleString("en-US");
+}
+
+export function formatQuantity(count: number, noun: string): string {
+  return `${formatNumber(count)} ${noun}${count === 1 ? "" : "s"}`;
 }
 
 export function formatFormalPeriod(p: Period): string {
+  if (p.end === p.start) return formatMonth(p.start);
   return `${formatMonth(p.start)} – ${p.end ? formatMonth(p.end) : "Present"}`;
 }
 
@@ -39,7 +59,7 @@ export function periodDuration(p: Period, now: YearMonth): string {
 }
 
 export function formatUsage(projects: number): string {
-  return `used in ${projects} project${projects === 1 ? "" : "s"}`;
+  return `used in ${formatQuantity(projects, "project")}`;
 }
 
 export function formatIndex(n: number): string {

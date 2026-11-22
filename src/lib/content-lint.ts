@@ -75,12 +75,35 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
   const heads = r.timeline.filter((event) => event.head).length;
   if (heads > 1) errors.push(`timeline has ${heads} head events, expected at most 1`);
 
-  r.education.forEach((e, i) => errors.push(...lintPeriod(e.period, `education[${i}].period`)));
+  r.competencies.forEach((competency, i) => {
+    if (competency.items.length === 0) errors.push(`competencies[${i}].items is empty`);
+  });
+
+  r.career.forEach((role, i) => {
+    const path = `career[${i}]`;
+    if (role.period) errors.push(...lintPeriod(role.period, `${path}.period`));
+    if (role.months !== null && role.months < 1) errors.push(`${path}.months must be at least 1`);
+    if (!role.summary) errors.push(`${path}.summary is empty`);
+    role.links.forEach((link, j) => errors.push(...lintHref(link.href, `${path}.links[${j}].href`)));
+  });
+  const current = r.career.filter((role) => role.period?.end === null).length;
+  if (current > 1) errors.push(`career has ${current} current roles, expected at most 1`);
+
+  r.education.forEach((education, i) => {
+    const path = `education[${i}]`;
+    if (!YEAR_MONTH.test(education.graduated)) {
+      errors.push(`${path}.graduated is not YYYY-MM: "${education.graduated}"`);
+    }
+    education.projects.forEach((slug, j) => {
+      if (!slugs.has(slug)) errors.push(`${path}.projects[${j}] is unknown: "${slug}"`);
+    });
+  });
 
   const pending = [
     r.profile.email === null && "profile.email",
     r.profile.linkedin === null && "profile.linkedin",
     r.education.length === 0 && "education",
+    ...r.career.map((role, i) => role.period === null && `career[${i}].period`),
   ].filter((field): field is string => typeof field === "string");
 
   return { errors, pending };

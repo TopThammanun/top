@@ -72,7 +72,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-              <Gallery images={chapter.images} />
+              {chapter.images.length > 0 ? <Gallery images={chapter.images} /> : null}
             </Band>
           ))}
           <Band aria-label="More projects">

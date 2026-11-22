@@ -11,7 +11,7 @@ describe("toLlmsTxt", () => {
 
   it("answers who this is in one quotable sentence", () => {
     expect(text).toContain(
-      "> Thammanun Aikhamdaeng, also known as Top Thammanun (topthammanun): Full-Stack Developer based in Thailand (UTC+7).",
+      "> Thammanun Aikhamdaeng, also known as Top Thammanun (topthammanun): Senior Full Stack Developer based in Thailand (UTC+7).",
     );
   });
 
@@ -24,9 +24,30 @@ describe("toLlmsTxt", () => {
     expect(text.indexOf("TCG Simulator")).toBeGreaterThan(personal);
   });
 
+  it("lists the career with the employer and what is known about each role", () => {
+    expect(text).toContain(
+      "- Senior Full Stack Developer, Chanwanich Company Limited (Mar 2026 – Present): Promoted in March 2026",
+    );
+    expect(text).toContain("- Junior Full Stack Developer, Chanwanich Company Limited: Worked on phase 1");
+    expect(text).toContain("- Intern Full Stack Developer, Chanwanich Company Limited (14 months): ");
+    expect(text).toContain("Technologies: React, .NET, Amazon Cognito, AWS services.");
+  });
+
+  it("lists education with the graduation month and coursework", () => {
+    expect(text).toContain(
+      "- Chiang Mai University: Digital Industry Integration (DII) · First-Class Honors. Graduated Mar 2024. Coursework: Programming Logical Thinking,",
+    );
+  });
+
+  it("puts the career before the projects", () => {
+    expect(text.indexOf("## Career")).toBeGreaterThan(0);
+    expect(text.indexOf("## Career")).toBeLessThan(text.indexOf("## Company projects"));
+  });
+
   it("lists skills by category", () => {
     expect(text).toContain("## Skills");
     expect(text).toContain("- Languages: C#, TypeScript, JavaScript, SQL, Python, GDScript");
+    expect(text).toContain("- Database performance: SQL optimisation, Database indexing,");
   });
 
   it("links the machine-readable routes", () => {

@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { activity } from "@/content/activity";
 import { resume } from "@/content/resume";
+import { careerSteps } from "@/lib/career";
+import { buildCalendar, describeSummary } from "@/lib/commit-calendar";
 import { AI_CRAWLERS } from "@/lib/crawlers";
+import { formatDate, formatQuantity } from "@/lib/format";
 import { fullName } from "@/lib/identity";
 import { absoluteUrl, MACHINE_ROUTES, projectPath } from "@/lib/routes";
 import { SECTIONS } from "@/lib/sections";
@@ -11,6 +15,12 @@ import { distanceFromTop, gotoHydrated } from "./helpers";
 const LINKEDIN_RESUME_MAX_BYTES = 2 * 1024 * 1024;
 const GALLERY_PROJECT = personalProjects(resume).find((project) => projectImages(project).length > 1);
 if (!GALLERY_PROJECT) throw new Error("expected a personal project with a gallery");
+const TEXT_PROJECT = personalProjects(resume).find(
+  (project) => project.chapters && projectImages(project).length === 0,
+);
+if (!TEXT_PROJECT) throw new Error("expected a personal project with a write-up and no screenshots");
+const CALENDAR = buildCalendar(activity);
+const BUSY_WEEK = CALENDAR.weeks.findIndex((week) => (week[0]?.total ?? 0) > 0);
 
 test.describe("home page", () => {
   test("renders every section and the name", async ({ page }) => {
@@ -34,6 +44,49 @@ test.describe("home page", () => {
     const mascot = page.waitForResponse((response) => response.url().endsWith("/mascot.png"));
     await page.goto("/");
     expect((await mascot).ok()).toBe(true);
+  });
+
+  test("shows the commit calendar and reads out the day under the pointer", async ({ page }) => {
+    const day = CALENDAR.weeks[BUSY_WEEK][0];
+    if (!day) throw new Error("expected a Monday with commits");
+    await gotoHydrated(page);
+    const hero = page.locator("section#home");
+    const calendar = hero.getByRole("img", { name: /^Commit calendar/ });
+    await expect(calendar).toHaveAttribute("aria-label", new RegExp(`${describeSummary(CALENDAR.summary)}$`));
+    await expect(calendar.locator("circle")).toHaveCount(CALENDAR.weeks.flat().filter(Boolean).length);
+    await expect(
+      hero.getByText(formatQuantity(CALENDAR.summary.total, "commit"), { exact: true }),
+    ).toBeVisible();
+
+    const column = calendar.locator(`[data-week="${BUSY_WEEK}"] svg`);
+    const box = await column.boundingBox();
+    if (!box) throw new Error("expected the week column to be laid out");
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 14);
+    await expect(hero.getByText(formatDate(day.date), { exact: true })).toBeVisible();
+    await expect(hero.getByText(formatQuantity(day.total, "commit"), { exact: true })).toBeVisible();
+    await page.mouse.move(0, 0);
+    await expect(hero.getByText(formatDate(day.date), { exact: true })).toBeHidden();
+  });
+
+  test("lists the career path from education to the current role", async ({ page }) => {
+    await page.goto("/");
+    const steps = page.locator("section#log ol").first().getByRole("listitem");
+    const expected = careerSteps(resume);
+    await expect(steps.getByRole("heading", { level: 4 })).toHaveText(expected.map((step) => step.title));
+    await expect(steps.last().getByText("now", { exact: true })).toBeVisible();
+    await steps.first().getByRole("link", { name: TEXT_PROJECT.name }).click();
+    await expect(page).toHaveURL(new RegExp(`${projectPath(TEXT_PROJECT.slug)}$`));
+  });
+
+  test("lists the practice skills beside the technologies", async ({ page }) => {
+    await page.goto("/");
+    const skills = page.locator("section#stack");
+    for (const competency of resume.competencies) {
+      await expect(skills.getByRole("heading", { name: competency.label })).toHaveCount(1);
+      await expect(skills.getByRole("list", { name: competency.label }).getByRole("listitem")).toHaveText(
+        competency.items,
+      );
+    }
   });
 
   test("palette opens with Control+K and jumps to Work", async ({ page }) => {
@@ -149,6 +202,18 @@ test.describe("project page", () => {
     await expect(viewer.getByText(second.caption)).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(viewer).toBeHidden();
+  });
+
+  test("shows a write-up without screenshots and links its repositories", async ({ page }) => {
+    await page.goto(projectPath(TEXT_PROJECT.slug));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(TEXT_PROJECT.name);
+    for (const chapter of TEXT_PROJECT.chapters ?? []) {
+      await expect(page.getByRole("heading", { name: chapter.title })).toBeVisible();
+    }
+    for (const link of TEXT_PROJECT.links ?? []) {
+      await expect(page.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
+    }
+    await expect(page.locator("main figure")).toHaveCount(0);
   });
 
   test("has no horizontal scroll at 360px and no console errors", async ({ page }) => {

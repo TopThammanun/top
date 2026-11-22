@@ -1,6 +1,7 @@
 import { Document, Font, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import type { ReactNode } from "react";
-import type { Period, Project, Resume } from "@/content/types";
+import type { Education, Project, Resume, Role } from "@/content/types";
+import { educationDegree, educationWhen, roleWhen } from "@/lib/career";
 import { profileEndpoints } from "@/lib/endpoints";
 import { formatFormalPeriod } from "@/lib/format";
 import { fullName } from "@/lib/identity";
@@ -93,62 +94,74 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function EntryHead({ title, subtitle, period }: { title: string; subtitle: string; period: Period }) {
+function EntryHead({ title, subtitle, aside }: { title: string; subtitle: string; aside: string | null }) {
   return (
     <View>
       <View style={styles.entryHead}>
         <Text style={styles.entryTitle}>{title}</Text>
-        <Text style={styles.entryPeriod}>{formatFormalPeriod(period)}</Text>
+        {aside ? <Text style={styles.entryPeriod}>{aside}</Text> : null}
       </View>
       <Text style={styles.entrySubtitle}>{subtitle}</Text>
     </View>
   );
 }
 
-interface EntryProps {
-  project: Project;
-  resume: Resume;
-}
-
-function Technologies({ project, resume }: EntryProps) {
+function Labelled({ label, items }: { label: string; items: string[] }) {
   return (
     <Text style={styles.technologies}>
-      <Text style={styles.label}>Technologies: </Text>
-      {project.stack.map((id) => techName(resume, id)).join(", ")}
+      <Text style={styles.label}>{label}: </Text>
+      {items.join(", ")}
     </Text>
   );
 }
 
-function ExperienceEntry({ project, resume }: EntryProps) {
+function RoleEntry({ role }: { role: Role }) {
   return (
     <View style={styles.entry} wrap={false}>
-      <EntryHead
-        title={project.role}
-        subtitle={`${project.name} · ${project.domain}`}
-        period={project.period}
-      />
-      <Text>{project.summary}</Text>
-      {project.highlights.map((highlight) => (
-        <View key={highlight} style={styles.bullet}>
-          <Text style={styles.bulletMark}>•</Text>
-          <RichText text={highlight} />
-        </View>
-      ))}
-      <Technologies project={project} resume={resume} />
+      <EntryHead title={role.title} subtitle={role.employer} aside={roleWhen(role)} />
+      <Text>{role.summary}</Text>
+      {role.stack.length > 0 ? <Labelled label="Technologies" items={role.stack} /> : null}
     </View>
   );
 }
 
-function ProjectEntry({ project, resume }: EntryProps) {
+interface ProjectEntryProps {
+  project: Project;
+  resume: Resume;
+  detailed?: boolean;
+}
+
+function ProjectEntry({ project, resume, detailed = false }: ProjectEntryProps) {
   return (
     <View style={styles.entry} wrap={false}>
       <EntryHead
         title={project.name}
         subtitle={`${project.role} · ${project.domain}`}
-        period={project.period}
+        aside={formatFormalPeriod(project.period)}
       />
       <Text>{project.summary}</Text>
-      <Technologies project={project} resume={resume} />
+      {detailed
+        ? project.highlights.map((highlight) => (
+            <View key={highlight} style={styles.bullet}>
+              <Text style={styles.bulletMark}>•</Text>
+              <RichText text={highlight} />
+            </View>
+          ))
+        : null}
+      <Labelled label="Technologies" items={project.stack.map((id) => techName(resume, id))} />
+    </View>
+  );
+}
+
+function EducationEntry({ education }: { education: Education }) {
+  return (
+    <View style={styles.entry} wrap={false}>
+      <EntryHead
+        title={education.school}
+        subtitle={educationDegree(education)}
+        aside={educationWhen(education)}
+      />
+      {education.coursework.length > 0 ? <Labelled label="Coursework" items={education.coursework} /> : null}
     </View>
   );
 }
@@ -189,13 +202,21 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
           <Text>{profile.summary.join(" ")}</Text>
         </Section>
 
-        <Section title="Professional Experience">
+        {resume.career.length > 0 ? (
+          <Section title="Professional Experience">
+            {resume.career.map((role) => (
+              <RoleEntry key={role.id} role={role} />
+            ))}
+          </Section>
+        ) : null}
+
+        <Section title="Company Projects">
           {companyProjects(resume).map((project) => (
-            <ExperienceEntry key={project.slug} project={project} resume={resume} />
+            <ProjectEntry key={project.slug} project={project} resume={resume} detailed />
           ))}
         </Section>
 
-        <Section title="Selected Projects">
+        <Section title="Personal Projects">
           {personalProjects(resume).map((project) => (
             <ProjectEntry key={project.slug} project={project} resume={resume} />
           ))}
@@ -213,9 +234,7 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
         {resume.education.length > 0 ? (
           <Section title="Education">
             {resume.education.map((education) => (
-              <View key={education.school} style={styles.entry} wrap={false}>
-                <EntryHead title={education.school} subtitle={education.degree} period={education.period} />
-              </View>
+              <EducationEntry key={education.school} education={education} />
             ))}
           </Section>
         ) : null}
