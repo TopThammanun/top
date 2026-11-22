@@ -293,3 +293,27 @@ Where the build differs from the task text above, and why:
 - **Fonts:** only Geist is preloaded; JetBrains Mono and Prompt load on use.
 - **`"type": "module"`** in `package.json`, because `@react-pdf/renderer`'s hyphenation package is ESM only.
 - **Hero meta keys** use `--fg-muted`, since `--fg-faint` fails AA at that size.
+
+## Changes after the plan
+
+Requested by the owner once the seven tasks were done. These replace the matching task text above;
+`docs/DESIGN.md` describes the current behaviour.
+
+- **Mascot instead of the `TOP` mask.** The hero dot field samples `public/mascot.png` (the v1 mascot, trimmed and
+  converted to white on transparent) into a 64-column halftone that blinks and reacts to the pointer. It is
+  drawn in one frame on load: an animated load-in cost about two Lighthouse Performance points.
+  The text mask and the `public/portrait.jpg` hook are gone. Pure math lives in `src/lib/dot-field.ts`, canvas
+  helpers in `hero/dot-canvas.ts`, the art's size and eye positions in `hero/mascot.ts`.
+- **Real name.** `profile.givenName` and `profile.familyName` replace `name` and the nullable `fullName`;
+  `src/lib/identity.ts` builds the full name, the alternate names and the download file name.
+- **Search.** `src/lib/seo.ts` builds the title, description, keywords and JSON-LD (`Person`, `WebSite`,
+  `ProfilePage`). The layout adds authors, robots directives, `profile` Open Graph fields and an optional
+  `GOOGLE_SITE_VERIFICATION` token. The Open Graph image shows the full name and mascot.
+- **AI search.** `robots.ts` names the AI crawlers from `src/lib/crawlers.ts`, the sitemap and the head's
+  alternate links list every machine-readable route, and `/llms.txt` gained a one-sentence identity line and a
+  skills section. `BING_SITE_VERIFICATION` is the optional token for Bing Webmaster Tools.
+- **Formal PDF.** Times, black on white, centred header, `Professional Summary`, `Professional Experience`,
+  `Selected Projects`, `Technical Skills`, `Education` (when present) and `Languages`, month-name dates, a
+  `Technologies` line per entry and page numbers. `profile.summary` is written without first-person pronouns.
+- **Site URL.** `meta.siteUrl` reads `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links, the sitemap and the
+  PDF follow whichever production domain the Vercel project has.

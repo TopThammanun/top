@@ -1,9 +1,9 @@
 # topthammanun.com v2
 
-Web resume for Top Thammanun, built as a small documented system: projects are indexed entries, the career is
-a git graph, skills are a dependency matrix and contact details are endpoints. The same content is served to
-people (the page), parsers (`/resume.json`, JSON Resume v1.0.0) and agents (`/llms.txt`, `/resume.txt`), plus a
-generated `/resume.pdf`.
+Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`), built as a small documented system:
+projects are indexed entries, the career is a git graph, skills are a dependency matrix and contact details are
+endpoints. The same content is served to people (the page), parsers (`/resume.json`, JSON Resume v1.0.0) and
+agents (`/llms.txt`, `/resume.txt`), plus a formal `/resume.pdf` for job applications.
 
 Design spec: [`docs/DESIGN.md`](docs/DESIGN.md). Implementation plan: [`docs/PLAN.md`](docs/PLAN.md).
 
@@ -32,24 +32,41 @@ Run `pnpm exec playwright install chromium` once before the first `pnpm e2e`.
 
 - `src/content/resume.ts` is the only source of facts. Every section, route and the PDF read from it.
   `src/lib/content-lint.ts` checks it (run by `pnpm test`).
-- `src/lib/` holds pure logic with a test beside each file.
+- `src/lib/` holds pure logic with a test beside each file. Names come from `identity.ts`, search metadata and
+  JSON-LD from `seo.ts`, the AI crawler list from `crawlers.ts`.
 - `src/components/ui/` holds shared primitives, `src/components/sections/<name>/` one folder per page
   section, `src/components/shell/` the dock, command palette, shortcuts and theme.
 - `src/app/` holds the page, the machine-readable routes, sitemap, robots and the Open Graph image.
 - `src/pdf/ResumeDocument.tsx` and `scripts/build-pdf.tsx` produce the PDF.
+- `public/mascot.png` is the hero mascot (white on transparent, 512×448). The dot field samples it; its size
+  and eye positions are in `src/components/sections/hero/mascot.ts`.
 
 ## Pending content
 
 These fields are empty on purpose and render nothing until they are filled in `src/content/resume.ts`:
 
-- `profile.fullName`
 - `profile.email`
 - `profile.linkedin`
 - `education`
-- a portrait: drop `public/portrait.jpg` in and the hero dot field uses it instead of the `TOP` mask
 
-Client names are intentionally left out. Commit counts are rounded figures from local clones on
+Client and employer names are intentionally left out. Commit counts are rounded figures from local clones on
 `meta.statsAsOf`.
+
+## Search and AI crawlers
+
+- The full name is the `h1`, leads the title and description, and is the PDF's title and author. JSON-LD
+  describes the `Person` (given name, family name, alternate names, profiles), the `WebSite` and the
+  `ProfilePage`.
+- `/robots.txt` allows every crawler and names the AI search and assistant agents explicitly
+  (`src/lib/crawlers.ts`). `/sitemap.xml` lists the page and the machine-readable routes, which are also
+  linked from the page head as alternates. `/llms.txt` gives agents a one-sentence answer to who this is,
+  then work, skills and contact links.
+- `meta.siteUrl` follows the deployment: it reads `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links, the
+  sitemap and the PDF use whichever production domain the Vercel project has. Without it the fallback is
+  `www.topthammanun.com`.
+- Optional environment variables: `GOOGLE_SITE_VERIFICATION` (Google Search Console) and
+  `BING_SITE_VERIFICATION` (Bing Webmaster Tools, which also feeds ChatGPT search and Copilot). Each adds its
+  verification meta tag on the next build.
 
 ## Keyboard
 
@@ -63,15 +80,16 @@ Lighthouse 12, mobile, production build served locally (`pnpm build && pnpm star
 
 | Category       | Score                       |
 | -------------- | --------------------------- |
-| Performance    | 92 (median; range 85 to 92) |
+| Performance    | 91 (median; range 86 to 92) |
 | Accessibility  | 100                         |
 | Best Practices | 100                         |
 | SEO            | 100                         |
 
-`pnpm e2e` covers the sections, palette, shortcuts, theme persistence, the accordion, no horizontal scroll at
-360px, no console errors, the machine-readable routes and an axe scan in both themes.
+`pnpm e2e` covers the sections, the name and structured data in the head, the mascot, palette, shortcuts,
+theme persistence, the accordion, no horizontal scroll at 360px, no console errors, the machine-readable
+routes, the sitemap, the robots rules and an axe scan in both themes.
 
 ## Deploy
 
-Import the repository in Vercel with the default Next.js settings. `pnpm build` generates the PDF before
-`next build`, and the build stamp in the footer reads `VERCEL_GIT_COMMIT_SHA`.
+The repository is connected to a Vercel project, so a push to `main` deploys to production. `pnpm build`
+generates the PDF before `next build`, and the build stamp in the footer reads `VERCEL_GIT_COMMIT_SHA`.

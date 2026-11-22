@@ -1,6 +1,7 @@
 # topthammanun-resume
 
-Web resume for Top Thammanun (topthammanun.com v2). Spec: `docs/DESIGN.md`. Plan: `docs/PLAN.md`.
+Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanun.com v2). Spec:
+`docs/DESIGN.md`. Plan: `docs/PLAN.md`.
 
 ## Rules
 
@@ -11,6 +12,9 @@ Web resume for Top Thammanun (topthammanun.com v2). Spec: `docs/DESIGN.md`. Plan
 - TypeScript strict, no `any`. No explanatory comments in code.
 - Commits: one short conventional subject line, no body, no trailers. Push only when asked.
 - No analytics, cookies or runtime third-party requests.
+- Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
+  resume for job applications: keep its copy free of first-person pronouns.
+- `.next/dev` can serve stale CSS after `globals.css` changes; delete it if a token edit does not show up.
 
 ## Components
 
@@ -31,4 +35,5 @@ Web resume for Top Thammanun (topthammanun.com v2). Spec: `docs/DESIGN.md`. Plan
 
 ## Git
 
-Branch `main`, remote `origin` = `github.com/TopThammanun/top`. The v1 site lives only in the old local clone `C:\Work\top`.
+Branch `main`, remote `origin` = `github.com/TopThammanun/top`. The remote is connected to Vercel, so a push to
+`main` deploys to production. The v1 site lives only in the old local clone `C:\Work\top`.

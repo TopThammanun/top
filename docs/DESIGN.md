@@ -1,8 +1,10 @@
 # topthammanun.com v2 — Design Spec
 
-Web resume for Top Thammanun. Minimal, geek/nerd, Awwwards-level craft, Mobbin-style product UI patterns.
+Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`). Minimal, geek/nerd, Awwwards-level craft,
+Mobbin-style product UI patterns.
 Mood reference only: https://www.poulo.site/ (floating dock, hairline frame, table-like journey). Do not clone it:
-no illustrated avatar, no top dock, no logo bubbles, no monochrome palette, no chat widget.
+no top dock, no logo bubbles, no monochrome palette, no chat widget. The hero carries the owner's own mascot
+(from the v1 site), drawn as a dot field rather than as an illustration.
 
 Concept: **the resume as a well-documented system**. Projects are indexed entries, the career is a git graph,
 skills are a dependency matrix, contact details are endpoints, and the same data is served to humans, ATS
@@ -65,15 +67,17 @@ Every section has `id`, a header row `NN  LABEL ............ meta` (index in gol
 meta right-aligned), and is a landmark with an accessible name.
 
 ### 00 Hero (`#home`)
-- Left (7/12): mono path label `~/topthammanun`; display name `Top Thammanun`; role line that cycles
-  `profile.roles` with a scramble/decode effect (every 3.2s, 600ms decode); tagline; buttons
-  `View work`, `Download PDF`, and a `Ctrl K` / `⌘ K` hint button that opens the palette.
-- Meta table in mono, key column muted: `now`, `loc` (`Thailand · UTC+7`), `time` (live `HH:mm:ss` in
-  Asia/Bangkok, rendered only after mount), `focus` (`.NET · TypeScript · Next.js`).
-- Right (5/12): **dot field**. A canvas grid of small dots; dots inside a mask drawn from the text `TOP`
-  are brighter; the pointer brightens nearby dots to gold and pushes them slightly. If
-  `public/portrait.jpg` exists it is used as the mask instead (luminance to dot size). Static render under
-  reduced motion. Hidden from assistive tech. On mobile it sits above the text at 40vh max.
+- Left (7/12): mono path label `~/topthammanun`; the full name `Thammanun Aikhamdaeng` as the `h1`; role line
+  that cycles `profile.roles` with a scramble/decode effect (every 3.2s, 600ms decode); tagline; buttons
+  `View work`, `Download PDF` (saved as `Thammanun-Aikhamdaeng-Resume.pdf`), and a `Ctrl K` / `⌘ K` hint
+  button that opens the palette.
+- Meta table in mono, key column muted: `aka` (`Top Thammanun`), `now`, `loc` (`Thailand · UTC+7`), `time`
+  (live `HH:mm:ss` in Asia/Bangkok, rendered only after mount), `focus` (`.NET · TypeScript · Next.js`).
+- Right (5/12): **dot field mascot**. A canvas grid of 64 columns of dots; `public/mascot.png` (white on
+  transparent) is sampled per cell and its coverage sets each dot's size, so the mascot reads as a halftone.
+  The mascot blinks every few seconds, and the pointer brightens nearby dots to gold and pushes them
+  slightly. Static render under reduced motion. Hidden from assistive tech. On mobile it
+  sits above the text at 40vh max.
 - No availability claim. Nothing is shown for `null` profile fields.
 
 ### 01 Work (`#work`)
@@ -142,15 +146,31 @@ All generated from `src/content/resume.ts` and prerendered at build.
 | `/resume.json` | JSON Resume schema v1.0.0 (`basics`, `work` from client projects, `projects` from the rest, `skills` by category, `languages`, `meta`) |
 | `/resume.txt` | plain text, lines ≤ 80 columns |
 | `/llms.txt` | short markdown summary with links to the other routes |
-| `/resume.pdf` | one or two A4 pages via `@react-pdf/renderer`, built-in Helvetica/Courier, real text, written to `public/` before `next build` |
-| `/sitemap.xml`, `/robots.txt` | standard |
-| Open Graph image | 1200×630, `#1c1740`, name, title, gold index mark |
+| `/resume.pdf` | formal resume for job applications: two A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, month-name dates, page numbers, real text, written to `public/` before `next build` |
+| `/sitemap.xml` | the page and the four routes above |
+| `/robots.txt` | allow all, with the AI search and assistant agents named explicitly |
+| Open Graph image | 1200×630, `#1c1740`, full name, title, mascot, gold index mark |
+
+### Search
+
+The names people search for are `Thammanun Aikhamdaeng`, `topthammanun` and `Top Thammanun`. The full name is the
+`h1`, leads the `<title>` (`Thammanun Aikhamdaeng (topthammanun) — Full-Stack Developer`) and the description,
+and is the PDF's title and author. JSON-LD on the page describes a `Person` (with `givenName`, `familyName`,
+`alternateName`, `sameAs`), the `WebSite` and the `ProfilePage`. Open Graph uses the `profile` type with first
+name, last name and username. Text and data come from `src/lib/seo.ts` and `src/lib/identity.ts`.
+
+For AI search, `/robots.txt` welcomes the crawlers listed in `src/lib/crawlers.ts` (OpenAI, Anthropic, Perplexity,
+Google, Apple, Amazon, DuckDuckGo, Mistral, Meta, Common Crawl), the page head links the machine-readable routes
+as alternates, and `/llms.txt` opens with one quotable sentence saying who this is, followed by the summary, work,
+skills and contact links. Every section is in the prerendered HTML, so nothing depends on running JavaScript.
 
 ## 5. Content rules
 
 - `src/content/resume.ts` is the only source of facts. Do not add facts, numbers, employers, dates or client
   names that are not in it. `null` fields and empty arrays mean "not provided yet": render nothing for them.
-- Pending owner input: `profile.fullName`, `profile.email`, `profile.linkedin`, `education`, a portrait.
+- Pending owner input: `profile.email`, `profile.linkedin`, `education`.
+- `meta.siteUrl` follows the deployment: Vercel's production domain when it is set, otherwise
+  `www.topthammanun.com`.
 - Client names are intentionally absent. Commit counts are rounded figures from local clones on `meta.statsAsOf`.
 - English only. Keep copy plain; no marketing adjectives.
 
