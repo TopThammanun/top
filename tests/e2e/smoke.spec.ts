@@ -15,10 +15,6 @@ import { distanceFromTop, gotoHydrated } from "./helpers";
 const LINKEDIN_RESUME_MAX_BYTES = 2 * 1024 * 1024;
 const GALLERY_PROJECT = personalProjects(resume).find((project) => projectImages(project).length > 1);
 if (!GALLERY_PROJECT) throw new Error("expected a personal project with a gallery");
-const TEXT_PROJECT = personalProjects(resume).find(
-  (project) => project.chapters && projectImages(project).length === 0,
-);
-if (!TEXT_PROJECT) throw new Error("expected a personal project with a write-up and no screenshots");
 const CALENDAR = buildCalendar(activity);
 const BUSY_WEEK = CALENDAR.weeks.findIndex((week) => (week[0]?.total ?? 0) > 0);
 
@@ -74,8 +70,9 @@ test.describe("home page", () => {
     const expected = careerSteps(resume);
     await expect(steps.getByRole("heading", { level: 4 })).toHaveText(expected.map((step) => step.title));
     await expect(steps.last().getByText("now", { exact: true })).toBeVisible();
-    await steps.first().getByRole("link", { name: TEXT_PROJECT.name }).click();
-    await expect(page).toHaveURL(new RegExp(`${projectPath(TEXT_PROJECT.slug)}$`));
+    const [studentProject] = expected[0].projects;
+    await steps.first().getByRole("link", { name: studentProject.name }).click();
+    await expect(page).toHaveURL(new RegExp(`${projectPath(studentProject.slug)}$`));
   });
 
   test("lists the practice skills beside the technologies", async ({ page }) => {
@@ -126,6 +123,18 @@ test.describe("home page", () => {
     await expect(html).toHaveAttribute("data-theme", "light");
     await page.reload();
     await expect(html).toHaveAttribute("data-theme", "light");
+  });
+
+  test("shows personal projects in content order, each with a cover image", async ({ page }) => {
+    await page.goto("/");
+    const cards = page.locator("section#personal > div > ul > li");
+    const projects = personalProjects(resume);
+    await expect(cards.getByRole("heading", { level: 3 })).toHaveText(
+      projects.map((project) => project.name),
+    );
+    for (const [i, project] of projects.entries()) {
+      await expect(cards.nth(i).getByRole("img")).toHaveAttribute("src", projectImages(project)[0].src);
+    }
   });
 
   test("keeps company work and personal projects in separate sections", async ({ page }) => {
@@ -184,18 +193,18 @@ test.describe("home page", () => {
 test.describe("project page", () => {
   const path = projectPath(GALLERY_PROJECT.slug);
 
-  test("shows the write-up with every screenshot and its own canonical url", async ({ page }) => {
+  test("shows the write-up with every image and its own canonical url", async ({ page }) => {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(GALLERY_PROJECT.name);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", absoluteUrl(resume, path));
     await expect(page.locator("main figure img")).toHaveCount(projectImages(GALLERY_PROJECT).length);
   });
 
-  test("opens a screenshot in the viewer and steps through it with the keyboard", async ({ page }) => {
+  test("opens an image in the viewer and steps through it with the keyboard", async ({ page }) => {
     const [first, second] = projectImages(GALLERY_PROJECT);
     await page.goto(path, { waitUntil: "networkidle" });
-    await page.getByRole("button", { name: `Enlarge screenshot: ${first.caption}` }).click();
-    const viewer = page.getByRole("dialog", { name: "Screenshot viewer" });
+    await page.getByRole("button", { name: `Enlarge image: ${first.caption}` }).click();
+    const viewer = page.getByRole("dialog", { name: "Image viewer" });
     await expect(viewer).toBeVisible();
     await expect(viewer.getByText(first.caption)).toBeVisible();
     await page.keyboard.press("ArrowRight");
@@ -204,17 +213,31 @@ test.describe("project page", () => {
     await expect(viewer).toBeHidden();
   });
 
-  test("shows a write-up without screenshots and links its repositories", async ({ page }) => {
-    await page.goto(projectPath(TEXT_PROJECT.slug));
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(TEXT_PROJECT.name);
-    for (const chapter of TEXT_PROJECT.chapters ?? []) {
-      await expect(page.getByRole("heading", { name: chapter.title })).toBeVisible();
-    }
-    for (const link of TEXT_PROJECT.links ?? []) {
-      await expect(page.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
-    }
-    await expect(page.locator("main figure")).toHaveCount(0);
-  });
+  for (const project of personalProjects(resume)) {
+    test(`${project.slug} has its chapters, images and links`, async ({ page }) => {
+      await page.goto(projectPath(project.slug));
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(project.name);
+      for (const chapter of project.chapters ?? []) {
+        await expect(page.getByRole("heading", { name: chapter.title })).toBeVisible();
+      }
+      for (const link of project.links ?? []) {
+        await expect(page.getByRole("link", { name: link.label })).toHaveAttribute("href", link.href);
+      }
+      const images = page.locator("main figure img");
+      await expect(images).toHaveCount(projectImages(project).length);
+      const broken = await images.evaluateAll((nodes) =>
+        Promise.all(
+          nodes.map(async (node) => {
+            const image = node as HTMLImageElement;
+            image.loading = "eager";
+            await image.decode().catch(() => undefined);
+            return image.naturalWidth === 0 ? image.src : null;
+          }),
+        ),
+      );
+      expect(broken.filter(Boolean)).toEqual([]);
+    });
+  }
 
   test("has no horizontal scroll at 360px and no console errors", async ({ page }) => {
     const errors: string[] = [];

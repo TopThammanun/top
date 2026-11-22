@@ -29,7 +29,7 @@ describe("techUsage", () => {
     const usage = techUsage(withUnusedTech);
     expect(Object.keys(usage)).toHaveLength(withUnusedTech.tech.length);
     expect(usage.postgresql).toBe(2);
-    expect(usage.typescript).toBe(5);
+    expect(usage.typescript).toBe(6);
     expect(usage.unused).toBe(0);
   });
 });
@@ -38,11 +38,13 @@ describe("project groups", () => {
   it("treats client work as company projects and the rest as personal", () => {
     expect(companyProjects(resume).map((p) => p.slug)).toEqual(["epermit", "abc", "tch"]);
     expect(personalProjects(resume).map((p) => p.slug)).toEqual([
-      "agent-tooling",
       "tcg-simulator",
-      "godot-games",
+      "agent-tooling",
       "site-v1",
+      "godot-games",
       "ibrand",
+      "tep-auction",
+      "backend-patterns",
     ]);
     expect(projectGroup(resume.projects[0])).toBe("company");
   });

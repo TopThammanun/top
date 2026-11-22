@@ -1,4 +1,5 @@
 import type { Period, Resume } from "@/content/types";
+import { projectGroup, projectImages } from "./selectors";
 
 const YEAR_MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
 
@@ -57,6 +58,9 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
       if (!techIds.has(id)) errors.push(`${path}.stack[${j}] is an unknown tech: "${id}"`);
     });
     p.links?.forEach((link, j) => errors.push(...lintHref(link.href, `${path}.links[${j}].href`)));
+    if (projectGroup(p) === "personal" && projectImages(p).length === 0) {
+      errors.push(`${path} is a personal project without an image`);
+    }
     p.chapters?.forEach((chapter, j) => {
       if (chapter.body.length === 0) errors.push(`${path}.chapters[${j}].body is empty`);
       chapter.images.forEach((image, k) => {

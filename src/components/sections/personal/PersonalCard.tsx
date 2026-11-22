@@ -10,7 +10,7 @@ import type { Project, ProjectImage } from "@/content/types";
 import { projectAnchor } from "@/lib/anchors";
 import { buildMonth } from "@/lib/build-info";
 import { cx } from "@/lib/cx";
-import { formatFormalPeriod, periodDuration } from "@/lib/format";
+import { formatFormalPeriod, formatQuantity, periodDuration } from "@/lib/format";
 import { projectPath } from "@/lib/routes";
 import { techName } from "@/lib/selectors";
 
@@ -18,22 +18,23 @@ interface PersonalCardProps {
   project: Project;
   images: ProjectImage[];
   order: number;
+  featured: boolean;
 }
 
-export function PersonalCard({ project, images, order }: PersonalCardProps) {
+export function PersonalCard({ project, images, order, featured }: PersonalCardProps) {
   const [cover] = images;
 
   return (
     <TechFocus
       stack={project.stack}
       id={projectAnchor(project.slug)}
-      className={cx("group scroll-mt-6", cover && "md:col-span-2")}
+      className={cx("group scroll-mt-6", featured && "md:col-span-2 lg:col-span-3")}
     >
       <Reveal
         order={order}
         className={cx(
-          "relative h-full rounded-xl border border-line p-5 transition-colors duration-150 group-hover:border-line-strong group-data-[focus=match]:border-violet sm:p-6",
-          cover && "grid gap-6 md:grid-cols-2 md:items-center md:gap-8",
+          "relative flex h-full flex-col gap-5 rounded-xl border border-line p-5 transition-colors duration-150 group-hover:border-line-strong group-data-[focus=match]:border-violet sm:p-6",
+          featured && "md:grid md:grid-cols-2 md:items-center md:gap-8",
         )}
       >
         {cover ? (
@@ -46,7 +47,7 @@ export function PersonalCard({ project, images, order }: PersonalCardProps) {
             className="h-auto w-full rounded-lg border border-line"
           />
         ) : null}
-        <div className="flex h-full flex-col">
+        <div className="flex flex-1 flex-col">
           <p className="flex items-center gap-2 mono-label text-fg-muted">
             <GroupDot group="personal" />
             {project.domain}
@@ -66,7 +67,9 @@ export function PersonalCard({ project, images, order }: PersonalCardProps) {
           <p className="mt-auto flex items-center gap-2 pt-6 font-mono text-sm text-fg-muted transition-colors duration-150 group-hover:text-fg">
             View project
             <ArrowRight aria-hidden className="size-4" />
-            {images.length > 0 ? <span className="ml-auto">{images.length} screenshots</span> : null}
+            {images.length > 0 ? (
+              <span className="ml-auto">{formatQuantity(images.length, "image")}</span>
+            ) : null}
           </p>
         </div>
       </Reveal>

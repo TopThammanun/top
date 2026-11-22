@@ -26,7 +26,7 @@ export function Gallery({ images }: { images: ProjectImage[] }) {
             <figure>
               <button
                 type="button"
-                aria-label={`Enlarge screenshot: ${image.caption}`}
+                aria-label={`Enlarge image: ${image.caption}`}
                 onClick={() => open(i)}
                 className="block w-full cursor-zoom-in overflow-hidden rounded-xl border border-line bg-bg-sunken transition-colors duration-150 hover:border-line-strong"
               >
@@ -46,7 +46,7 @@ export function Gallery({ images }: { images: ProjectImage[] }) {
       </ul>
       <dialog
         ref={dialogRef}
-        aria-label="Screenshot viewer"
+        aria-label="Image viewer"
         onClose={() => setIndex(null)}
         onClick={(event) => {
           if (event.target === event.currentTarget) event.currentTarget.close();
@@ -73,10 +73,10 @@ export function Gallery({ images }: { images: ProjectImage[] }) {
                 <span className="mr-2 font-mono text-xs text-fg-muted">
                   {index + 1} / {images.length}
                 </span>
-                <Button variant="icon" aria-label="Previous screenshot" onClick={() => step(-1)}>
+                <Button variant="icon" aria-label="Previous image" onClick={() => step(-1)}>
                   <ChevronLeft aria-hidden className="size-4" />
                 </Button>
-                <Button variant="icon" aria-label="Next screenshot" onClick={() => step(1)}>
+                <Button variant="icon" aria-label="Next image" onClick={() => step(1)}>
                   <ChevronRight aria-hidden className="size-4" />
                 </Button>
                 <Button variant="icon" aria-label="Close" onClick={() => dialogRef.current?.close()}>

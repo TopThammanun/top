@@ -49,9 +49,9 @@ describe("graphPaths", () => {
       events.map((_, i) => i * 10),
       x,
     );
-    expect(paths[0]).toEqual({ lane: "main", group: "company", d: "M 10 10 V 120" });
+    expect(paths[0]).toEqual({ lane: "main", group: "company", d: "M 10 10 V 140" });
     const branches = paths.filter((p) => p.lane === "branch");
-    expect(branches).toHaveLength(6);
+    expect(branches).toHaveLength(7);
     expect(branches.filter((p) => p.group === "company")).toHaveLength(2);
   });
 });

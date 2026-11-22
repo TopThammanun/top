@@ -4,9 +4,23 @@ const SITE_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.topthammanun
 const SITE_URL = `https://${SITE_HOST}`;
 const EMPLOYER = "Chanwanich Company Limited";
 
-function gameShot(file: string, alt: string, caption: string): ProjectImage {
-  return { src: `/projects/godot-games/${file}.webp`, alt, caption, width: 1280, height: 720 };
+function shotsIn(slug: string) {
+  return (file: string, alt: string, caption: string): ProjectImage => ({
+    src: `/projects/${slug}/${file}.webp`,
+    alt,
+    caption,
+    width: 1280,
+    height: 720,
+  });
 }
+
+const tcgShot = shotsIn("tcg-simulator");
+const toolingShot = shotsIn("agent-tooling");
+const siteShot = shotsIn("site-v1");
+const gameShot = shotsIn("godot-games");
+const ibrandShot = shotsIn("ibrand");
+const auctionShot = shotsIn("tep-auction");
+const patternShot = shotsIn("backend-patterns");
 
 export const resume: Resume = {
   meta: {
@@ -126,6 +140,7 @@ export const resume: Resume = {
     { id: "tesseract", name: "Tesseract OCR", category: "special" },
     { id: "face-api", name: "face-api.js", category: "special" },
     { id: "react-pdf", name: "react-pdf", category: "special" },
+    { id: "pytorch", name: "PyTorch", category: "special" },
 
     { id: "claude-code", name: "Claude Code (skills, hooks)", category: "tooling" },
     { id: "git", name: "Git", category: "tooling" },
@@ -283,6 +298,120 @@ export const resume: Resume = {
       ],
     },
     {
+      slug: "tcg-simulator",
+      name: "TCG Simulator",
+      kind: "side",
+      domain: "Game simulation · bots",
+      role: "Author",
+      period: { start: "2026-11", end: null },
+      summary:
+        "A practice site for Pokémon TCG matchups: pick a deck, play a bot that runs the top decks of the tournament meta in the browser, then review the game turn by turn.",
+      highlights: [
+        "Rules engine in TypeScript where `apply(state, action)` returns a new state. Card effects live in their own modules, and a coverage test fails when a card with effect text has no code.",
+        "The bot is a policy and value network that sees only what its side knows, with a look-ahead search over re-dealt hidden cards. It learned by imitating a rule-based bot, then by self-play PPO on a GPU, and thinks in a Web Worker.",
+        "Review page: every finished game is kept in the browser with win% for each turn, the turns worth a second look and what the bot would have played, and any turn can be played again.",
+        "A static Astro site with Svelte islands in Thai and English, with no back end and no sign-up.",
+        "Vitest covers the rules, every card, a fuzz run and the bots. Playwright plays seeded games to the end on the production build.",
+      ],
+      layers: [
+        { label: "UI", items: ["Astro pages", "Svelte islands", "Bot in a Web Worker"] },
+        { label: "Engine", items: ["Rules", "Card effects", "Turn analysis"] },
+        { label: "Bot", items: ["Policy and value network", "Look-ahead search", "Rule-based bot"] },
+        { label: "Training", items: ["PyTorch", "Imitation", "Self-play PPO"] },
+        { label: "Checks", items: ["Vitest", "Fuzz", "Playwright"] },
+      ],
+      stats: [
+        { label: "commits", value: "100+" },
+        { label: "meta decks", value: "6" },
+      ],
+      stack: ["typescript", "astro", "svelte", "python", "pytorch", "vitest", "playwright"],
+      links: [
+        { label: "Live site", href: "https://tcg-simulator-lilac.vercel.app" },
+        { label: "Source on GitHub", href: "https://github.com/TopThammanun/tcg-simulator" },
+      ],
+      chapters: [
+        {
+          title: "Playing the bot",
+          body: [
+            "The player picks a deck from the meta or pastes a list, then picks the opponent or lets it be drawn by its share of recent tournaments. The game runs on a table like the real one: cards are dragged onto the board, a deck search shows the whole deck and Prize cards are chosen by hand.",
+            "The rules live in an engine that takes a state and an action and returns a new state. A choice in the middle of an effect becomes a pending question, and the same action runs again with the answer. That keeps a game replayable from its list of moves.",
+            "The opponent is one bot at one strength. A network scores every legal move from what its side can see, a search plays the best few forward over hidden cards dealt again from public information, and the value head picks. It never reads the player's hand or deck.",
+            "It is a fan site, not affiliated with The Pokémon Company. Card text and images load from TCGdex and pokemontcg.io.",
+          ],
+          images: [
+            tcgShot(
+              "table",
+              "A card table mid-game with the bot's cards at the top, the player's below, face-down Prize cards on both sides and a move log on the right",
+              "Turn 6 of a game against the bot.",
+            ),
+            tcgShot(
+              "card-played",
+              "A played Trainer card shown large over the table while the log lists the moves of the turn",
+              "Each card played is shown large for a moment.",
+            ),
+            tcgShot(
+              "setup",
+              "A game setup panel with a deck picker for the player and for the opponent, bot speed and animation settings",
+              "Pick both decks, or let the opponent be drawn by meta share.",
+            ),
+            tcgShot(
+              "game-over",
+              "A game over dialog saying You lose, with buttons to play again, pick new decks or review the game",
+              "The end of a game, with a link to its review.",
+            ),
+          ],
+        },
+        {
+          title: "Reviewing a game",
+          body: [
+            "Every finished game is saved in the browser. The review shows win% for each turn, marks the turns where the player's line fell furthest from the bot's, and lists the moves the bot would have made with its reason.",
+            "Any turn can be opened on the table and played again from that position, and games can be exported and imported as files.",
+          ],
+          images: [
+            tcgShot(
+              "review",
+              "A review page with a replay table on the left and a line chart of win percentage per turn on the right",
+              "The review: a replay and win% for every turn.",
+            ),
+            tcgShot(
+              "review-turn",
+              "A turn detail that sets the moves the player made beside the moves the bot would have made",
+              "What was played on a turn and what the bot would play instead.",
+            ),
+            tcgShot(
+              "history",
+              "A game history page with the number of games, the win rate and a list of finished games",
+              "Finished games are kept in the browser.",
+            ),
+          ],
+        },
+        {
+          title: "Decks from the tournament meta",
+          body: [
+            "Deck lists come from recent tournaments and each deck page says where its list is from. A script rebuilds the card data from the lists, and a test names every card the engine cannot play yet.",
+            "The bots also play each other thousands of times from the command line, which gives a matchup table with confidence intervals to compare with real tournament results.",
+          ],
+          images: [
+            tcgShot(
+              "decks",
+              "A grid of deck cards, each with artwork, a rank and its share of the tournament meta",
+              "The meta decks, ranked by their share of recent tournaments.",
+            ),
+            tcgShot(
+              "deck-list",
+              "A deck page listing every card with its count beside the card images",
+              "A deck's full list.",
+            ),
+            tcgShot(
+              "home",
+              "A landing page with the headline Practise against the decks that rule the meta before you meet them at an event",
+              "The landing page.",
+            ),
+          ],
+        },
+      ],
+    },
+    {
       slug: "agent-tooling",
       name: "Workflow tooling for coding agents",
       kind: "tooling",
@@ -292,48 +421,114 @@ export const resume: Resume = {
       summary:
         "Skills, hooks and guardrails that make coding agents follow an established engineering process.",
       highlights: [
-        "A project workflow pack: slash-command skills for tracing where a value comes from, verifying a change against a baseline, managing worktrees and shipping a branch, plus a guard hook.",
-        "A timesheet secretary: a skill, a session hook and a status line that log tasks and rebuild hours from git history and session transcripts, synced across machines.",
-        "A shared toolkit for the team on the border-control project.",
+        "A workflow pack for one project: a rules file with the order every task follows (worktree, intake, root cause, implement, verify, ship, clean up) and seven slash-command skills for the steps that repeat.",
+        "Skills for the repeated work: fix a list of issues and sweep the sibling forms, trace a screen value to its API and table, write SQL with a rollback and a dry run, verify against a baseline, ship a branch with merge-request text and run end-to-end checks.",
+        "A guard hook that reads every shell command and file edit first. It denies a push onto the main branches or without an explicit refspec, denies edits to generated API clients and asks before a command that changes a shared checkout.",
+        "Install and uninstall scripts link the skills into the agent's folder and register the hook, with a plan mode that changes nothing.",
+        "Contributed to a shared agent toolkit for the team on the border-control project.",
       ],
       layers: [
-        { label: "Entry points", items: ["Slash-command skills", "Session hooks", "Status line"] },
-        { label: "Checks", items: ["Baseline-aware verify", "Guard hook", "Playwright E2E"] },
-        { label: "Storage", items: ["Markdown logs", "Git sync"] },
+        { label: "Entry points", items: ["Rules file", "Slash-command skills"] },
+        { label: "Guard", items: ["Pre-tool-use hook"] },
+        { label: "Checks", items: ["Baseline-aware verify", "Playwright E2E"] },
+        { label: "Setup", items: ["Install script", "Uninstall script"] },
       ],
-      stats: [{ label: "packs", value: "3" }],
-      stack: ["claude-code", "python", "git", "playwright"],
-      links: [
+      stats: [
+        { label: "skills", value: "7" },
+        { label: "guard hook", value: "1" },
+      ],
+      stack: ["claude-code", "javascript", "git", "playwright"],
+      chapters: [
         {
-          label: "Timesheet skill on GitHub",
-          href: "https://github.com/TopThammanun/claude-secretary-timesheet-sync-skill",
+          title: "A process the agent cannot skip",
+          body: [
+            "The pack was written for a project with four repositories that share forms and data. Its rules file is loaded for every session and sets one order for every task, starting with a separate worktree and ending with that worktree removed.",
+            "Each step that repeats has a skill, so the agent runs the same procedure every time instead of improvising it. The verify skill runs the type check, lint and format on the base branch and on the change, and fails only on what the change adds.",
+            "The guard hook covers the mistakes that cost the most: pushing to a shared branch, hand-editing generated code and changing a checkout that other sessions are using. It fails open, so an error inside the hook never blocks work.",
+            "The pictures here are diagrams, because the pack itself is text files and scripts written for a client project.",
+          ],
+          images: [
+            toolingShot(
+              "task-loop",
+              "Diagram of seven steps in a row: worktree, intake, root cause, implement, verify, ship and clean up, with a guard hook bar under all of them",
+              "Diagram: the order every task follows and the skill for each step.",
+            ),
+            toolingShot(
+              "guard-hook",
+              "Diagram with two lists: actions the hook denies and actions it asks about first",
+              "Diagram: what the guard hook denies and what it asks about.",
+            ),
+            toolingShot(
+              "baseline-verify",
+              "Diagram of three rows of squares: the base branch, a clean change with no new problems and a change with two new problems marked in gold",
+              "Diagram: only problems a change adds fail the check.",
+            ),
+          ],
         },
       ],
     },
     {
-      slug: "tcg-simulator",
-      name: "TCG Simulator",
+      slug: "site-v1",
+      name: "topthammanun.dev v1",
       kind: "side",
-      domain: "Game simulation",
+      domain: "Personal site",
       role: "Author",
-      period: { start: "2026-11", end: null },
+      period: { start: "2023-09", end: "2024-09" },
       summary:
-        "A trading-card-game simulator in the browser, with bots that play it and a test suite that keeps the rules honest.",
+        "First personal site: a Notion-style block editor on Tiptap with slash commands, i18n and PWA support.",
       highlights: [
-        "Astro and Svelte front end in TypeScript.",
-        "Rules engine covered by Vitest, battles checked end to end with Playwright.",
-        "Bot research: simulated matches and experiments to make the AI opponent stronger.",
+        "Custom Tiptap extensions for root blocks, slash commands and drag handles.",
+        "Documents save on a debounce while typing and open again in a reading view.",
+        "Its indigo, gold and violet palette is the one this site still uses.",
       ],
       layers: [
-        { label: "UI", items: ["Astro", "Svelte"] },
-        { label: "Engine", items: ["Rules engine", "Bots", "Match simulator"] },
-        { label: "Checks", items: ["Vitest", "Playwright"] },
+        { label: "UI", items: ["Next.js 14", "NextUI", "Tiptap"] },
+        { label: "State", items: ["Redux Toolkit", "TanStack Query"] },
       ],
-      stats: [{ label: "commits", value: "80+" }],
-      stack: ["typescript", "astro", "svelte", "vitest", "playwright"],
-      links: [
-        { label: "Live site", href: "https://tcg-simulator-lilac.vercel.app" },
-        { label: "Source on GitHub", href: "https://github.com/TopThammanun/tcg-simulator" },
+      stats: [{ label: "commits", value: "50+" }],
+      stack: [
+        "typescript",
+        "nextjs",
+        "react",
+        "heroui",
+        "tailwind",
+        "tiptap",
+        "redux-toolkit",
+        "tanstack-query",
+      ],
+      links: [{ label: "Source on GitHub", href: "https://github.com/TopThammanun/top-old" }],
+      chapters: [
+        {
+          title: "A block editor in the browser",
+          body: [
+            "The first version of this site was a place to try a Notion-style editor. Every paragraph is a block of its own, built as a custom Tiptap node, so it can be dragged to a new position or get a new block under it.",
+            "Typing a slash opens a command menu for headings, lists, quotes, code and images. The editor saves on a debounce while typing, and the same document opens without the editing controls in a reading view.",
+            "The screenshots come from the public source running locally. The documents in them were typed for the capture and the document API was answered on the same machine.",
+          ],
+          images: [
+            siteShot(
+              "editor",
+              "A block editor page titled Block editor demo with a heading, a bullet list, a quote and a code block",
+              "The editor with a few block types.",
+            ),
+            siteShot(
+              "slash-menu",
+              "A menu under the cursor listing Heading 1, Heading 2, Heading 3, Text and Bold",
+              "Typing a slash opens the command menu.",
+            ),
+            siteShot(
+              "reading",
+              "The same document without the sidebar or the editing controls",
+              "The same document in the reading view.",
+            ),
+            siteShot("docs", "A page titled Example Docs with three document cards", "The document list."),
+            siteShot(
+              "home",
+              "A dark starfield with the line Hello, I'm Thammanun and two buttons",
+              "The landing page.",
+            ),
+          ],
+        },
       ],
     },
     {
@@ -451,48 +646,19 @@ export const resume: Resume = {
       ],
     },
     {
-      slug: "site-v1",
-      name: "topthammanun.dev v1",
-      kind: "side",
-      domain: "Personal site",
-      role: "Author",
-      period: { start: "2023-09", end: "2024-09" },
-      summary:
-        "First personal site: a Notion-style block editor on Tiptap with slash commands, i18n and PWA support.",
-      highlights: [
-        "Custom Tiptap extensions for root blocks, slash commands and drag handles.",
-        "Its indigo, gold and violet palette is the one this site still uses.",
-      ],
-      layers: [
-        { label: "UI", items: ["Next.js 14", "NextUI", "Tiptap"] },
-        { label: "State", items: ["Redux Toolkit", "TanStack Query"] },
-      ],
-      stats: [{ label: "commits", value: "50+" }],
-      stack: [
-        "typescript",
-        "nextjs",
-        "react",
-        "heroui",
-        "tailwind",
-        "tiptap",
-        "redux-toolkit",
-        "tanstack-query",
-      ],
-    },
-    {
       slug: "ibrand",
       name: "IBRAND hackathon project",
       kind: "side",
       domain: "Hackathon · made-to-order products",
-      role: "Back-end developer",
+      role: "Full-stack developer",
       period: { start: "2022-11", end: "2022-11" },
       summary:
         "A hackathon project from university: a web platform where a customer picks a factory and a product formula, then follows the order from price estimate to delivery.",
       highlights: [
         "Wrote the REST API in Express on MongoDB, with Mongoose models for factories, users and order transactions.",
+        "Built the React app with a teammate: a customer side for finding a factory and following an order, and a factory console that lists the orders waiting at each step.",
         "Sign-in hashes passwords with bcrypt and returns a JWT that a middleware checks on protected routes.",
-        "An order is one transaction with a current step, and the factory side queries the orders waiting at each step.",
-        "The React front end lives in a second repository: a customer app and a factory console.",
+        "An order is one transaction with a current step, and both sides read that step to decide what to show.",
       ],
       layers: [
         { label: "Clients", items: ["Customer app · React", "Factory console · React"] },
@@ -500,10 +666,10 @@ export const resume: Resume = {
         { label: "Data", items: ["MongoDB · Mongoose"] },
       ],
       stats: [
-        { label: "API commits", value: "30" },
+        { label: "commits", value: "65" },
         { label: "days", value: "11" },
       ],
-      stack: ["javascript", "express", "mongodb", "react"],
+      stack: ["javascript", "react", "express", "mongodb"],
       links: [
         { label: "API on GitHub", href: "https://github.com/TopThammanun/Hackaton-IBRAND-API" },
         { label: "App on GitHub", href: "https://github.com/TopThammanun/Hackaton-IBRAND-App" },
@@ -512,12 +678,178 @@ export const resume: Resume = {
         {
           title: "From formula to delivery",
           body: [
-            "IBRAND was built for a hackathon in November 2022, while studying at Chiang Mai University. A customer searches factories by province, product type and category, picks a formula and opens an order.",
+            "IBRAND was built for a hackathon in November 2022, while studying at Chiang Mai University. A customer searches factories by province, product type, category and material, picks a formula and opens an order.",
             "From there the order moves through nine steps: formula, price estimate, test product, deposit, packaging, FDA registration, production, payment and delivery.",
-            "The API keeps each order as a transaction that records its current step. The customer app shows that step on a timeline, and the factory console lists the orders waiting at each step.",
-            "Both repositories are public. The API repository holds the back-end work described here.",
+            "The API keeps each order as a transaction that records its current step. The customer app shows that step on a progress line, and the factory console counts and lists the orders waiting at each step.",
+            "The screenshots come from both public repositories running locally, with the sample factories that ship in the API repository.",
           ],
-          images: [],
+          images: [
+            ibrandShot(
+              "home",
+              "A grid of factory cards with a price, an address and certificates under four search filters",
+              "The factory search, filtered by province, type, category and material.",
+            ),
+            ibrandShot(
+              "factory",
+              "A factory page with photos, a price per formula and a company description",
+              "A factory page.",
+            ),
+            ibrandShot(
+              "request",
+              "A nine-step progress line above a grid of product formulas to choose from",
+              "Step 1: pick a formula. The line above shows all nine steps.",
+            ),
+            ibrandShot(
+              "waiting",
+              "The progress line at step 1 with a yellow notice saying Waiting for confirmation from factory",
+              "After a request is sent, the order waits for the factory.",
+            ),
+            ibrandShot(
+              "admin",
+              "A factory console with a sidebar of order steps and a counter card for each step",
+              "The factory console counts the orders at each step.",
+            ),
+            ibrandShot(
+              "admin-orders",
+              "A table of orders at the first step with an order number, date, status, owner and a detail button",
+              "The orders waiting at one step.",
+            ),
+          ],
+        },
+      ],
+    },
+    {
+      slug: "tep-auction",
+      name: "TEP Auction",
+      kind: "side",
+      domain: "Team project · online auction",
+      role: "Full-stack developer",
+      period: { start: "2022-09", end: "2022-10" },
+      summary:
+        "A team project built while studying: an online auction site where people list products, bid on them and keep a watch list.",
+      highlights: [
+        "Built most of the React front end: the landing page with categories, auction lists, the product page with its bidding panel, the watch list and the form for listing a product.",
+        "Wrote most of the Express API: products by category, a user's bids and listings, placing a bid, buy now and image upload for new listings.",
+        "Pages that need an account send the visitor to sign in first and bring them back afterwards.",
+      ],
+      layers: [
+        { label: "Client", items: ["React", "React Router", "Bootstrap", "styled-components"] },
+        { label: "API", items: ["Products", "Bids", "Sign-in", "Image upload"] },
+        { label: "Data", items: ["In-memory lists"] },
+      ],
+      stats: [
+        { label: "commits", value: "98" },
+        { label: "repos", value: "2" },
+      ],
+      stack: ["javascript", "react", "express"],
+      links: [
+        { label: "App on GitHub", href: "https://github.com/TopThammanun/TEP-lnW_Project_Frontend" },
+        { label: "API on GitHub", href: "https://github.com/TopThammanun/TEP-lnW_Project-Back" },
+      ],
+      chapters: [
+        {
+          title: "Bidding in the browser",
+          body: [
+            "TEP Auction was a team project from September and October 2022. Visitors browse auctions by category, open a product to see the current price, the bid increment and the buy-now price, and place a bid once they have signed in.",
+            "Signed-in users keep a watch list, see the auctions they are bidding on and the ones they are selling, and list a new product with a photo, a starting price, a buy-now price and an end time.",
+            "The API keeps its products and users in memory, so the whole thing runs with two commands. The screenshots come from both public repositories running locally.",
+          ],
+          images: [
+            auctionShot(
+              "home",
+              "An orange landing page with an illustration and the headline Find Your Next Deal",
+              "The landing page.",
+            ),
+            auctionShot(
+              "auctions",
+              "Three product cards with the current bid, the buy-now price and a Submit A Bid button",
+              "Auctions in one category.",
+            ),
+            auctionShot(
+              "product",
+              "A product page with the current price, the bid increment, the buy-now price and a countdown box",
+              "A product page with its bidding panel.",
+            ),
+            auctionShot(
+              "add-product",
+              "A form titled Add New Product with an image upload, a name, a category, prices and an end time",
+              "Listing a product for auction.",
+            ),
+            auctionShot(
+              "login",
+              "A sign-in card beside an illustration of an auctioneer",
+              "The sign-in page.",
+            ),
+          ],
+        },
+      ],
+    },
+    {
+      slug: "backend-patterns",
+      name: "Back-end pattern studies",
+      kind: "side",
+      domain: "Architecture practice",
+      role: "Author",
+      period: { start: "2022-12", end: "2024-06" },
+      summary:
+        "Four small repositories that each try one back-end pattern in C# or TypeScript: a generic repository with a unit of work, CQRS with MediatR, a state machine read from the database and a repository over Prisma.",
+      highlights: [
+        "Repository and unit of work on EF Core: generic base classes that a concrete repository and unit of work extend.",
+        "CQRS with MediatR in ASP.NET Core: controllers only send queries, and a handler per query calls the repository.",
+        "State pattern in NestJS: the order of states is rows in the database, and each state name maps to a class.",
+        "Repository pattern over Prisma in an Express API with JWT sign-in, request validation and a rate limit.",
+      ],
+      layers: [
+        { label: "C#", items: ["EF Core repository", "Unit of work", "MediatR handlers"] },
+        { label: "TypeScript", items: ["NestJS state machine", "Prisma repository", "Express API"] },
+      ],
+      stats: [
+        { label: "repos", value: "4" },
+        { label: "commits", value: "26" },
+      ],
+      stack: ["csharp", "dotnet", "ef-core", "typescript", "nestjs", "express", "prisma"],
+      links: [
+        {
+          label: "EF Core repository and unit of work",
+          href: "https://github.com/TopThammanun/DotNet-EntityFrameworkCore",
+        },
+        { label: "CQRS with MediatR", href: "https://github.com/TopThammanun/CQRS-and-Repository-Pattern" },
+        { label: "State pattern in NestJS", href: "https://github.com/TopThammanun/state-pattern" },
+        {
+          label: "Repository over Prisma",
+          href: "https://github.com/TopThammanun/NodeJs-prisma-with-Repository-Pattern",
+        },
+      ],
+      chapters: [
+        {
+          title: "One pattern per repository",
+          body: [
+            "Each repository is small on purpose: enough code to wire one pattern end to end and see what it costs. The pictures are excerpts from the public source, copied as they are.",
+            "The C# pair covers data access. One has a generic repository and a unit of work on EF Core. The other puts MediatR between the controller and the repository, so a request becomes a query object with its own handler.",
+            "The NestJS study keeps a workflow's states as rows in the database. A transaction moves to the next state by sequence, and the state's name picks the class that handles it. The Prisma study hides the client behind a repository interface in an Express API.",
+          ],
+          images: [
+            patternShot(
+              "repository",
+              "C# code of a generic IRepository interface with GetAll, Add, Find and Update members",
+              "The generic repository interface on EF Core.",
+            ),
+            patternShot(
+              "cqrs",
+              "C# code of a controller that sends a query through a MediatR mediator",
+              "A controller that only sends queries to MediatR.",
+            ),
+            patternShot(
+              "state",
+              "TypeScript code that maps a state name to a state class and throws on an unknown name",
+              "Choosing the state class by a name stored in the database.",
+            ),
+            patternShot(
+              "prisma",
+              "TypeScript code of a UserRepo class that implements an interface and creates a user with Prisma",
+              "A repository class over Prisma.",
+            ),
+          ],
         },
       ],
     },
@@ -583,10 +915,22 @@ export const resume: Resume = {
     },
     { date: "2023-09", lane: "branch", project: "site-v1", message: "init: topthammanun.dev v1" },
     {
+      date: "2022-12",
+      lane: "branch",
+      project: "backend-patterns",
+      message: "feat(patterns): first pattern study, a repository over Prisma",
+    },
+    {
       date: "2022-11",
       lane: "main",
       project: "ibrand",
-      message: "feat(ibrand): hackathon API on Express and MongoDB",
+      message: "feat(ibrand): hackathon app and API in eleven days",
+    },
+    {
+      date: "2022-09",
+      lane: "main",
+      project: "tep-auction",
+      message: "feat(auction): team auction site in React and Express",
     },
   ],
 

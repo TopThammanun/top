@@ -11,9 +11,11 @@ function withChange(change: (r: Resume) => void): Resume {
   return copy;
 }
 
+const GALLERY = resume.projects.findIndex((project) => (project.chapters?.[0]?.images.length ?? 0) > 0);
+
 function galleryImage(r: Resume): ProjectImage {
-  const image = r.projects[5].chapters?.[0]?.images[0];
-  if (!image) throw new Error("expected the Godot project to have a gallery");
+  const image = r.projects[GALLERY]?.chapters?.[0]?.images[0];
+  if (!image) throw new Error("expected a project with a gallery");
   return image;
 }
 
@@ -52,7 +54,7 @@ describe("lintResume", () => {
     [
       "chapter image outside the media folder",
       (r) => (galleryImage(r).src = "/elsewhere/shot.webp"),
-      "projects[5].chapters[0].images[0].src",
+      `projects[${GALLERY}].chapters[0].images[0].src`,
     ],
     ["empty competency", (r) => (r.competencies[0].items = []), "competencies[0].items"],
     [
@@ -74,9 +76,14 @@ describe("lintResume", () => {
     ],
     ["unknown education project", (r) => (r.education[0].projects = ["nope"]), "education[0].projects[0]"],
     [
+      "personal project without an image",
+      (r) => (r.projects[GALLERY].chapters = []),
+      `projects[${GALLERY}] is a personal project without an image`,
+    ],
+    [
       "chapter image without a caption",
       (r) => (galleryImage(r).caption = ""),
-      "projects[5].chapters[0].images[0]",
+      `projects[${GALLERY}].chapters[0].images[0]`,
     ],
   ])("reports %s", (_name, change, path) => {
     const { errors } = lintResume(withChange(change));
