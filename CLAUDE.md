@@ -6,7 +6,11 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 ## Rules
 
 - Facts live only in `src/content/resume.ts`. Never invent employers, dates, numbers or client names.
-  `null` and empty fields are pending owner input and render nothing.
+  `null` and empty fields are pending owner input and render nothing. The employer is named; clients are not.
+- Roles are in `career` and schooling in `education`. A role whose dates the owner has not given keeps
+  `period: null` and shows no dates; do not derive them from project periods.
+- `src/content/activity.ts` (the hero commit calendar) is generated from local clones by `pnpm build:activity`.
+  Never edit it by hand, and keep folder names of client work out of the repository.
 - This Next.js is newer than most training data. Read `node_modules/next/dist/docs/` before using its APIs
   (see `AGENTS.md`).
 - TypeScript strict, no `any`. No explanatory comments in code.
@@ -41,6 +45,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - `pnpm dev` · `pnpm build` · `pnpm start`
 - `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm e2e`
 - `pnpm build:pdf` writes `public/resume.pdf`
+- `pnpm build:activity --root <dir> --author <pattern> --company <folder>` rewrites `src/content/activity.ts`
+  (`--author`, `--company` and `--personal` repeat; `--personal` overrides a company folder)
 
 ## Git
 

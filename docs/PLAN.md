@@ -328,3 +328,15 @@ Requested by the owner once the seven tasks were done. These replace the matchin
   layout to the home page.
 - **Site URL.** `meta.siteUrl` reads `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links, the sitemap and the
   PDF follow whichever production domain the Vercel project has.
+- **Career and education.** `career` (intern, junior, senior at one employer) and a fuller `education` entry
+  feed a career path at the top of Timeline, the hero meta table (`at`, `path`, `edu`), `Professional
+  Experience` in the PDF, `work`, `education` and `awards` in the JSON resume, the text outputs and the
+  JSON-LD (`worksFor`, `alumniOf`). The title is now `Senior Full Stack Developer`. Company projects moved to
+  their own PDF section. Roles without known dates show none.
+- **Commit calendar.** `scripts/build-activity.ts` writes `src/content/activity.ts` from local clones, and the
+  hero shows it under the mascot as a dot calendar coloured by company or personal work, with a readout for
+  the day under the pointer (`hero/CommitCalendar.tsx`, `src/lib/commit-calendar.ts`).
+- **Practice skills.** `competencies` adds Git workflow, problem solving and database performance to Skills
+  and to every output that lists skills.
+- **IBRAND.** The university hackathon project is a personal project with its own page, written from its two
+  public repositories. Chapters may now have no images. Personal cards use a two-column grid.

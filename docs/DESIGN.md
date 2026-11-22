@@ -76,13 +76,24 @@ live in `src/lib/sections.ts`.
   that cycles `profile.roles` with a scramble/decode effect (every 3.2s, 600ms decode); tagline; one primary
   button `Download resume` (saved as `Thammanun-Aikhamdaeng-Resume.pdf`), then `View company work` and a
   `Ctrl K` / `⌘ K` hint button that opens the palette.
-- Meta table in mono, key column muted: `aka` (`Top Thammanun`), `now`, `loc` (`Thailand · UTC+7`), `time`
-  (live `HH:mm:ss` in Asia/Bangkok, rendered only after mount), `focus` (`.NET · TypeScript · Next.js`).
+- Meta table in mono, key column muted: `aka` (`Top Thammanun`), `at` (current employer), `path` (the role
+  ladder, `Intern → Junior → Senior Full Stack Developer`), `edu` (school and honors), `now`, `loc`
+  (`Thailand · UTC+7`), `time` (live `HH:mm:ss` in Asia/Bangkok, rendered only after mount), `focus`
+  (`.NET · TypeScript · Next.js`). From 1024px the table sits at the bottom of the column, level with the
+  calendar.
 - Right (5/12): **dot field mascot**. A canvas grid of 64 columns of dots; `public/mascot.png` (white on
   transparent) is sampled per cell and its coverage sets each dot's size, so the mascot reads as a halftone.
   The mascot blinks every few seconds, and the pointer brightens nearby dots to gold and pushes them
   slightly. Static render under reduced motion. Hidden from assistive tech. On mobile it
   sits above the text at 40vh max.
+- Under the mascot: **commit calendar** (`fig. 01`), drawn in the same dot language. One dot per day for the
+  53 weeks in `src/content/activity.ts`, Monday at the top. Dot size is the day's rank among active days
+  (quartiles, `src/lib/commit-calendar.ts`); gold when most commits that day were company work, violet when
+  most were personal. The weeks wrap into two half-year strips in a narrow card and run as one strip from
+  576px of card width. A line above the dots gives the total, the active days and the longest streak; pointing
+  at or tapping a day replaces it with that day's date and counts and rings the dot. The grid is one image
+  for assistive tech, labelled with the range and the totals. Below 1024px the calendar spans the full
+  width; on mobile it follows the meta table.
 - **Career stats** under both columns, computed from company projects only (`src/lib/stats.ts`): time on
   company projects with its start month, number of company projects, repositories and commits, plus a
   footnote saying where the counts come from.
@@ -95,7 +106,8 @@ live in `src/lib/sections.ts`.
   statement uses the same effect.
 
 ### 01 Work (`#work`): company projects
-- Intro `Company work.` with a line explaining that company and client names are left out on purpose.
+- Intro `Company work.` naming the employer, with a line explaining that client names are left out on
+  purpose.
 - One case per company project, all visible without a click: gold index, a `Current` chip when the period is
   open, name, role and domain, period in month names with duration, summary, every highlight, and stat tiles
   (`commits`, `repos`).
@@ -106,11 +118,17 @@ live in `src/lib/sections.ts`.
   notice above the list names the selected skill and clears it.
 
 ### 02 Personal (`#personal`): personal projects
-- Intro `Personal projects.` Cards in a three-column grid: violet dot with the domain, name, period, summary,
+- Intro `Personal projects.` Cards in a two-column grid: violet dot with the domain, name, period, summary,
   stack chips and `View project`. A project with screenshots is featured across the full width with its first
   screenshot and the screenshot count. The whole card links to the project page.
 
 ### 03 Timeline (`#log`)
+- **Career path** first: one step per `education` entry, then one per `career` role from the first to the
+  current one (`src/lib/career.ts`). Four columns from 1024px, two from 640px, one below. Each step has a node
+  on a rail (gold for roles, filled for the current one), its number, what is known about when (`Graduated
+  Mar 2024`, `14 months`, `Mar 2026 – Present`, or nothing), title, employer or program, honors in gold, a
+  one-sentence summary, chips (coursework or the technologies of that role) and links (the project done at
+  university, the product pages of the internship). Dates the owner has not given are not shown.
 - Caption `$ git log --graph --author=top` and a legend (gold = company work, violet = personal projects).
 - An SVG graph on the left with two lanes, `main` and `branch`. One node per `resume.timeline` event, newest
   first; branch nodes connect to the main lane with a curved fork line. Lines and nodes take the colour of
@@ -126,6 +144,9 @@ live in `src/lib/sections.ts`.
 - Hover or focus a chip: it turns gold, shows `used in N projects`, and dims the projects that do not use it.
   Click toggles it as the filter and scrolls to Work. Techs used by no project are still listed but not
   clickable.
+- A second block, `practices`, lists `resume.competencies` (Git workflow, problem solving, database
+  performance) in the same row layout with plain chips. They are ways of working, not tied to one project,
+  so they carry no dot, count or filter. Every output that lists skills includes them.
 
 ### 05 Agents (`#agents`)
 - Statement with the word reveal: `I work with coding agents the way I work with a team: written process,
@@ -148,8 +169,9 @@ live in `src/lib/sections.ts`.
   has a top bar with `All projects`, the handle and the theme toggle.
 - Header in the Personal section style: domain, name as `h1`, period, role, summary, optional outside links
   (`project.links`), then highlights beside stat tiles, the layer diagram and stack chips.
-- One band per `project.chapters` entry: title, paragraphs and a two-column gallery. A screenshot opens in a
-  native `<dialog>` viewer with its caption, a counter, previous and next (also the arrow keys) and close.
+- One band per `project.chapters` entry: title, paragraphs and, when the chapter has images, a two-column
+  gallery. A screenshot opens in a native `<dialog>` viewer with its caption, a counter, previous and next
+  (also the arrow keys) and close.
 - Previous and next project links at the end.
 - Screenshots live in `public/projects/<slug>/` as lossless WebP and are listed, with alt text and captions,
   in `src/content/resume.ts`. `content-lint` checks that every listed file exists.
@@ -181,35 +203,39 @@ All generated from `src/content/resume.ts` and prerendered at build.
 
 | Route | Content |
 |---|---|
-| `/resume.json` | JSON Resume schema v1.0.0 (`basics`, `work` from client projects, `projects` from the rest, `skills` by category, `languages`, `meta`) |
+| `/resume.json` | JSON Resume schema v1.0.0 (`basics`, `work` from the roles, `education`, `awards` from honors, `projects` with company work first, `skills` by category plus the practice skills, `languages`, `meta`) |
 | `/resume.txt` | plain text, lines ≤ 80 columns |
 | `/llms.txt` | short markdown summary with links to the other routes |
-| `/resume.pdf` | formal resume for job applications and LinkedIn uploads: two A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, selectable text in reading order, experience entries as title, organisation and month-name dates, visible URLs, page numbers, under LinkedIn's recommended 2 MB, written to `public/` before `next build` |
-| `/sitemap.xml` | the page and the four routes above |
+| `/resume.pdf` | formal resume for job applications and LinkedIn uploads: three A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, selectable text in reading order, `Professional Experience` as one entry per role (title, employer, dates when known), then `Company Projects`, `Personal Projects`, `Technical Skills`, `Education` and `Languages`, visible URLs, page numbers, under LinkedIn's recommended 2 MB, written to `public/` before `next build` |
+| `/sitemap.xml` | the page, the project pages and the four routes above |
 | `/robots.txt` | allow all, with the AI search and assistant agents named explicitly |
 | Open Graph image | 1200×630, `#1c1740`, full name, title, mascot, gold index mark |
 
 ### Search
 
 The names people search for are `Thammanun Aikhamdaeng`, `topthammanun` and `Top Thammanun`. The full name is the
-`h1`, leads the `<title>` (`Thammanun Aikhamdaeng (topthammanun) — Full-Stack Developer`) and the description,
-and is the PDF's title and author. JSON-LD on the page describes a `Person` (with `givenName`, `familyName`,
-`alternateName`, `sameAs`), the `WebSite` and the `ProfilePage`. Open Graph uses the `profile` type with first
+`h1`, leads the `<title>` (`Thammanun Aikhamdaeng (topthammanun) — Senior Full Stack Developer`) and the
+description, and is the PDF's title and author. JSON-LD on the page describes a `Person` (with `givenName`,
+`familyName`, `alternateName`, `sameAs`, `worksFor`, `alumniOf`), the `WebSite` and the `ProfilePage`. Open Graph uses the `profile` type with first
 name, last name and username. Text and data come from `src/lib/seo.ts` and `src/lib/identity.ts`.
 
 For AI search, `/robots.txt` welcomes the crawlers listed in `src/lib/crawlers.ts` (OpenAI, Anthropic, Perplexity,
 Google, Apple, Amazon, DuckDuckGo, Mistral, Meta, Common Crawl), the page head links the machine-readable routes
-as alternates, and `/llms.txt` opens with one quotable sentence saying who this is, followed by the summary, work,
-skills and contact links. Every section is in the prerendered HTML, so nothing depends on running JavaScript.
+as alternates, and `/llms.txt` opens with one quotable sentence saying who this is, followed by the summary,
+career, education, projects, skills and contact links. Every section is in the prerendered HTML, so nothing depends on running JavaScript.
 
 ## 5. Content rules
 
 - `src/content/resume.ts` is the only source of facts. Do not add facts, numbers, employers, dates or client
   names that are not in it. `null` fields and empty arrays mean "not provided yet": render nothing for them.
-- Pending owner input: `profile.email`, `profile.linkedin`, `education`.
+- Pending owner input: `profile.email`, `profile.linkedin`, and the start and end months of the junior and
+  intern roles (`career[].period` is `null` for them, so no dates are shown).
+- `src/content/activity.ts` is generated by `pnpm build:activity` from local clones: commits per day for 53
+  weeks, split into company and personal by the folder a repository is in, each commit hash counted once.
 - `meta.siteUrl` follows the deployment: Vercel's production domain when it is set, otherwise
   `www.topthammanun.dev`.
-- Client names are intentionally absent. Commit counts are rounded figures from local clones on `meta.statsAsOf`.
+- Client names are intentionally absent; the employer is named. Commit counts are rounded figures from local
+  clones on `meta.statsAsOf`.
 - English only. Keep copy plain; no marketing adjectives.
 
 ## 6. Quality bar
