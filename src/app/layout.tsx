@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono, Prompt } from "next/font/google";
 import { Shell } from "@/components/shell/Shell";
-import { themeScript } from "@/components/shell/theme-script";
+import { headScript } from "@/components/shell/head-script";
 import { resume } from "@/content/resume";
 import "./globals.css";
 
@@ -57,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geist.variable} ${jetbrainsMono.variable} ${prompt.variable}`}
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: headScript }} />
       </head>
       <body className="min-h-dvh">
         <Shell>{children}</Shell>

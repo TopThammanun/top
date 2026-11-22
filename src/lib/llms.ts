@@ -1,4 +1,5 @@
 import type { Resume } from "@/content/types";
+import { projectAnchor } from "./anchors";
 import { formatPeriod } from "./format";
 import { absoluteUrl, MACHINE_ROUTES } from "./routes";
 
@@ -27,7 +28,7 @@ export function toLlmsTxt(r: Resume): string {
     "",
     ...r.projects.map(
       (p) =>
-        `- [${p.name}](${absoluteUrl(r, `/#work-${p.slug}`)}): ${formatPeriod(p.period)}, ${p.kind}. ${p.summary}`,
+        `- [${p.name}](${absoluteUrl(r, `/#${projectAnchor(p.slug)}`)}): ${formatPeriod(p.period)}, ${p.kind}. ${p.summary}`,
     ),
     "",
     "## Contact",

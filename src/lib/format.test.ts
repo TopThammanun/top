@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { formatDuration, formatPeriod, monthsBetween, periodDuration, toYearMonth } from "./format";
+import {
+  formatDuration,
+  formatIndex,
+  formatPeriod,
+  monthsBetween,
+  periodDuration,
+  toYearMonth,
+} from "./format";
 
 describe("monthsBetween", () => {
   it("counts both ends", () => {
@@ -36,6 +43,13 @@ describe("periodDuration", () => {
 
   it("ignores now for a closed period", () => {
     expect(periodDuration({ start: "2024-03", end: "2026-07" }, "2030-01")).toBe("2y 5m");
+  });
+});
+
+describe("formatIndex", () => {
+  it("pads to two digits", () => {
+    expect(formatIndex(1)).toBe("01");
+    expect(formatIndex(12)).toBe("12");
   });
 });
 

@@ -28,6 +28,10 @@ export function periodDuration(p: Period, now: YearMonth): string {
   return formatDuration(monthsBetween(p.start, p.end ?? now));
 }
 
+export function formatIndex(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
 export function toYearMonth(d: Date): YearMonth {
   const month = String(d.getUTCMonth() + 1).padStart(2, "0");
   return `${d.getUTCFullYear()}-${month}` as YearMonth;

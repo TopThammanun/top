@@ -1,0 +1,1 @@
+export const headScript = `(function(){var d=document.documentElement;d.dataset.js="";try{var t=localStorage.getItem("theme");d.dataset.theme=t==="light"||t==="dark"?t:"dark"}catch(e){d.dataset.theme="dark"}})()`;
