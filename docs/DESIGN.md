@@ -118,9 +118,10 @@ live in `src/lib/sections.ts`.
   notice above the list names the selected skill and clears it.
 
 ### 02 Personal (`#personal`): personal projects
-- Intro `Personal projects.` Cards in a two-column grid: violet dot with the domain, name, period, summary,
-  stack chips and `View project`. A project with screenshots is featured across the full width with its first
-  screenshot and the screenshot count. The whole card links to the project page.
+- Intro `Personal projects.` Cards in the order of `resume.ts` (the owner's priority), three columns from
+  1024px and two from 768px. Each card has its first image as a cover, a violet dot with the domain, the
+  name, period, summary, stack chips, `View project` and the image count. The first project is featured
+  across the full width with the cover beside the text. The whole card links to the project page.
 
 ### 03 Timeline (`#log`)
 - **Career path** first: one step per `education` entry, then one per `career` role from the first to the
@@ -170,11 +171,13 @@ live in `src/lib/sections.ts`.
 - Header in the Personal section style: domain, name as `h1`, period, role, summary, optional outside links
   (`project.links`), then highlights beside stat tiles, the layer diagram and stack chips.
 - One band per `project.chapters` entry: title, paragraphs and, when the chapter has images, a two-column
-  gallery. A screenshot opens in a native `<dialog>` viewer with its caption, a counter, previous and next
+  gallery. An image opens in a native `<dialog>` viewer with its caption, a counter, previous and next
   (also the arrow keys) and close.
 - Previous and next project links at the end.
-- Screenshots live in `public/projects/<slug>/` as lossless WebP and are listed, with alt text and captions,
-  in `src/content/resume.ts`. `content-lint` checks that every listed file exists.
+- Images live in `public/projects/<slug>/` as WebP (1280×720) and are listed, with alt text and captions,
+  in `src/content/resume.ts`. Screenshots come from the project itself, running live or from its public
+  source; work without a screen gets diagrams or code excerpts, and the caption or the chapter says so.
+  `content-lint` checks that every personal project has an image and that every listed file exists.
 
 ### Footer
 - Mono build line: `build <sha7> · <yyyy-mm-dd> · next <version> · 0 trackers`.

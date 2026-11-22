@@ -339,4 +339,10 @@ Requested by the owner once the seven tasks were done. These replace the matchin
 - **Practice skills.** `competencies` adds Git workflow, problem solving and database performance to Skills
   and to every output that lists skills.
 - **IBRAND.** The university hackathon project is a personal project with its own page, written from its two
-  public repositories. Chapters may now have no images. Personal cards use a two-column grid.
+  public repositories. Chapters may now have no images.
+- **Images on every personal project.** Personal projects follow the owner's order (TCG Simulator first) and
+  every card has a cover. TCG Simulator was captured from its live site, the v1 site, IBRAND and TEP Auction
+  from their public source running locally, and the agent tooling and the pattern studies use diagrams and
+  code excerpts. TEP Auction and the back-end pattern studies were added from the owner's public
+  repositories. The tooling entry no longer lists a timesheet skill: that repository is a fork of a
+  colleague's work.

@@ -19,8 +19,13 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - No analytics, cookies or runtime third-party requests.
 - Company work is the main content. Use `companyProjects` / `personalProjects` from `src/lib/selectors.ts`;
   never branch on `project.kind` in a component. Gold marks company work, violet marks personal projects.
-- Project screenshots go in `public/projects/<slug>/` as WebP and are listed in `resume.ts` with alt text and
-  a caption; `pnpm test` fails if a listed file is missing.
+- Project images (screenshots, diagrams, code excerpts) go in `public/projects/<slug>/` as WebP and are listed
+  in `resume.ts` with alt text and a caption. Every personal project needs at least one; `pnpm test` fails
+  when one has none or a listed file is missing. Say in the caption when a picture is a diagram.
+- Personal projects are shown in the order they have in `resume.ts`, which is the owner's priority. The
+  first one is the featured card.
+- Before crediting a repository to the owner, check its commit authors. Forks and starter kits on the
+  owner's GitHub include other people's work.
 - Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
   resume for job applications: keep its copy free of first-person pronouns.
 - `.next/dev` can serve stale CSS after `globals.css` changes; delete it if a token edit does not show up.
@@ -51,4 +56,4 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 ## Git
 
 Branch `main`, remote `origin` = `github.com/TopThammanun/top`. The remote is connected to Vercel, so a push to
-`main` deploys to production. The v1 site lives only in the old local clone `C:\Work\top`.
+`main` deploys to production. The v1 site's source is public at `github.com/TopThammanun/top-old`.
