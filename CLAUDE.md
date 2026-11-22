@@ -10,7 +10,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - This Next.js is newer than most training data. Read `node_modules/next/dist/docs/` before using its APIs
   (see `AGENTS.md`).
 - TypeScript strict, no `any`. No explanatory comments in code.
-- Commits: one short conventional subject line, no body, no trailers. Push only when asked.
+- Commits: one short conventional subject line, no body, no trailers. The owner asked on 2026-11-22 for `main`
+  to be pushed every time a piece of work is finished: run the checks first, then push without asking.
 - No analytics, cookies or runtime third-party requests.
 - Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
   resume for job applications: keep its copy free of first-person pronouns.
