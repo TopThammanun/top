@@ -15,6 +15,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
   resume for job applications: keep its copy free of first-person pronouns.
 - `.next/dev` can serve stale CSS after `globals.css` changes; delete it if a token edit does not show up.
+- In `@react-pdf/renderer`, position a fixed `Text` that uses `render` (page numbers) with `top`. With `bottom`
+  it is drawn off the page, and with a fixed `height` it is not drawn at all.
 
 ## Components
 
