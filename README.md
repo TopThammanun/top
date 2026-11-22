@@ -10,8 +10,8 @@ Design spec: [`docs/DESIGN.md`](docs/DESIGN.md). Implementation plan: [`docs/PLA
 ## Stack
 
 Next.js 16 (App Router, every route prerendered) · React 19 · TypeScript · Tailwind CSS 4 · cmdk ·
-lucide-react · @react-pdf/renderer · Vitest · Playwright with axe. No analytics, cookies or runtime
-third-party requests.
+lucide-react · @react-pdf/renderer · Vitest · Playwright with axe. The code adds no analytics, cookies or
+runtime third-party requests; the CDN in front of the site adds its own analytics beacon.
 
 ## Commands
 

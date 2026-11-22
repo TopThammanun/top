@@ -346,3 +346,11 @@ Requested by the owner once the seven tasks were done. These replace the matchin
   code excerpts. TEP Auction and the back-end pattern studies were added from the owner's public
   repositories. The tooling entry no longer lists a timesheet skill: that repository is a fork of a
   colleague's work.
+- **Screening pass.** The site and the PDF were read the way a resume parser, a recruiter and a senior
+  developer read them. Each role now lists its company projects (`career[].projects`), so the PDF and the
+  text resume put the bullets under the job title a parser attributes them to, and the PDF is two pages
+  with the first two personal projects. The job title is fixed text under the name in the hero. The first
+  career stat is the time since the first role. Technology names carry the words a keyword search uses
+  (`Node.js`, `REST APIs`, `Entity Framework Core`, `Material UI (MUI)`, `OpenID Connect`), spelling is
+  American throughout, education names the degree, and the footer claims `0 cookies` because the CDN adds
+  its own analytics beacon.

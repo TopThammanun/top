@@ -8,7 +8,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - Facts live only in `src/content/resume.ts`. Never invent employers, dates, numbers or client names.
   `null` and empty fields are pending owner input and render nothing. The employer is named; clients are not.
 - Roles are in `career` and schooling in `education`. Role dates come from the owner; do not derive them
-  from project periods.
+  from project periods. Every company project is listed under exactly one role (`career[].projects`), the
+  one it mostly ran in; the PDF and the text resume print it there.
 - `src/content/activity.ts` (the hero commit calendar) is generated from local clones by `pnpm build:activity`.
   Never edit it by hand, and keep folder names of client work out of the repository.
 - This Next.js is newer than most training data. Read `node_modules/next/dist/docs/` before using its APIs
@@ -16,7 +17,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - TypeScript strict, no `any`. No explanatory comments in code.
 - Commits: one short conventional subject line, no body, no trailers. The owner asked on 2026-11-22 for `main`
   to be pushed every time a piece of work is finished: run the checks first, then push without asking.
-- No analytics, cookies or runtime third-party requests.
+- No analytics, cookies or runtime third-party requests from this code. Cloudflare in front of the site
+  injects its own analytics beacon, which is why the footer says `0 cookies` and not `0 trackers`.
 - Company work is the main content. Use `companyProjects` / `personalProjects` from `src/lib/selectors.ts`;
   never branch on `project.kind` in a component. Gold marks company work, violet marks personal projects.
 - Project images (screenshots, diagrams, code excerpts) go in `public/projects/<slug>/` as WebP and are listed
@@ -27,7 +29,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - Before crediting a repository to the owner, check its commit authors. Forks and starter kits on the
   owner's GitHub include other people's work.
 - Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
-  resume for job applications: keep its copy free of first-person pronouns.
+  resume for job applications: keep its copy free of first-person pronouns, keep it to two pages (an e2e
+  test counts them) and write American English, because resume parsers match keywords by spelling.
 - `.next/dev` can serve stale CSS after `globals.css` changes; delete it if a token edit does not show up.
 - In `@react-pdf/renderer`, position a fixed `Text` that uses `render` (page numbers) with `top`. With `bottom`
   it is drawn off the page, and with a fixed `height` it is not drawn at all.

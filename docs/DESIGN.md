@@ -72,8 +72,10 @@ meta right-aligned), and is a landmark with an accessible name. Section ids, ind
 live in `src/lib/sections.ts`.
 
 ### 00 Home (`#home`)
-- Left (7/12): mono path label `~/topthammanun`; the full name `Thammanun Aikhamdaeng` as the `h1`; role line
-  that cycles `profile.roles` with a scramble/decode effect (every 3.2s, 600ms decode); tagline; one primary
+- Left (7/12): mono path label `~/topthammanun`; the full name `Thammanun Aikhamdaeng` as the `h1`; the job
+  title (`profile.title`) as fixed text under it, so a reader gets name and title without waiting; a muted
+  mono line that cycles `profile.specialties` with a scramble/decode effect (every 3.2s, 600ms decode);
+  tagline; one primary
   button `Download resume` (saved as `Thammanun-Aikhamdaeng-Resume.pdf`), then `View company work` and a
   `Ctrl K` / `⌘ K` hint button that opens the palette.
 - Meta table in mono, key column muted: `aka` (`Top Thammanun`), `at` (current employer), `path` (the role
@@ -94,9 +96,9 @@ live in `src/lib/sections.ts`.
   streak; pointing at or tapping a day replaces it with that day's date and counts and outlines the square.
   The grid is one image for assistive tech, labelled with the range and the totals. Below 1024px the calendar spans the full
   width; on mobile it follows the meta table.
-- **Career stats** under both columns, computed from company projects only (`src/lib/stats.ts`): time on
-  company projects with its start month, number of company projects, repositories and commits, plus a
-  footnote saying where the counts come from.
+- **Career stats** under both columns (`src/lib/stats.ts`): time since the first role in `career` with its
+  start month, saying when that includes an internship, then the number of company projects, their
+  repositories and commits, plus a footnote saying where the counts come from.
 - No availability claim. Nothing is shown for `null` profile fields.
 
 ### Statement band
@@ -127,9 +129,10 @@ live in `src/lib/sections.ts`.
 - **Career path** first: one step per `education` entry, then one per `career` role from the first to the
   current one (`src/lib/career.ts`). Four columns from 1024px, two from 640px, one below. Each step has a node
   on a rail (gold for roles, filled for the current one), its number, when (`Graduated Mar 2024`,
-  `Dec 2022 – Mar 2024`, `Mar 2026 – Present`), title, employer or program, honors in gold, a one-sentence
-  summary, chips (coursework or the technologies of that role) and links (the project done at university,
-  the product pages of the internship).
+  `Dec 2022 – Mar 2024`, `Mar 2026 – Present`), title, employer or degree and program, honors in gold, a
+  one-sentence summary, chips (coursework or the technologies of that role) and links (the project done at
+  university, the company projects of a role, which jump to their case in Work, and the product pages of
+  the internship).
 - Caption `$ git log --graph --author=top` and a legend (gold = company work, violet = personal projects).
 - An SVG graph on the left with two lanes, `main` and `branch`. One node per `resume.timeline` event, newest
   first; branch nodes connect to the main lane with a curved fork line. Lines and nodes take the colour of
@@ -180,7 +183,10 @@ live in `src/lib/sections.ts`.
   `content-lint` checks that every personal project has an image and that every listed file exists.
 
 ### Footer
-- Mono build line: `build <sha7> · <yyyy-mm-dd> · next <version> · 0 trackers`.
+- Mono build line: `build <sha7> · <yyyy-mm-dd> · next <version> · 0 cookies · source`, where `source`
+  links to the public repository (`meta.sourceUrl`). The repository adds no
+  analytics, but the CDN in front of the site injects its own beacon, so the line claims only what the code
+  controls.
 - Oversized wordmark `topthammanun` in mono, hairline outline (`-webkit-text-stroke`), filling the width,
   cropped at the bottom. Decorative.
 
@@ -206,10 +212,10 @@ All generated from `src/content/resume.ts` and prerendered at build.
 
 | Route | Content |
 |---|---|
-| `/resume.json` | JSON Resume schema v1.0.0 (`basics`, `work` from the roles, `education`, `awards` from honors, `projects` with company work first, `skills` by category plus the practice skills, `languages`, `meta`) |
-| `/resume.txt` | plain text, lines ≤ 80 columns |
+| `/resume.json` | JSON Resume schema v1.0.0 (`basics`, `work` from the roles with the highlights of their projects, `education` with `studyType`, `awards` from honors, `projects` with company work first, `skills` by category plus the practice skills, `languages`, `meta`) |
+| `/resume.txt` | plain text, lines ≤ 80 columns: each role with its company projects under it, then every personal project, skills, education and languages, all periods in month names |
 | `/llms.txt` | short markdown summary with links to the other routes |
-| `/resume.pdf` | formal resume for job applications and LinkedIn uploads: three A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, selectable text in reading order, `Professional Experience` as one entry per role (title, employer, month-name dates), then `Company Projects`, `Personal Projects`, `Technical Skills`, `Education` and `Languages`, visible URLs, page numbers, under LinkedIn's recommended 2 MB, written to `public/` before `next build` |
+| `/resume.pdf` | formal resume for job applications and LinkedIn uploads: two A4 pages via `@react-pdf/renderer`, single column, built-in Times, black on white, selectable text in reading order, `Professional Experience` as one entry per role (title, employer, month-name dates) with that role's company projects, bullets and technologies under it, then `Projects` (the first two personal projects and a link to the rest), `Technical Skills`, `Education` and `Languages`, visible URLs, page numbers, under LinkedIn's recommended 2 MB, written to `public/` before `next build` |
 | `/sitemap.xml` | the page, the project pages and the four routes above |
 | `/robots.txt` | allow all, with the AI search and assistant agents named explicitly |
 | Open Graph image | 1200×630, `#1c1740`, full name, title, mascot, gold index mark |
