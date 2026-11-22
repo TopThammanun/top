@@ -47,7 +47,7 @@ export const resume: Resume = {
       "I build enterprise systems end to end: C#/.NET and NestJS services, Next.js front ends, and the tooling around them.",
     summary: [
       "Senior Full Stack Developer specialising in government and enterprise systems, where forms are long, business rules are strict and data accuracy is critical.",
-      `Progressed from intern to Senior Full Stack Developer at ${EMPLOYER}.`,
+      "Progressed from intern to Senior Full Stack Developer at one company in just over three years.",
       "Experienced on both sides of the API: ASP.NET Core and NestJS services on PostgreSQL, with React and Next.js applications built on top of them.",
       "Also builds the tooling used in day-to-day work, including skills and hooks that keep AI coding agents aligned with a defined engineering process.",
     ],
