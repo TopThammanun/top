@@ -14,12 +14,11 @@ const BASE =
 
 interface ChipProps {
   tone?: ChipTone;
-  className?: string;
   children: ReactNode;
 }
 
-export function Chip({ tone = "default", className, children }: ChipProps) {
-  return <span className={cx(BASE, TONES[tone], className)}>{children}</span>;
+export function Chip({ tone = "default", children }: ChipProps) {
+  return <span className={cx(BASE, TONES[tone])}>{children}</span>;
 }
 
 interface ChipButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

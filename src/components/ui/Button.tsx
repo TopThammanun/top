@@ -9,7 +9,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
   icon: "size-8 justify-center border-transparent text-fg-muted hover:border-line hover:text-fg",
 };
 
-export function buttonClass(variant: ButtonVariant, className?: string): string {
+function buttonClass(variant: ButtonVariant, className?: string): string {
   return cx(
     "inline-flex shrink-0 cursor-pointer items-center rounded-md border text-sm font-medium whitespace-nowrap transition-[background-color,border-color,color,filter] duration-150 ease-out-expo",
     VARIANTS[variant],

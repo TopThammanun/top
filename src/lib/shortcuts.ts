@@ -11,7 +11,7 @@ export interface ShortcutState {
   pendingG: number | null;
 }
 
-export const G_WINDOW_MS = 1000;
+const G_WINDOW_MS = 1000;
 
 const SINGLE_KEYS: Readonly<Record<string, Intent>> = {
   t: { type: "theme" },

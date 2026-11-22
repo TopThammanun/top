@@ -6,7 +6,7 @@ export type Theme = "dark" | "light";
 
 const STORAGE_KEY = "theme";
 
-export function readTheme(): Theme {
+function readTheme(): Theme {
   return document.documentElement.dataset.theme === "light" ? "light" : "dark";
 }
 

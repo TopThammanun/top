@@ -7,7 +7,6 @@ interface SectionProps {
   label: string;
   meta?: ReactNode;
   heading?: "h2" | "p";
-  className?: string;
   children?: ReactNode;
 }
 
@@ -25,7 +24,7 @@ function CrossMark({ side }: { side: "left" | "right" }) {
   );
 }
 
-export function Section({ id, index, label, meta, heading = "h2", className, children }: SectionProps) {
+export function Section({ id, index, label, meta, heading = "h2", children }: SectionProps) {
   const Heading = heading;
   const labelId = `${id}-label`;
 
@@ -33,7 +32,7 @@ export function Section({ id, index, label, meta, heading = "h2", className, chi
     <section id={id} aria-labelledby={labelId} className="relative border-t border-line">
       <CrossMark side="left" />
       <CrossMark side="right" />
-      <div className={cx("px-5 py-14 sm:px-8 md:py-24 lg:px-12", className)}>
+      <div className="px-5 py-14 sm:px-8 md:py-24 lg:px-12">
         <header className="mb-10 flex items-baseline gap-3 mono-label md:mb-14">
           <span className="text-accent">{index}</span>
           <Heading id={labelId} className="font-normal text-fg">
