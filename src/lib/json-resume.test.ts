@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resume } from "@/content/resume";
+import type { Resume } from "@/content/types";
 import { toJsonResume } from "./json-resume";
 
 function hasEmptyValue(value: unknown): boolean {
@@ -52,8 +53,19 @@ describe("toJsonResume", () => {
     expect(json.skills).toHaveLength(resume.categories.length + resume.competencies.length);
   });
 
-  it("has no null or undefined values and no email", () => {
+  it("carries the email and the LinkedIn profile", () => {
+    expect(json.basics.email).toBe(resume.profile.email);
+    expect(json.basics.profiles).toContainEqual({
+      network: "LinkedIn",
+      username: "thammanun-aikhamdaeng-764348448",
+      url: resume.profile.linkedin,
+    });
+  });
+
+  it("has no null or undefined values, with or without contact details", () => {
+    const anonymous: Resume = { ...resume, profile: { ...resume.profile, email: null, linkedin: null } };
     expect(hasEmptyValue(json)).toBe(false);
-    expect(json.basics).not.toHaveProperty("email");
+    expect(hasEmptyValue(toJsonResume(anonymous))).toBe(false);
+    expect(toJsonResume(anonymous).basics).not.toHaveProperty("email");
   });
 });

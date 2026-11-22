@@ -67,8 +67,8 @@ export const resume: Resume = {
         href: SITE_URL,
       },
     ],
-    email: null,
-    linkedin: null,
+    email: "thammanun.aik@gmail.com",
+    linkedin: "https://www.linkedin.com/in/thammanun-aikhamdaeng-764348448",
     languages: [
       { name: "Thai", level: "Native" },
       { name: "English", level: "Working proficiency" },

@@ -3,8 +3,18 @@ import { resume } from "@/content/resume";
 import { machineEndpoints, profileEndpoints } from "./endpoints";
 
 describe("profileEndpoints", () => {
-  it("lists the set links and skips missing email and linkedin", () => {
-    expect(profileEndpoints(resume).map((e) => e.path)).toEqual(["/github", "/website"]);
+  it("lists the links, the email and LinkedIn", () => {
+    expect(profileEndpoints(resume).map((e) => e.path)).toEqual([
+      "/github",
+      "/website",
+      "/email",
+      "/linkedin",
+    ]);
+  });
+
+  it("skips a missing email and LinkedIn", () => {
+    const anonymous = { ...resume, profile: { ...resume.profile, email: null, linkedin: null } };
+    expect(profileEndpoints(anonymous).map((e) => e.path)).toEqual(["/github", "/website"]);
   });
 
   it("adds email and linkedin once they are set", () => {

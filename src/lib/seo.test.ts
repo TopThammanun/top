@@ -67,7 +67,7 @@ describe("structuredData", () => {
   });
 
   it("links other profiles but not the site itself", () => {
-    expect(node("Person").sameAs).toEqual(["https://github.com/TopThammanun"]);
+    expect(node("Person").sameAs).toEqual(["https://github.com/TopThammanun", resume.profile.linkedin]);
   });
 
   it("only claims technology used in more than one project", () => {
@@ -105,9 +105,15 @@ describe("structuredData", () => {
     });
   });
 
-  it("has no empty values and no email while it is pending", () => {
+  it("gives the email as a mailto link", () => {
+    expect(node("Person").email).toBe(`mailto:${resume.profile.email}`);
+  });
+
+  it("has no empty values, and no email when it is not set", () => {
+    const anonymous = structuredData({ ...resume, profile: { ...resume.profile, email: null } });
     expect(hasEmptyValue(data)).toBe(false);
-    expect(node("Person")).not.toHaveProperty("email");
+    expect(hasEmptyValue(anonymous)).toBe(false);
+    expect(anonymous["@graph"].find((n) => n["@type"] === "Person")).not.toHaveProperty("email");
   });
 });
 

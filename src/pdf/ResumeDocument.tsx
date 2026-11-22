@@ -2,7 +2,7 @@ import { Document, Font, Link, Page, StyleSheet, Text, View } from "@react-pdf/r
 import type { ReactNode } from "react";
 import type { Education, Project, Resume, Role } from "@/content/types";
 import { educationDegree, educationWhen } from "@/lib/career";
-import { profileEndpoints } from "@/lib/endpoints";
+import { profileEndpoints, type Endpoint } from "@/lib/endpoints";
 import { formatFormalPeriod } from "@/lib/format";
 import { fullName } from "@/lib/identity";
 import { splitCode } from "@/lib/rich-text";
@@ -14,6 +14,7 @@ const SOFT = "#404040";
 const MARGIN_X = 54;
 const FOOTER_TOP = 800;
 const CONTACT_SEPARATOR = "   |   ";
+const DIRECT_CONTACTS: ReadonlySet<string> = new Set(["/email", "/linkedin"]);
 
 const styles = StyleSheet.create({
   page: {
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
   name: { fontFamily: "Times-Bold", fontSize: 24, lineHeight: 1.2 },
   title: { fontSize: 12, marginTop: 2 },
   contact: { fontSize: 10, marginTop: 5, textAlign: "center" },
+  contactNext: { fontSize: 10, marginTop: 2, textAlign: "center" },
   link: { color: INK, textDecoration: "none" },
   section: { marginTop: 13 },
   heading: {
@@ -79,6 +81,22 @@ function RichText({ text }: { text: string }) {
           run.text
         ),
       )}
+    </Text>
+  );
+}
+
+function ContactLine({ lead, contacts, first }: { lead?: string; contacts: Endpoint[]; first: boolean }) {
+  return (
+    <Text style={first ? styles.contact : styles.contactNext}>
+      {lead}
+      {contacts.map((contact, i) => (
+        <Text key={contact.href}>
+          {lead || i > 0 ? CONTACT_SEPARATOR : null}
+          <Link src={contact.href} style={styles.link}>
+            {contact.value}
+          </Link>
+        </Text>
+      ))}
     </Text>
   );
 }
@@ -170,6 +188,8 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
   const { profile, meta } = resume;
   const name = fullName(profile);
   const contacts = profileEndpoints(resume);
+  const direct = contacts.filter((contact) => DIRECT_CONTACTS.has(contact.path));
+  const web = contacts.filter((contact) => !DIRECT_CONTACTS.has(contact.path));
 
   return (
     <Document
@@ -185,17 +205,8 @@ export function ResumeDocument({ resume }: { resume: Resume }) {
         <View style={styles.header}>
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.title}>{profile.title}</Text>
-          <Text style={styles.contact}>
-            {profile.location.label}
-            {contacts.map((contact) => (
-              <Text key={contact.href}>
-                {CONTACT_SEPARATOR}
-                <Link src={contact.href} style={styles.link}>
-                  {contact.value}
-                </Link>
-              </Text>
-            ))}
-          </Text>
+          <ContactLine lead={profile.location.label} contacts={direct.length > 0 ? direct : web} first />
+          {direct.length > 0 ? <ContactLine contacts={web} first={false} /> : null}
         </View>
 
         <Section title="Professional Summary">

@@ -30,6 +30,7 @@ function present(commands: (Command | null)[]): Command[] {
 
 export function buildCommands(r: Resume): Command[] {
   const github = linkHref(r, "github");
+  const { email, linkedin } = r.profile;
 
   const navigate = SECTIONS.map<Command>((s) => ({
     id: `nav-${s.id}`,
@@ -70,9 +71,28 @@ export function buildCommands(r: Resume): Command[] {
       label: "Copy site URL",
       action: { type: "copy", text: r.meta.siteUrl },
     },
+    email
+      ? { id: "copy-email", group: "Actions", label: "Copy email", action: { type: "copy", text: email } }
+      : null,
   ]);
 
   const open = present([
+    email
+      ? {
+          id: "open-email",
+          group: "Open",
+          label: "Email",
+          action: { type: "href", href: `mailto:${email}`, newTab: false },
+        }
+      : null,
+    linkedin
+      ? {
+          id: "open-linkedin",
+          group: "Open",
+          label: "LinkedIn",
+          action: { type: "href", href: linkedin, newTab: true },
+        }
+      : null,
     github
       ? {
           id: "open-github",

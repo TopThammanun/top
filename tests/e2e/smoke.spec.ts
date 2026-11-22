@@ -86,6 +86,18 @@ test.describe("home page", () => {
     }
   });
 
+  test("offers the email and LinkedIn in the contact section", async ({ page }) => {
+    const { email, linkedin } = resume.profile;
+    if (!email || !linkedin) throw new Error("expected the email and LinkedIn to be set");
+    await page.goto("/");
+    const contact = page.locator("section#contact");
+    await expect(contact.getByRole("link", { name: "Email me" })).toHaveAttribute("href", `mailto:${email}`);
+    await expect(contact.getByRole("link", { name: "LinkedIn", exact: true })).toHaveAttribute(
+      "href",
+      linkedin,
+    );
+  });
+
   test("palette opens with Control+K and jumps to Work", async ({ page }) => {
     await gotoHydrated(page);
     await page.keyboard.press("Control+K");

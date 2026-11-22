@@ -20,11 +20,13 @@ function galleryImage(r: Resume): ProjectImage {
 }
 
 describe("lintResume", () => {
-  it("passes the real resume and lists pending fields", () => {
-    expect(lintResume(resume)).toEqual({
-      errors: [],
-      pending: ["profile.email", "profile.linkedin"],
-    });
+  it("passes the real resume with nothing pending", () => {
+    expect(lintResume(resume)).toEqual({ errors: [], pending: [] });
+  });
+
+  it("lists a missing email and LinkedIn as pending", () => {
+    const anonymous = withChange((r) => Object.assign(r.profile, { email: null, linkedin: null }));
+    expect(lintResume(anonymous).pending).toEqual(["profile.email", "profile.linkedin"]);
   });
 
   it.each<[string, (r: Resume) => void, string]>([
