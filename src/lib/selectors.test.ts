@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resume } from "@/content/resume";
-import { countByKind, projectsUsing, techName, techUsage } from "./selectors";
+import { countByKind, projectsUsing, skillGroups, techName, techUsage } from "./selectors";
 
 describe("projectsUsing", () => {
   it("finds the projects whose stack has the tech", () => {
@@ -31,5 +31,17 @@ describe("techName", () => {
 
   it("falls back to the id", () => {
     expect(techName(resume, "nope")).toBe("nope");
+  });
+});
+
+describe("skillGroups", () => {
+  it("names the tech of every category in content order", () => {
+    const groups = skillGroups(resume);
+    expect(groups.map((g) => g.label)).toEqual(resume.categories.map((c) => c.label));
+    expect(groups[0]).toEqual({
+      label: "Languages",
+      names: ["C#", "TypeScript", "JavaScript", "SQL", "Python", "GDScript"],
+    });
+    expect(groups.flatMap((g) => g.names)).toHaveLength(resume.tech.length);
   });
 });

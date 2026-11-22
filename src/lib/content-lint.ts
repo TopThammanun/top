@@ -66,7 +66,6 @@ export function lintResume(r: Resume): { errors: string[]; pending: string[] } {
   r.education.forEach((e, i) => errors.push(...lintPeriod(e.period, `education[${i}].period`)));
 
   const pending = [
-    r.profile.fullName === null && "profile.fullName",
     r.profile.email === null && "profile.email",
     r.profile.linkedin === null && "profile.linkedin",
     r.education.length === 0 && "education",

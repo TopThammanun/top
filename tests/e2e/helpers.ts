@@ -1,4 +1,11 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
+
+const LIVE_CLOCK = /^\d{2}:\d{2}:\d{2}$/;
+
+export async function gotoHydrated(page: Page): Promise<void> {
+  await page.goto("/");
+  await expect(page.getByText(LIVE_CLOCK)).toBeVisible();
+}
 
 export async function scrollThrough(page: Page): Promise<void> {
   await page.evaluate(async () => {
@@ -9,6 +16,14 @@ export async function scrollThrough(page: Page): Promise<void> {
     }
     window.scrollTo({ top: 0, behavior: "instant" });
   });
+}
+
+export async function distanceFromTop(page: Page, id: string): Promise<number> {
+  return page.evaluate(
+    (target) =>
+      Math.round(Math.abs(document.getElementById(target)?.getBoundingClientRect().top ?? Infinity)),
+    id,
+  );
 }
 
 export async function useTheme(page: Page, theme: "dark" | "light"): Promise<void> {

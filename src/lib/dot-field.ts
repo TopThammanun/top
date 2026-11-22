@@ -2,6 +2,7 @@ export interface Dot {
   x: number;
   y: number;
   mask: number;
+  target: number;
   ox: number;
   oy: number;
   glow: number;
@@ -12,13 +13,19 @@ export interface Point {
   y: number;
 }
 
-export type MaskMode = "alpha" | "luma";
+export interface Size {
+  width: number;
+  height: number;
+}
+
+export interface Rect extends Point, Size {}
 
 export const DOT_FIELD = {
-  spacing: 10,
-  baseRadius: 0.9,
-  maskRadius: 1.9,
-  glowRadius: 0.9,
+  columns: 64,
+  minSpacing: 5,
+  baseRadius: 0.1,
+  maskRadius: 0.42,
+  glowRadius: 0.12,
   pointerRadius: 96,
   push: 7,
   ease: 0.14,
@@ -26,6 +33,10 @@ export const DOT_FIELD = {
 } as const;
 
 export type DotFieldParams = typeof DOT_FIELD;
+
+export function gridSpacing(width: number, p: DotFieldParams = DOT_FIELD): number {
+  return Math.max(p.minSpacing, width / p.columns);
+}
 
 export function createDots(width: number, height: number, spacing: number): Dot[] {
   const cols = Math.max(0, Math.floor(width / spacing));
@@ -35,33 +46,47 @@ export function createDots(width: number, height: number, spacing: number): Dot[
   const dots: Dot[] = [];
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      dots.push({ x: left + col * spacing, y: top + row * spacing, mask: 0, ox: 0, oy: 0, glow: 0 });
+      dots.push({
+        x: left + col * spacing,
+        y: top + row * spacing,
+        mask: 0,
+        target: 0,
+        ox: 0,
+        oy: 0,
+        glow: 0,
+      });
     }
   }
   return dots;
 }
 
-export function maskValue(pixels: Uint8ClampedArray, index: number, mode: MaskMode): number {
-  const alpha = (pixels[index + 3] ?? 0) / 255;
-  if (mode === "alpha") return alpha;
-  const r = pixels[index] ?? 0;
-  const g = pixels[index + 1] ?? 0;
-  const b = pixels[index + 2] ?? 0;
-  return ((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255) * alpha;
+export function containRect(box: Size, aspect: number, fit: number): Rect {
+  const width = Math.min(box.width, box.height * aspect) * fit;
+  const height = width / aspect;
+  return { x: (box.width - width) / 2, y: (box.height - height) / 2, width, height };
 }
 
-export function applyMask(
-  dots: Dot[],
-  pixels: Uint8ClampedArray,
-  width: number,
-  height: number,
-  mode: MaskMode,
-): void {
-  for (const dot of dots) {
-    const x = Math.min(width - 1, Math.max(0, Math.floor(dot.x)));
-    const y = Math.min(height - 1, Math.max(0, Math.floor(dot.y)));
-    dot.mask = maskValue(pixels, (y * width + x) * 4, mode);
-  }
+export function sampleMask(dots: Dot[], alpha: Uint8ClampedArray, size: Size, cell: number): number[] {
+  const half = cell / 2;
+  return dots.map((dot) => {
+    const left = Math.max(0, Math.round(dot.x - half));
+    const right = Math.min(size.width, Math.round(dot.x + half));
+    const top = Math.max(0, Math.round(dot.y - half));
+    const bottom = Math.min(size.height, Math.round(dot.y + half));
+    let sum = 0;
+    for (let y = top; y < bottom; y++) {
+      for (let x = left; x < right; x++) sum += alpha[(y * size.width + x) * 4 + 3] ?? 0;
+    }
+    const pixels = (right - left) * (bottom - top);
+    return pixels > 0 ? sum / (pixels * 255) : 0;
+  });
+}
+
+export function aimDots(dots: Dot[], targets: number[], snap = false): void {
+  dots.forEach((dot, i) => {
+    dot.target = targets[i] ?? 0;
+    if (snap) dot.mask = dot.target;
+  });
 }
 
 export function stepDots(dots: Dot[], pointer: Point | null, p: DotFieldParams = DOT_FIELD): boolean {
@@ -84,10 +109,12 @@ export function stepDots(dots: Dot[], pointer: Point | null, p: DotFieldParams =
     dot.ox += (tx - dot.ox) * p.ease;
     dot.oy += (ty - dot.oy) * p.ease;
     dot.glow += (tg - dot.glow) * p.ease;
+    dot.mask += (dot.target - dot.mask) * p.ease;
     if (
       Math.abs(tx - dot.ox) > p.epsilon ||
       Math.abs(ty - dot.oy) > p.epsilon ||
-      Math.abs(tg - dot.glow) > p.epsilon
+      Math.abs(tg - dot.glow) > p.epsilon ||
+      Math.abs(dot.target - dot.mask) > p.epsilon
     ) {
       settled = false;
     }
@@ -95,6 +122,7 @@ export function stepDots(dots: Dot[], pointer: Point | null, p: DotFieldParams =
   return settled;
 }
 
-export function dotRadius(dot: Dot, p: DotFieldParams = DOT_FIELD): number {
-  return p.baseRadius + (p.maskRadius - p.baseRadius) * dot.mask + p.glowRadius * dot.glow;
+export function dotRadius(dot: Dot, spacing: number, p: DotFieldParams = DOT_FIELD): number {
+  const ink = Math.sqrt(Math.max(0, dot.mask));
+  return spacing * (p.baseRadius + (p.maskRadius - p.baseRadius) * ink + p.glowRadius * dot.glow);
 }

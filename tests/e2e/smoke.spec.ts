@@ -1,18 +1,38 @@
 import { expect, test } from "@playwright/test";
 import { resume } from "@/content/resume";
+import { AI_CRAWLERS } from "@/lib/crawlers";
+import { fullName } from "@/lib/identity";
+import { absoluteUrl, MACHINE_ROUTES } from "@/lib/routes";
 import { SECTIONS } from "@/lib/sections";
+import { seoDescription, seoTitle, structuredData } from "@/lib/seo";
+import { distanceFromTop, gotoHydrated } from "./helpers";
 
 test.describe("home page", () => {
   test("renders the six sections and the name", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(resume.profile.displayName);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(fullName(resume.profile));
     for (const section of SECTIONS) {
       await expect(page.locator(`section#${section.id}`)).toHaveCount(1);
     }
   });
 
-  test("palette opens with Control+K and jumps to Work", async ({ page }) => {
+  test("exposes the real name to search engines", async ({ page }) => {
     await page.goto("/");
+    await expect(page).toHaveTitle(seoTitle(resume));
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", seoDescription(resume));
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", resume.meta.siteUrl);
+    const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
+    expect(JSON.parse(jsonLd ?? "null")).toEqual(structuredData(resume));
+  });
+
+  test("loads the mascot for the hero dot field", async ({ page }) => {
+    const mascot = page.waitForResponse((response) => response.url().endsWith("/mascot.png"));
+    await page.goto("/");
+    expect((await mascot).ok()).toBe(true);
+  });
+
+  test("palette opens with Control+K and jumps to Work", async ({ page }) => {
+    await gotoHydrated(page);
     await page.keyboard.press("Control+K");
     const palette = page.getByRole("dialog", { name: "Command palette" });
     await expect(palette).toBeVisible();
@@ -20,15 +40,11 @@ test.describe("home page", () => {
     await page.keyboard.type("work");
     await page.keyboard.press("Enter");
     await expect(palette).toBeHidden();
-    await expect
-      .poll(() =>
-        page.evaluate(() => Math.round(document.getElementById("work")?.getBoundingClientRect().top ?? -1)),
-      )
-      .toBe(0);
+    await expect.poll(() => distanceFromTop(page, "work")).toBe(0);
   });
 
   test("palette closes with Escape and returns focus", async ({ page }) => {
-    await page.goto("/");
+    await gotoHydrated(page);
     const trigger = page.getByRole("button", { name: "Open command palette" });
     await trigger.click();
     await expect(page.getByRole("dialog", { name: "Command palette" })).toBeVisible();
@@ -38,18 +54,14 @@ test.describe("home page", () => {
   });
 
   test("g then w jumps to Work", async ({ page }) => {
-    await page.goto("/");
+    await gotoHydrated(page);
     await page.keyboard.press("g");
     await page.keyboard.press("w");
-    await expect
-      .poll(() =>
-        page.evaluate(() => Math.round(document.getElementById("work")?.getBoundingClientRect().top ?? -1)),
-      )
-      .toBe(0);
+    await expect.poll(() => distanceFromTop(page, "work")).toBe(0);
   });
 
   test("theme toggle persists after reload", async ({ page }) => {
-    await page.goto("/");
+    await gotoHydrated(page);
     const html = page.locator("html");
     await expect(html).toHaveAttribute("data-theme", "dark");
     await page.getByRole("button", { name: "Switch to light theme" }).click();
@@ -60,7 +72,7 @@ test.describe("home page", () => {
 
   test("opening a project row shows its highlights", async ({ page }) => {
     const project = resume.projects[1];
-    await page.goto("/");
+    await gotoHydrated(page);
     const row = page.locator(`#work-${project.slug}-button`);
     await row.scrollIntoViewIfNeeded();
     await expect(row).toHaveAttribute("aria-expanded", "false");
@@ -92,7 +104,21 @@ test.describe("machine-readable routes", () => {
     const response = await request.get("/resume.json");
     expect(response.ok()).toBe(true);
     const body = (await response.json()) as { basics: { name: string } };
-    expect(body.basics.name).toBe(resume.profile.displayName);
+    expect(body.basics.name).toBe(fullName(resume.profile));
+  });
+
+  test("/sitemap.xml lists the page and every machine-readable route", async ({ request }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    for (const path of ["/", ...MACHINE_ROUTES.map((route) => route.path)]) {
+      expect(xml).toContain(`<loc>${absoluteUrl(resume, path)}</loc>`);
+    }
+  });
+
+  test("/robots.txt welcomes AI crawlers and links the sitemap", async ({ request }) => {
+    const text = await (await request.get("/robots.txt")).text();
+    for (const agent of AI_CRAWLERS) expect(text).toContain(`User-Agent: ${agent}`);
+    expect(text).not.toContain("Disallow");
+    expect(text).toContain(`Sitemap: ${absoluteUrl(resume, "/sitemap.xml")}`);
   });
 
   test("/resume.pdf is a PDF", async ({ request }) => {

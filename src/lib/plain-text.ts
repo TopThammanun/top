@@ -1,7 +1,8 @@
 import type { Project, Resume, YearMonth } from "@/content/types";
 import { formatPeriod, periodDuration } from "./format";
+import { fullName } from "./identity";
 import { absoluteUrl, MACHINE_ROUTES } from "./routes";
-import { techName } from "./selectors";
+import { skillGroups, techName } from "./selectors";
 
 const WIDTH = 80;
 const INDENT = "  ";
@@ -56,7 +57,7 @@ export function toPlainText(r: Resume, now: YearMonth): string {
   );
 
   return [
-    (profile.fullName ?? profile.displayName).toUpperCase(),
+    fullName(profile).toUpperCase(),
     ...wrap(`${profile.title} · ${profile.location.label} (${profile.location.utcOffset})`, WIDTH),
     ...wrap(contacts.join(" · "), WIDTH),
     "=".repeat(WIDTH),
@@ -67,10 +68,7 @@ export function toPlainText(r: Resume, now: YearMonth): string {
     ...heading("Projects"),
     ...r.projects.filter((p) => p.kind !== "client").flatMap((p) => projectBlock(r, p, now)),
     ...heading("Skills"),
-    ...r.categories.flatMap((c) => {
-      const names = r.tech.filter((t) => t.category === c.id).map((t) => t.name);
-      return hanging(names.join(", "), `${c.label}: `, INDENT);
-    }),
+    ...skillGroups(r).flatMap((group) => hanging(group.names.join(", "), `${group.label}: `, INDENT)),
     ...heading("Languages"),
     ...wrap(profile.languages.map((l) => `${l.name} (${l.level})`).join(" · "), WIDTH),
     ...heading("Machine-readable"),

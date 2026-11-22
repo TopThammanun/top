@@ -26,6 +26,6 @@ describe("toPlainText", () => {
   });
 
   it("starts with the name", () => {
-    expect(lines[0]).toBe("TOP THAMMANUN");
+    expect(lines[0]).toBe("THAMMANUN AIKHAMDAENG");
   });
 });

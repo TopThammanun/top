@@ -1,6 +1,7 @@
 import type { Period, YearMonth } from "@/content/types";
 
 const MONTHS_PER_YEAR = 12;
+const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function parseYearMonth(value: YearMonth): { year: number; month: number } {
   const [year, month] = value.split("-").map(Number);
@@ -20,8 +21,17 @@ export function formatDuration(months: number): string {
   return [years ? `${years}y` : "", rest ? `${rest}m` : ""].filter(Boolean).join(" ");
 }
 
-export function formatPeriod(p: Period, separator = "→"): string {
-  return `${p.start} ${separator} ${p.end ?? "now"}`;
+export function formatPeriod(p: Period): string {
+  return `${p.start} → ${p.end ?? "now"}`;
+}
+
+function formatMonth(value: YearMonth): string {
+  const { year, month } = parseYearMonth(value);
+  return `${MONTH_NAMES[month - 1]} ${year}`;
+}
+
+export function formatFormalPeriod(p: Period): string {
+  return `${formatMonth(p.start)} – ${p.end ? formatMonth(p.end) : "Present"}`;
 }
 
 export function periodDuration(p: Period, now: YearMonth): string {

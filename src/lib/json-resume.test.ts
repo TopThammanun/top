@@ -13,7 +13,7 @@ describe("toJsonResume", () => {
   const json = toJsonResume(resume);
 
   it("fills basics from the profile", () => {
-    expect(json.basics.name).toBe("Top Thammanun");
+    expect(json.basics.name).toBe("Thammanun Aikhamdaeng");
     expect(json.basics.label).toBe("Full-Stack Developer");
     expect(json.basics.profiles).toContainEqual({
       network: "GitHub",

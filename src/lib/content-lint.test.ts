@@ -13,7 +13,7 @@ describe("lintResume", () => {
   it("passes the real resume and lists pending fields", () => {
     expect(lintResume(resume)).toEqual({
       errors: [],
-      pending: ["profile.fullName", "profile.email", "profile.linkedin", "education"],
+      pending: ["profile.email", "profile.linkedin", "education"],
     });
   });
 

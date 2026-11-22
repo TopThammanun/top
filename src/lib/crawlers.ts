@@ -1,0 +1,17 @@
+export const AI_CRAWLERS: readonly string[] = [
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "GPTBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "ClaudeBot",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+  "Applebot-Extended",
+  "Amazonbot",
+  "DuckAssistBot",
+  "MistralAI-User",
+  "meta-externalagent",
+  "CCBot",
+];

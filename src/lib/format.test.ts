@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   formatDuration,
+  formatFormalPeriod,
   formatIndex,
   formatPeriod,
   formatUsage,
@@ -35,9 +36,15 @@ describe("formatPeriod", () => {
   it("shows an open end as now", () => {
     expect(formatPeriod({ start: "2026-07", end: null })).toBe("2026-07 → now");
   });
+});
 
-  it("takes a custom separator", () => {
-    expect(formatPeriod({ start: "2024-03", end: "2026-07" }, "–")).toBe("2024-03 – 2026-07");
+describe("formatFormalPeriod", () => {
+  it("spells out the months", () => {
+    expect(formatFormalPeriod({ start: "2024-03", end: "2026-12" })).toBe("Mar 2024 – Dec 2026");
+  });
+
+  it("shows an open end as Present", () => {
+    expect(formatFormalPeriod({ start: "2026-01", end: null })).toBe("Jan 2026 – Present");
   });
 });
 

@@ -13,10 +13,10 @@ export interface ContactLink {
 
 export interface Profile {
   handle: string;
-  name: string;
+  givenName: string;
+  familyName: string;
   nickname: string;
   displayName: string;
-  fullName: string | null;
   title: string;
   roles: string[];
   tagline: string;

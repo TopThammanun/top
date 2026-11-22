@@ -1,19 +1,22 @@
 import type { Resume } from "./types";
 
+const SITE_HOST = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.topthammanun.com";
+const SITE_URL = `https://${SITE_HOST}`;
+
 export const resume: Resume = {
   meta: {
     version: "0.1.0",
     updated: "2026-11-22",
-    siteUrl: "https://www.topthammanun.com",
+    siteUrl: SITE_URL,
     statsAsOf: "2026-11-22",
   },
 
   profile: {
     handle: "topthammanun",
-    name: "Thammanun",
+    givenName: "Thammanun",
+    familyName: "Aikhamdaeng",
     nickname: "Top",
     displayName: "Top Thammanun",
-    fullName: null,
     title: "Full-Stack Developer",
     roles: [
       "Full-Stack Developer",
@@ -24,9 +27,9 @@ export const resume: Resume = {
     tagline:
       "I build enterprise systems end to end: C#/.NET and NestJS services, Next.js front ends, and the tooling around them.",
     summary: [
-      "Most of my work is government and enterprise software where the forms are long, the rules are strict and the data has to be right.",
-      "I am comfortable on both sides of the API: ASP.NET Core and NestJS services on PostgreSQL, and React/Next.js applications on top of them.",
-      "I also build the tools I work with, including skills and hooks that make coding agents follow my actual process.",
+      "Full-Stack Developer specialising in government and enterprise systems, where forms are long, business rules are strict and data accuracy is critical.",
+      "Experienced on both sides of the API: ASP.NET Core and NestJS services on PostgreSQL, with React and Next.js applications built on top of them.",
+      "Also builds the tooling used in day-to-day work, including skills and hooks that keep AI coding agents aligned with a defined engineering process.",
     ],
     now: "Building an e-permit platform for industrial estates",
     location: { label: "Thailand", timeZone: "Asia/Bangkok", utcOffset: "UTC+7" },
@@ -40,8 +43,8 @@ export const resume: Resume = {
       {
         id: "website",
         label: "Website",
-        value: "topthammanun.com",
-        href: "https://www.topthammanun.com",
+        value: SITE_HOST.replace(/^www\./, ""),
+        href: SITE_URL,
       },
     ],
     email: null,
@@ -183,7 +186,7 @@ export const resume: Resume = {
       summary:
         "Back-office and service layer for automated border-control gates: a management console, the .NET services behind it, reporting and data jobs.",
       highlights: [
-        "Built the central management console (Next.js, MUI) and its ASP.NET Core API, my main codebases on the platform.",
+        "Built the central management console (Next.js, MUI) and its ASP.NET Core API, the primary codebases of the role.",
         "Wrote the reporting service and scheduled jobs, Airflow DAGs for data work and a ClickHouse store for analytics.",
         "Worked across the event-driven side as well: a Kafka consumer service, SignalR real-time updates and Redis caching.",
         "Built desktop diagnostic tools: OpenCV analysis of passport data-page read failures and a Tesseract OCR scanner.",
@@ -274,12 +277,13 @@ export const resume: Resume = {
     },
     {
       slug: "agent-tooling",
-      name: "Agent tooling for my own workflow",
+      name: "Workflow tooling for coding agents",
       kind: "tooling",
       domain: "Developer tooling",
       role: "Author",
       period: { start: "2026-05", end: null },
-      summary: "Skills, hooks and guardrails that make coding agents follow the way I actually work.",
+      summary:
+        "Skills, hooks and guardrails that make coding agents follow an established engineering process.",
       highlights: [
         "A project workflow pack: slash-command skills for tracing where a value comes from, verifying a change against a baseline, managing worktrees and shipping a branch, plus a guard hook.",
         "A timesheet secretary: a skill, a session hook and a status line that log tasks and rebuild hours from git history and session transcripts, synced across machines.",
@@ -343,7 +347,7 @@ export const resume: Resume = {
       role: "Author",
       period: { start: "2023-09", end: "2024-09" },
       summary:
-        "My first personal site: a Notion-style block editor on Tiptap with slash commands, i18n and PWA support.",
+        "First personal site: a Notion-style block editor on Tiptap with slash commands, i18n and PWA support.",
       highlights: [
         "Custom Tiptap extensions for root blocks, slash commands and drag handles.",
         "Its indigo, gold and violet palette is the one this site still uses.",

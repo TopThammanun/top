@@ -3,6 +3,8 @@ import { Geist, JetBrains_Mono, Prompt } from "next/font/google";
 import { Shell } from "@/components/shell/Shell";
 import { headScript } from "@/components/shell/head-script";
 import { resume } from "@/content/resume";
+import { fullName } from "@/lib/identity";
+import { alternateTypes, seoDescription, seoKeywords, seoTitle } from "@/lib/seo";
 import "./globals.css";
 
 const geist = Geist({
@@ -24,25 +26,50 @@ const prompt = Prompt({
 });
 
 const { profile, meta } = resume;
-const title = `${profile.displayName} — ${profile.title}`;
+const name = fullName(profile);
+const title = seoTitle(resume);
+const description = seoDescription(resume);
+const bingVerification = process.env.BING_SITE_VERIFICATION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(meta.siteUrl),
   title,
-  description: profile.tagline,
-  alternates: { canonical: "/" },
+  description,
+  keywords: seoKeywords(resume),
+  authors: [{ name, url: meta.siteUrl }],
+  creator: name,
+  publisher: name,
+  alternates: { canonical: "/", types: alternateTypes() },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    other: bingVerification ? { "msvalidate.01": bingVerification } : undefined,
+  },
   openGraph: {
     type: "profile",
     url: "/",
-    siteName: profile.displayName,
+    siteName: name,
     title,
-    description: profile.tagline,
+    description,
     locale: "en_US",
+    firstName: profile.givenName,
+    lastName: profile.familyName,
+    username: profile.handle,
   },
   twitter: {
     card: "summary_large_image",
     title,
-    description: profile.tagline,
+    description,
   },
 };
 
