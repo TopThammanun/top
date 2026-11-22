@@ -1,8 +1,8 @@
 # topthammanun.dev v2
 
 Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`), built as a small documented system:
-projects are indexed entries, the career is a git graph, skills are a dependency matrix and contact details are
-endpoints. The same content is served to people (the page), parsers (`/resume.json`, JSON Resume v1.0.0) and
+company work is presented as cases, personal projects have their own pages, the career is a git graph, skills
+are a dependency matrix and contact details are endpoints. The same content is served to people (the page), parsers (`/resume.json`, JSON Resume v1.0.0) and
 agents (`/llms.txt`, `/resume.txt`), plus a formal `/resume.pdf` for job applications.
 
 Design spec: [`docs/DESIGN.md`](docs/DESIGN.md). Implementation plan: [`docs/PLAN.md`](docs/PLAN.md).
@@ -35,9 +35,13 @@ Run `pnpm exec playwright install chromium` once before the first `pnpm e2e`.
 - `src/lib/` holds pure logic with a test beside each file. Names come from `identity.ts`, search metadata and
   JSON-LD from `seo.ts`, the AI crawler list from `crawlers.ts`.
 - `src/components/ui/` holds shared primitives, `src/components/sections/<name>/` one folder per page
-  section, `src/components/shell/` the dock, command palette, shortcuts and theme.
-- `src/app/` holds the page, the machine-readable routes, sitemap, robots and the Open Graph image.
+  section, `src/components/shell/` the dock, command palette, shortcuts and theme, and
+  `src/components/project/` the personal project page with its gallery.
+- `src/app/` holds the home page, `/projects/[slug]`, the machine-readable routes, sitemap, robots, the 404
+  page and the Open Graph image.
 - `src/pdf/ResumeDocument.tsx` and `scripts/build-pdf.tsx` produce the PDF.
+- `public/projects/<slug>/` holds project screenshots (lossless WebP). They are listed with alt text and
+  captions under `chapters` in `src/content/resume.ts`.
 - `public/mascot.png` is the hero mascot (white on transparent, 512×448). The dot field samples it; its size
   and eye positions are in `src/components/sections/hero/mascot.ts`.
 
@@ -71,7 +75,7 @@ Client and employer names are intentionally left out. Commit counts are rounded 
 ## Keyboard
 
 `Ctrl/⌘ K` command palette · `?` shortcuts · `t` theme · `j` / `k` next / previous section ·
-`g` then `h w l s a c` jump to a section.
+`g` then `h w p t s a c` jump to a section.
 
 ## Quality
 
@@ -80,14 +84,15 @@ Lighthouse 12, mobile, production build served locally (`pnpm build && pnpm star
 
 | Category       | Score                       |
 | -------------- | --------------------------- |
-| Performance    | 91 (median; range 86 to 92) |
+| Performance    | 91 (median; range 90 to 95) |
 | Accessibility  | 100                         |
 | Best Practices | 100                         |
 | SEO            | 100                         |
 
-`pnpm e2e` covers the sections, the name and structured data in the head, the mascot, palette, shortcuts,
-theme persistence, the accordion, no horizontal scroll at 360px, no console errors, the machine-readable
-routes, the sitemap, the robots rules and an axe scan in both themes.
+`pnpm e2e` covers the sections, the split between company and personal work, the name and structured data in
+the head, the mascot, palette, shortcuts, theme persistence, the architecture toggle, the project page and its
+screenshot viewer, no horizontal scroll at 360px, no console errors, the machine-readable routes, the sitemap,
+the robots rules and an axe scan of the home page and a project page in both themes.
 
 ## Deploy
 

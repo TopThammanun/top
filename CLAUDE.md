@@ -13,6 +13,10 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - Commits: one short conventional subject line, no body, no trailers. The owner asked on 2026-11-22 for `main`
   to be pushed every time a piece of work is finished: run the checks first, then push without asking.
 - No analytics, cookies or runtime third-party requests.
+- Company work is the main content. Use `companyProjects` / `personalProjects` from `src/lib/selectors.ts`;
+  never branch on `project.kind` in a component. Gold marks company work, violet marks personal projects.
+- Project screenshots go in `public/projects/<slug>/` as WebP and are listed in `resume.ts` with alt text and
+  a caption; `pnpm test` fails if a listed file is missing.
 - Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
   resume for job applications: keep its copy free of first-person pronouns.
 - `.next/dev` can serve stale CSS after `globals.css` changes; delete it if a token edit does not show up.
@@ -21,10 +25,12 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 
 ## Components
 
-- `src/components/ui/` holds content-agnostic primitives (Section, Chip, Button, Kbd, CopyButton, Reveal).
-  Reuse them instead of repeating class strings.
+- `src/components/ui/` holds content-agnostic primitives (Band, Section, SectionIntro, Chip, ChipList, Button,
+  StatGrid, HighlightList, LayerDiagram, Reveal, WordReveal and friends). Reuse them instead of repeating
+  class strings.
 - `src/components/sections/<name>/` holds one folder per page section; its sub-components live beside it.
-- `src/components/shell/` holds the dock, palette, theme and shortcuts.
+- `src/components/shell/` holds the dock, palette, theme and shortcuts. It wraps the home page only.
+- `src/components/project/` holds the personal project page (`/projects/<slug>`) and its gallery.
 - Server components by default; `"use client"` only on small interactive leaves. Pass data down as props.
 - One component per file, named export, file name = component name, props typed with an interface.
 - Pure logic goes in `src/lib/` with a test beside it; components stay presentational. Join classes with `cx`.

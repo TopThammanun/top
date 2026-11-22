@@ -317,5 +317,14 @@ Requested by the owner once the seven tasks were done. These replace the matchin
   `Technologies` line per entry and page numbers. `profile.summary` is written without first-person pronouns.
   For LinkedIn and ATS parsers the name is in normal case, experience entries lead with the job title, and an
   e2e test keeps the file under 2 MB.
+- **Recruiter pass.** The mixed project list became two sections: Work (company cases, shown in full) and
+  Personal (cards). The hero leads with `Download resume` and a band of career stats from `src/lib/stats.ts`;
+  a statement band and the Agents statement light up word by word on scroll; Log and Stack are labelled
+  Timeline and Skills; gold and violet mark company and personal work in the timeline and the skills list.
+  The kind filter is gone, and `companyProjects` / `personalProjects` replace the scattered `kind` checks.
+- **Project pages.** Personal projects have prerendered pages at `/projects/<slug>` with long-form chapters
+  and a screenshot gallery (`src/components/project/`). The Godot prototypes carry 14 screenshots captured by
+  running both games with a small driver script. The shell (dock, palette, shortcuts) moved from the root
+  layout to the home page.
 - **Site URL.** `meta.siteUrl` reads `VERCEL_PROJECT_PRODUCTION_URL`, so canonical links, the sitemap and the
   PDF follow whichever production domain the Vercel project has.
