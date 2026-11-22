@@ -51,10 +51,8 @@ Run `pnpm exec playwright install chromium` once before the first `pnpm e2e`.
 
 ## Pending content
 
-These fields are empty on purpose and render nothing until they are filled in `src/content/resume.ts`:
-
-- `profile.email`
-- `profile.linkedin`
+Nothing is pending. A field set to `null` in `src/content/resume.ts` renders nothing, so `profile.email`
+or `profile.linkedin` can be taken down again by setting it to `null`.
 
 Client names are intentionally left out; the employer is named. Commit counts are rounded figures from local
 clones on `meta.statsAsOf`, and the calendar shows the 53 weeks up to the day it was generated.
