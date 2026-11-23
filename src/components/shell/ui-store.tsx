@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import { projectAnchor } from "@/lib/anchors";
+import type { SceneId } from "@/lib/thai-calendar";
 import { PANEL_TRANSITION_MS, scrollToId } from "./navigation";
 
 export type PaletteView = "root" | "help";
@@ -18,6 +19,8 @@ interface UiState {
   setPaletteOpen: (open: boolean) => void;
   paletteView: PaletteView;
   setPaletteView: (view: PaletteView) => void;
+  scenePreview: SceneId | null;
+  setScenePreview: (scene: SceneId | null) => void;
 }
 
 const UiContext = createContext<UiState | null>(null);
@@ -36,6 +39,7 @@ export function UiProvider({
   );
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [paletteView, setPaletteView] = useState<PaletteView>("root");
+  const [scenePreview, setScenePreview] = useState<SceneId | null>(null);
 
   const toggleProject = useCallback((slug: string) => {
     setOpenProjects((previous) => {
@@ -66,8 +70,19 @@ export function UiProvider({
       setPaletteOpen,
       paletteView,
       setPaletteView,
+      scenePreview,
+      setScenePreview,
     }),
-    [activeTech, techFilter, openProjects, toggleProject, showProject, paletteOpen, paletteView],
+    [
+      activeTech,
+      techFilter,
+      openProjects,
+      toggleProject,
+      showProject,
+      paletteOpen,
+      paletteView,
+      scenePreview,
+    ],
   );
 
   return <UiContext.Provider value={value}>{children}</UiContext.Provider>;

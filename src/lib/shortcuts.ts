@@ -3,6 +3,7 @@ import { SECTIONS, type SectionId } from "./sections";
 export type Intent =
   | { type: "section"; id: SectionId }
   | { type: "theme" }
+  | { type: "effects" }
   | { type: "help" }
   | { type: "next" }
   | { type: "prev" };
@@ -15,6 +16,7 @@ const G_WINDOW_MS = 1000;
 
 const SINGLE_KEYS: Readonly<Record<string, Intent>> = {
   t: { type: "theme" },
+  e: { type: "effects" },
   "?": { type: "help" },
   j: { type: "next" },
   k: { type: "prev" },
@@ -32,6 +34,7 @@ export function shortcutHelp(modKey: string): ShortcutHelp[] {
     { keys: [modKey, "K"], label: "Command palette" },
     { keys: ["?"], label: "Keyboard shortcuts" },
     { keys: ["t"], label: "Toggle theme" },
+    { keys: ["e"], label: "Toggle seasonal effects" },
     { keys: ["j"], label: "Next section" },
     { keys: ["k"], label: "Previous section" },
     ...SECTIONS.map((s) => ({ keys: ["g", s.key], label: `Go to ${s.label}` })),

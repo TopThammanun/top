@@ -30,11 +30,13 @@ Colors come from v1 (`src/theme/colors/dark.ts`, `light.ts` in the old site). Da
 | `--violet` | `#bc88f8` | `#7828c8` |
 | `--violet-deco` | `#7828c8` | `#bc88f8` |
 | `--ok` | `#10b981` | `#047852` |
+| `--mote` | `#ECEDEE` | `#7c8088` |
 | `--invert-bg` | `#ECEDEE` | `#1c1740` |
 | `--invert-fg` | `#1c1740` | `#ECEDEE` |
 
 Rules: gold on at most about 5% of the screen (index numbers, active states, links, cursor glow, company work).
 Violet is rarer (personal projects, text selection). Body text never uses `--fg-faint`.
+`--mote` is the neutral colour of the seasonal particles and is used nowhere else.
 `#7828c8` on `#1c1740` is 2.4:1, so it is never text in dark mode. Every text pair must pass WCAG AA.
 
 Type: Geist (sans), JetBrains Mono (labels, meta, numerals, code), Prompt (Thai fallback), all through
@@ -58,7 +60,7 @@ crosses the vertical lines. Section padding 96px top/bottom (56px mobile). Radiu
 
 Motion: easing `cubic-bezier(0.16, 1, 0.3, 1)`. Durations 150ms hover, 250ms state change, 400ms enter.
 Enter = opacity 0→1 and y 8px→0, staggered 40ms, once per element. Under `prefers-reduced-motion: reduce`:
-no scramble, no canvas animation, no enter transitions, instant state changes. No smooth-scroll library;
+no scramble, no canvas animation, no seasonal layer, no enter transitions, instant state changes. No smooth-scroll library;
 native `scroll-behavior: smooth` only when motion is allowed.
 
 ## 2. Page structure
@@ -80,8 +82,9 @@ live in `src/lib/sections.ts`.
   `Ctrl K` / `⌘ K` hint button that opens the palette.
 - Meta table in mono, key column muted: `aka` (`Top Thammanun`), `at` (current employer), `path` (the role
   ladder, `Intern → Junior → Senior Full Stack Developer`), `edu` (school and honors), `now`, `loc`
-  (`Thailand · UTC+7`), `time` (live `HH:mm:ss` in Asia/Bangkok, rendered only after mount), `focus`
-  (`.NET · TypeScript · Next.js`). From 1024px the table sits at the bottom of the column, level with the
+  (`Thailand · UTC+7`), `time` (live `HH:mm:ss` in Asia/Bangkok, rendered only after mount), `season`
+  (the Thai season and festival of the day with a pause control, see Seasons in §3; the row is hidden
+  without JavaScript), `focus` (`.NET · TypeScript · Next.js`). From 1024px the table sits at the bottom of the column, level with the
   calendar.
 - Right (5/12): **dot field mascot**. A canvas grid of 64 columns of dots; `public/mascot.png` (white on
   transparent) is sampled per cell and its coverage sets each dot's size, so the mascot reads as a halftone.
@@ -197,14 +200,38 @@ live in `src/lib/sections.ts`.
   labels from 1024px, icons only below, with tighter padding under 380px. Active item has a sliding pill (CSS transform transition). Section spy with IntersectionObserver.
   Hidden in print. Page has bottom padding so the dock never covers the footer.
 - **Command palette** (cmdk): opens with `Ctrl/⌘ K` or the dock button. Groups: Navigate (7 sections),
-  Projects (open a project, labelled company or personal), Actions (Download PDF, Toggle theme, Copy GitHub URL, Copy site URL, Copy email),
-  Open (Email, LinkedIn, GitHub, resume.json, resume.txt), Help (shortcut list). Focus is trapped; Escape closes;
+  Projects (open a project, labelled company or personal), Actions (Download PDF, Toggle theme, Toggle seasonal effects, Copy GitHub URL, Copy site URL, Copy email),
+  Seasons (today's season, and a preview of each scene), Open (Email, LinkedIn, GitHub, resume.json,
+  resume.txt), Help (shortcut list). The groups show while the search box is empty; a search shows one
+  list ranked by match, so the best match is first whatever its group. Focus is trapped; Escape closes;
   focus returns to the trigger.
-- **Shortcuts** (ignored while typing in an input): `?` palette on Help, `t` theme, `j` / `k` next/previous
-  section, `g` then `h w p t s a c` jump to a section (1s window).
+- **Shortcuts** (ignored while typing in an input): `?` palette on Help, `t` theme, `e` seasonal effects,
+  `j` / `k` next/previous section, `g` then `h w p t s a c` jump to a section (1s window).
 - **Theme**: `data-theme="dark" | "light"` on `<html>`, default dark, stored in `localStorage["theme"]`, set by
   an inline script before paint. `color-scheme` follows it.
 - **Console greeting**: one styled `console.log` with the name, the GitHub URL and `/resume.json`.
+- **Seasons**: the home page shows the weather of the day in Thailand as particles drawn in the dot language of
+  the mascot. The day is read in Thailand's time (UTC+7) whatever the visitor's time zone, after mount.
+  - Calendar (`src/lib/thai-calendar.ts`): the three seasons of the Thai Meteorological Department with fixed
+    boundaries (hot 16 Feb – 15 May, rainy 16 May – 15 Oct, cool 16 Oct – 15 Feb). A festival replaces the
+    season on its days: year-end snow 1–30 Dec (Thailand has no snow; it marks the end of the year), New Year
+    31 Dec – 1 Jan, Songkran 13–15 Apr, and the lunar days of Chinese New Year and Loy Krathong, which are
+    listed per year in `src/content/festivals.ts`. A year that is not listed shows the season. Religious and
+    royal days are left out on purpose.
+  - Scenes (`src/lib/atmosphere.ts`, one data entry each): cool = small dots drifting sideways, hot = gold
+    motes rising, rainy = slanted streaks, year-end = snow, New Year = fireworks in gold, violet and neutral,
+    Chinese New Year = falling gold flakes with small pops, Songkran = water thrown up in splashes,
+    Loy Krathong = gold lanterns rising. A pointer press adds a splash, a firework or a lantern in the scenes
+    that have bursts.
+  - Drawing: one fixed canvas the size of the viewport, behind the content (`z-0` under the page wrapper's
+    `z-10`), `pointer-events: none`, hidden from assistive tech and from print. Colours are `--mote`,
+    `--accent-fill` and `--violet` only. At most 140 ambient and 320 burst particles, fewer on small screens;
+    the loop stops while the tab is hidden.
+  - Controls: the `season` row in the hero names the season and the festival and has a `pause` / `play`
+    button; `e` and the palette do the same. The choice is stored in `localStorage["effects"]` and applied by
+    the inline head script. The palette can preview any scene for the current visit (a preview turns paused
+    effects back on) and return to today.
+  - Under `prefers-reduced-motion: reduce` nothing is drawn and the button is not shown; the label stays.
 
 ## 4. Machine-readable outputs
 

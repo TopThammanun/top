@@ -27,6 +27,7 @@ describe("reduceShortcut", () => {
 
   it.each([
     ["t", { type: "theme" }],
+    ["e", { type: "effects" }],
     ["?", { type: "help" }],
     ["j", { type: "next" }],
     ["k", { type: "prev" }],
@@ -45,6 +46,7 @@ describe("shortcutHelp", () => {
     expect(help[0]).toEqual({ keys: ["⌘", "K"], label: "Command palette" });
     expect(help.filter((h) => h.keys[0] === "g")).toHaveLength(SECTIONS.length);
     expect(help).toContainEqual({ keys: ["g", "t"], label: "Go to Timeline" });
+    expect(help).toContainEqual({ keys: ["e"], label: "Toggle seasonal effects" });
     expect(help.at(-1)).toEqual({ keys: ["g", "c"], label: "Go to Contact" });
   });
 });

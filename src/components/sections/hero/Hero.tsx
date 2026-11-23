@@ -13,6 +13,7 @@ import { LiveClock } from "./LiveClock";
 import { MASCOT } from "./mascot";
 import { PaletteHint } from "./PaletteHint";
 import { ScrambleText } from "./ScrambleText";
+import { SeasonStatus } from "./SeasonStatus";
 
 const FOCUS = ".NET · TypeScript · Next.js";
 
@@ -23,12 +24,13 @@ export function Hero() {
     ["path", careerLadder(resume)],
     ["edu", resume.education.map(educationHeadline)[0]],
   ];
-  const facts: [string, ReactNode][] = [
+  const facts: [key: string, value: ReactNode, scripted?: boolean][] = [
     ["aka", profile.displayName],
     ...career.filter((fact): fact is [string, string] => Boolean(fact[1])),
     ["now", profile.now],
     ["loc", `${profile.location.label} · ${profile.location.utcOffset}`],
     ["time", <LiveClock key="time" timeZone={profile.location.timeZone} />],
+    ["season", <SeasonStatus key="season" />, true],
     ["focus", FOCUS],
   ];
 
@@ -62,8 +64,8 @@ export function Hero() {
             <PaletteHint />
           </div>
           <dl className="mt-10 grid grid-cols-[4.5rem_1fr] gap-x-4 gap-y-2 border-t border-line pt-6 font-mono text-sm lg:mt-auto">
-            {facts.map(([key, value]) => (
-              <div key={key} className="contents">
+            {facts.map(([key, value, scripted]) => (
+              <div key={key} className={scripted ? "hidden js:contents" : "contents"}>
                 <dt className="text-fg-muted">{key}</dt>
                 <dd className="text-fg">{value}</dd>
               </div>

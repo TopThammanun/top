@@ -354,3 +354,11 @@ Requested by the owner once the seven tasks were done. These replace the matchin
   (`Node.js`, `REST APIs`, `Entity Framework Core`, `Material UI (MUI)`, `OpenID Connect`), spelling is
   American throughout, education names the degree, and the footer claims `0 cookies` because the CDN adds
   its own analytics beacon.
+- **Seasons.** The home page follows the Thai calendar: one particle scene per season (cool, hot, rainy) and
+  per festival (year-end snow in December, New Year, Chinese New Year, Songkran, Loy Krathong), drawn on a
+  canvas behind the content in the dot language of the mascot. The hero has a `season` row with a pause
+  button, `e` toggles the effects, and the palette previews every scene. The calendar is
+  `src/lib/thai-calendar.ts`, the lunar days are `src/content/festivals.ts`, the particle maths is
+  `src/lib/atmosphere.ts`, and the canvas is `shell/AtmosphereCanvas.tsx`. The idea was checked against
+  Awwwards, Mobbin and the IndieWeb list of holiday themes first: seasonal work there is small, tied to dates
+  and can be switched off.

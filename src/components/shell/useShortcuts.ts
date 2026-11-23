@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { SECTIONS, type SectionId } from "@/lib/sections";
 import { reduceShortcut, type Intent, type ShortcutState } from "@/lib/shortcuts";
+import { toggleEffects } from "./effects";
 import { scrollToId } from "./navigation";
 import { toggleTheme } from "./theme";
 import { useUi } from "./ui-store";
@@ -37,6 +38,8 @@ export function useShortcuts(active: SectionId): void {
           return scrollToId(neighbour(active, -1));
         case "theme":
           return toggleTheme();
+        case "effects":
+          return void toggleEffects();
         case "help":
           setPaletteView("help");
           return setPaletteOpen(true);

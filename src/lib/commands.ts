@@ -2,6 +2,7 @@ import type { Resume } from "@/content/types";
 import { linkHref } from "./routes";
 import { projectGroup } from "./selectors";
 import { SECTIONS, type SectionId } from "./sections";
+import { SCENES, type SceneId } from "./thai-calendar";
 
 export type CommandAction =
   | { type: "section"; id: SectionId }
@@ -9,9 +10,12 @@ export type CommandAction =
   | { type: "href"; href: string; newTab: boolean }
   | { type: "copy"; text: string }
   | { type: "theme" }
+  | { type: "effects" }
+  | { type: "scene"; id: SceneId }
+  | { type: "today" }
   | { type: "help" };
 
-export type CommandGroup = "Navigate" | "Projects" | "Actions" | "Open" | "Help";
+export type CommandGroup = "Navigate" | "Projects" | "Actions" | "Seasons" | "Open" | "Help";
 
 export interface Command {
   id: string;
@@ -22,7 +26,14 @@ export interface Command {
   action: CommandAction;
 }
 
-export const COMMAND_GROUPS: readonly CommandGroup[] = ["Navigate", "Projects", "Actions", "Open", "Help"];
+export const COMMAND_GROUPS: readonly CommandGroup[] = [
+  "Navigate",
+  "Projects",
+  "Actions",
+  "Seasons",
+  "Open",
+  "Help",
+];
 
 function present(commands: (Command | null)[]): Command[] {
   return commands.filter((c): c is Command => c !== null);
@@ -57,6 +68,14 @@ export function buildCommands(r: Resume): Command[] {
       action: { type: "href", href: "/resume.pdf", newTab: true },
     },
     { id: "toggle-theme", group: "Actions", label: "Toggle theme", hint: "t", action: { type: "theme" } },
+    {
+      id: "toggle-effects",
+      group: "Actions",
+      label: "Toggle seasonal effects",
+      hint: "e",
+      keywords: ["animation", "motion", "particles"],
+      action: { type: "effects" },
+    },
     github
       ? {
           id: "copy-github",
@@ -75,6 +94,23 @@ export function buildCommands(r: Resume): Command[] {
       ? { id: "copy-email", group: "Actions", label: "Copy email", action: { type: "copy", text: email } }
       : null,
   ]);
+
+  const seasons: Command[] = [
+    {
+      id: "season-today",
+      group: "Seasons",
+      label: "Show today's season",
+      hint: "Thailand",
+      action: { type: "today" },
+    },
+    ...SCENES.map<Command>((scene) => ({
+      id: `season-${scene.id}`,
+      group: "Seasons",
+      label: `Preview ${scene.label}`,
+      keywords: ["festival"],
+      action: { type: "scene", id: scene.id },
+    })),
+  ];
 
   const open = present([
     email
@@ -119,5 +155,5 @@ export function buildCommands(r: Resume): Command[] {
     { id: "help-shortcuts", group: "Help", label: "Keyboard shortcuts", hint: "?", action: { type: "help" } },
   ];
 
-  return [...navigate, ...projects, ...actions, ...open, ...help];
+  return [...navigate, ...projects, ...actions, ...seasons, ...open, ...help];
 }

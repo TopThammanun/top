@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { Kbd } from "@/components/ui/Kbd";
 import type { Command as PaletteCommand, CommandAction } from "@/lib/commands";
+import { setEffects, toggleEffects } from "./effects";
 import { scrollToId } from "./navigation";
 import { ShortcutList } from "./ShortcutList";
 import { toggleTheme } from "./theme";
@@ -20,7 +21,7 @@ const CommandSearch = dynamic(loadCommandSearch, {
 });
 
 export function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
-  const { paletteOpen, setPaletteOpen, paletteView, setPaletteView, showProject } = useUi();
+  const { paletteOpen, setPaletteOpen, paletteView, setPaletteView, showProject, setScenePreview } = useUi();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [status, setStatus] = useState("");
 
@@ -73,6 +74,18 @@ export function CommandPalette({ commands }: { commands: PaletteCommand[] }) {
         return;
       case "theme":
         toggleTheme();
+        return;
+      case "effects":
+        setStatus(`Seasonal effects ${toggleEffects() ? "on" : "off"}`);
+        return;
+      case "scene":
+        close();
+        setEffects(true);
+        setScenePreview(action.id);
+        return;
+      case "today":
+        close();
+        setScenePreview(null);
         return;
       case "help":
         setPaletteView("help");

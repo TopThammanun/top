@@ -31,6 +31,11 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
 - Names come from `src/lib/identity.ts`, search metadata and JSON-LD from `src/lib/seo.ts`. The PDF is a formal
   resume for job applications: keep its copy free of first-person pronouns, keep it to two pages (an e2e
   test counts them) and write American English, because resume parsers match keywords by spelling.
+- The seasonal layer follows Thailand's calendar: seasons and fixed festivals in `src/lib/thai-calendar.ts`,
+  lunar festival days per year in `src/content/festivals.ts` (check a new year against a Thai calendar before
+  adding it; an unlisted year shows the season), scenes as data in `src/lib/atmosphere.ts`. Particles use only
+  `--mote`, `--accent-fill` and `--violet`, stay behind the content, and keep the pause control and the
+  reduced-motion rule. Religious and royal days are not turned into effects.
 - `.next/dev` can serve stale CSS after `globals.css` changes; delete it if a token edit does not show up.
 - In `@react-pdf/renderer`, position a fixed `Text` that uses `render` (page numbers) with `top`. With `bottom`
   it is drawn off the page, and with a fixed `height` it is not drawn at all.
@@ -41,7 +46,8 @@ Web resume for Thammanun Aikhamdaeng (Top Thammanun, `topthammanun`; topthammanu
   StatGrid, HighlightList, LayerDiagram, Reveal, WordReveal and friends). Reuse them instead of repeating
   class strings.
 - `src/components/sections/<name>/` holds one folder per page section; its sub-components live beside it.
-- `src/components/shell/` holds the dock, palette, theme and shortcuts. It wraps the home page only.
+- `src/components/shell/` holds the dock, palette, theme, shortcuts and the seasonal layer. It wraps the home
+  page only.
 - `src/components/project/` holds the personal project page (`/projects/<slug>`) and its gallery.
 - Server components by default; `"use client"` only on small interactive leaves. Pass data down as props.
 - One component per file, named export, file name = component name, props typed with an interface.

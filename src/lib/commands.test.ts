@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { resume } from "@/content/resume";
 import type { Resume } from "@/content/types";
-import { buildCommands } from "./commands";
+import { buildCommands, COMMAND_GROUPS } from "./commands";
 import { SECTIONS } from "./sections";
+import { SCENES } from "./thai-calendar";
 
 describe("buildCommands", () => {
   const commands = buildCommands(resume);
@@ -45,6 +46,27 @@ describe("buildCommands", () => {
     expect(serialized).not.toContain("mailto:");
     expect(serialized).not.toMatch(/linkedin/i);
     expect(serialized).not.toContain("null");
+  });
+
+  it("toggles the seasonal effects", () => {
+    expect(commands.find((c) => c.id === "toggle-effects")).toMatchObject({
+      group: "Actions",
+      hint: "e",
+      action: { type: "effects" },
+    });
+  });
+
+  it("returns to today's season and previews every scene", () => {
+    const seasons = commands.filter((c) => c.group === "Seasons");
+    expect(seasons.map((c) => c.action)).toEqual([
+      { type: "today" },
+      ...SCENES.map((scene) => ({ type: "scene", id: scene.id })),
+    ]);
+    expect(seasons.map((c) => c.label)).toContain("Preview Loy Krathong");
+  });
+
+  it("puts every command in a group the palette shows", () => {
+    expect(new Set(commands.map((c) => c.group))).toEqual(new Set(COMMAND_GROUPS));
   });
 
   it("offers the help view", () => {

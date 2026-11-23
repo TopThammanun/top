@@ -1,6 +1,7 @@
 "use client";
 
 import type { Command } from "@/lib/commands";
+import { Atmosphere } from "./Atmosphere";
 import { CommandPalette } from "./CommandPalette";
 import { ConsoleGreeting } from "./ConsoleGreeting";
 import { Dock } from "./Dock";
@@ -21,6 +22,7 @@ export function ShellControls({ commands, projectSlugs, greeting }: ShellControl
 
   return (
     <>
+      <Atmosphere />
       <Dock active={active} />
       <CommandPalette commands={commands} />
       <ConsoleGreeting {...greeting} />

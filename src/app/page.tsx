@@ -16,7 +16,7 @@ const jsonLd = serializeJsonLd(structuredData(resume));
 export default function Home() {
   return (
     <Shell>
-      <div className="px-4 pb-28 sm:px-6">
+      <div className="relative z-10 px-4 pb-28 sm:px-6">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
         <div className="mx-auto max-w-[1200px] border-x border-line">
           <main>

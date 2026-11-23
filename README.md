@@ -35,7 +35,7 @@ Run `pnpm exec playwright install chromium` once before the first `pnpm e2e`.
 - `src/lib/` holds pure logic with a test beside each file. Names come from `identity.ts`, search metadata and
   JSON-LD from `seo.ts`, the AI crawler list from `crawlers.ts`.
 - `src/components/ui/` holds shared primitives, `src/components/sections/<name>/` one folder per page
-  section, `src/components/shell/` the dock, command palette, shortcuts and theme, and
+  section, `src/components/shell/` the dock, command palette, shortcuts, theme and seasonal layer, and
   `src/components/project/` the personal project page with its gallery.
 - `src/app/` holds the home page, `/projects/[slug]`, the machine-readable routes, sitemap, robots, the 404
   page and the Open Graph image.
@@ -75,24 +75,25 @@ clones on `meta.statsAsOf`, and the calendar shows the 53 weeks up to the day it
 
 ## Keyboard
 
-`Ctrl/⌘ K` command palette · `?` shortcuts · `t` theme · `j` / `k` next / previous section ·
-`g` then `h w p t s a c` jump to a section.
+`Ctrl/⌘ K` command palette · `?` shortcuts · `t` theme · `e` seasonal effects · `j` / `k` next / previous
+section · `g` then `h w p t s a c` jump to a section.
 
 ## Quality
 
 Lighthouse 12, mobile, production build served locally (`pnpm build && pnpm start`), ten runs on
-2026-11-22:
+2026-11-23 with the seasonal layer drawing the cool season:
 
 | Category       | Score                       |
 | -------------- | --------------------------- |
-| Performance    | 91 (median; range 88 to 92) |
+| Performance    | 92 (median; range 90 to 94) |
 | Accessibility  | 100                         |
 | Best Practices | 100                         |
 | SEO            | 100                         |
 
 `pnpm e2e` covers the sections, the split between company and personal work, the name and structured data in
 the head, the mascot, the commit calendar and its day readout, the career path, the practice skills, palette,
-the order and cover images of the personal projects, shortcuts, theme persistence, the architecture toggle,
+the order and cover images of the personal projects, shortcuts, theme persistence, the seasonal layer (the
+scene for a Thai date, pause, preview and reduced motion), the architecture toggle,
 every project page (chapters, links and images that load) and the image viewer, no horizontal scroll at 360px,
 no console errors, the machine-readable routes, the sitemap, the robots rules and an axe scan of the home page
 and a project page in both themes.
